@@ -36,20 +36,7 @@
     "no-console": "off",
     "react/jsx-props-no-spreading": "off",
     "comma-dangle": ["error", "never"],
-    "prettier/prettier": [
-      "error",
-      {
-        "printWidth": 120,
-        "tabWidth": 2,
-        "semi": true,
-        "singleQuote": true,
-        "useTabs": false,
-        "trailingComma": "none",
-        "bracketSpacing": true,
-        "arrowParens": "always",
-        "endOfLine": "auto"
-      }
-    ],
+    "prettier/prettier": "error",
     "import/extensions": [
       "error",
       "ignorePackages",
