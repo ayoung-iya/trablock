@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import CoreBlock from '@/components/travelBlock/CoreBlock';
+import CoreBlock from '@/components/travelBlock/CoreBloc';
 import PlanBlock from '@/components/travelBlock/PlanBlock';
 import TransportBlock from '@/components/travelBlock/TransportBlock';
 
