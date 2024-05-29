@@ -7,7 +7,7 @@ import CoreBlock from '@/components/travelBlock/CoreBlock';
 interface TransportBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
   name: string;
   tag: string;
-  route?: { start: string; end: string };
+  route: { start: string; end: string };
   memo?: string;
 }
 
