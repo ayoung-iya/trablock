@@ -8,7 +8,7 @@ import TravelBlock from '@/components/travelBlock/TravelBlock';
 
 export default function Jinho() {
   // TravelBlock에 사용할 데이터
-  const blockProps: { [key: string]: PlanBlockProps | TransportBlockProps | BudgetBlockProps } = {
+  const blockProps: { plan: PlanBlockProps; transport: TransportBlockProps; budget: BudgetBlockProps } = {
     plan: {
       name: 'PlanBlock',
       tag: '태그',
