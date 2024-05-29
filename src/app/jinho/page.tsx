@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import CoreBlock from '@/components/travelBlock/coreBlock';
+import CoreBlock from '@/components/travelBlock/CoreBlock';
 
 export default function Jinho() {
   return (
