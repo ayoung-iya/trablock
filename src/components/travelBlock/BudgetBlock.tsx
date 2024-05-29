@@ -3,7 +3,7 @@ import React from 'react';
 import CoreBlock from '@/components/travelBlock/CoreBlock';
 import { addNumberCommas } from '@/libs/utils/moneyFormatter';
 
-interface BudgetBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface BudgetBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
   name: string;
   tag: string;
   symbol: string;

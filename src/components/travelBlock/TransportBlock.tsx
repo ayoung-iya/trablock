@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import CoreBlock from '@/components/travelBlock/CoreBlock';
 
-interface TransportBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface TransportBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
   name: string;
   tag: string;
   route: { start: string; end: string };

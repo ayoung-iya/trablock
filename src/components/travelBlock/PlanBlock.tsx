@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import CoreBlock from '@/components/travelBlock/CoreBlock';
 
-interface PlanBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface PlanBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
   name: string;
   tag: string;
   memo?: string;

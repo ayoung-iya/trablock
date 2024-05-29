@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface CoreBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface CoreBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
   name: string;
   tag: string;
   route?: { start: string; end: string };
