@@ -45,9 +45,6 @@ input,
 select {
   margin: 0;
 }
-html {
-  font-size: 62.5%;
-}
 *,
 :after,
 :before {
