@@ -79,7 +79,15 @@ button {
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .flex-row-center {
+    @apply flex flex-row items-center justify-center;
+  }
+
+  .flex-col-center {
+    @apply flex flex-col items-center justify-center;
+  }
+
+  .image-cover {
+    @apply h-full w-full object-cover;
   }
 }
