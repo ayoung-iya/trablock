@@ -4,7 +4,7 @@ import CoreBlock from '@/components/travelBlock/CoreBlock';
 import { addNumberCommas } from '@/libs/utils/moneyFormatter';
 
 /**
- * 교통 블록입니다.
+ * 예산 블록입니다.
  * @param name string; 이름
  * @param tag string; 태그
  * @param symbol string; 통화
@@ -18,7 +18,7 @@ export interface BudgetBlockProps extends React.HTMLAttributes<HTMLButtonElement
 }
 
 /**
- * 교통 블록입니다.
+ * 예산 블록입니다.
  * @param name string; 이름
  * @param tag string; 태그
  * @param symbol string; 통화
