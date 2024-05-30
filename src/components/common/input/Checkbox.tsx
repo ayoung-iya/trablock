@@ -1,31 +1,18 @@
 'use client';
 
-import { ComponentType, useState } from 'react';
+import { PropsWithChildren } from 'react';
 
-interface CheckboxProps {
-  checkedIcon: ComponentType<{ checked: boolean }>;
-  name: string;
+interface CheckboxProps extends PropsWithChildren {
   value: string;
+  checked: boolean;
 }
 
-// checkComponent: 체크박스 대신 보여준 아이콘(컴포넌트) 함수 전달
-export default function Checkbox({ checkedIcon: CheckedIcon, ...rest }: CheckboxProps) {
-  const [checked, setChecked] = useState(false);
-
-  const handleCheckedChange = () => {
-    setChecked(!checked);
-  };
-
+// Checkbox 네이티브 대신 들어갈 내용을 children으로 전달한다
+export default function Checkbox({ checked, value, children }: CheckboxProps) {
   return (
-    <div className="relative">
-      <CheckedIcon checked={checked} />
-      <input
-        type="checkbox"
-        className="absolute inset-0 opacity-0"
-        checked={checked}
-        onChange={handleCheckedChange}
-        {...rest}
-      />
+    <div className="relative min-w-48">
+      {children}
+      <input type="checkbox" id={value} className="absolute inset-0 opacity-0" checked={checked} value={value} />
     </div>
   );
 }
