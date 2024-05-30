@@ -44,10 +44,10 @@ function TestPage() {
     <div>
       <div className="flex w-full place-content-between border-2">
         <button type="button" onClick={() => setEditorOpen(true)}>
-          Open
+          Open Editor
         </button>
         <button type="button" onClick={() => setEditorOpen(false)}>
-          Close
+          Close Editor
         </button>
       </div>
       {editorOpen && (
