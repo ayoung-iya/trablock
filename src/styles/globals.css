@@ -80,11 +80,11 @@ button {
 
 @layer utilities {
   .flex-row-center {
-    @apply flex flex-row items-center justify-center;
+    @apply flex items-center;
   }
 
   .flex-col-center {
-    @apply flex flex-col items-center justify-center;
+    @apply flex flex-col items-center;
   }
 
   .image-cover {

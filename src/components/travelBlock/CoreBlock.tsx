@@ -11,7 +11,7 @@ export interface CoreBlockProps extends React.HTMLAttributes<HTMLButtonElement> 
 export default function CoreBlock({ name, tag, route, memo, children, onClick }: CoreBlockProps) {
   return (
     <button
-      className="flex w-full items-center justify-between border border-solid border-black p-4"
+      className="flex-row-center w-full justify-between border border-solid border-black p-4"
       type="button"
       onClick={onClick}
     >

@@ -22,13 +22,7 @@ export default function TransportBlock({ name, tag, route, memo, onClick }: Tran
       {/* 이미지 크기 조절하기 */}
       {imageUrl && (
         <div className="h-full max-w-36 overflow-hidden">
-          <Image
-            src={imageUrl[tag]}
-            alt={imageUrl[tag]}
-            width={144 * 4}
-            height={144 * 4}
-            className="h-full w-full object-cover"
-          />
+          <Image src={imageUrl[tag]} alt={imageUrl[tag]} width={144 * 4} height={144 * 4} className="image-cover" />
         </div>
       )}
     </CoreBlock>

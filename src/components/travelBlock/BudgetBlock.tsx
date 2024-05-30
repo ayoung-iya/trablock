@@ -20,7 +20,7 @@ export default function BudgetBlock({ name, tag, symbol, money, onClick }: Budge
 
   return (
     <CoreBlock name={name} tag={tag} onClick={onClick}>
-      <div className="flex items-center gap-2">
+      <div className="flex-row-center gap-2">
         {currSymbol[symbol]} {formattedMoney}
       </div>
     </CoreBlock>
