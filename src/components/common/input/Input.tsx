@@ -1,10 +1,11 @@
-import { ForwardedRef, InputHTMLAttributes, forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  id: string;
   label?: string;
 }
 
-const Input = forwardRef(function Input({ label, id, ...rest }: InputProps, ref: ForwardedRef<HTMLInputElement>) {
+const Input = forwardRef(function Input({ label, id, ...rest }: InputProps, ref: React.ForwardedRef<HTMLInputElement>) {
   return (
     <>
       {label && <label htmlFor={id}>{label}</label>}
