@@ -3,7 +3,7 @@ import PlanBlock, { PlanBlockProps } from '@/components/travelBlock/PlanBlock';
 import TransportBlock, { TransportBlockProps } from '@/components/travelBlock/TransportBlock';
 
 interface TravelBlockProps {
-  type: 'plan' | 'transport' | 'budget' | 'custom';
+  type: 'plan' | 'transport' | 'budget';
   blockProps: PlanBlockProps | TransportBlockProps | BudgetBlockProps;
 }
 
