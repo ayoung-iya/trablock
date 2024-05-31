@@ -2,10 +2,7 @@
 
 import React from 'react';
 
-interface CheckboxProps extends React.PropsWithChildren {
-  value: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-}
+interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement>, React.PropsWithChildren {}
 
 // Checkbox 네이티브 대신 들어갈 내용을 children으로 전달한다
 export default function Checkbox({ value, onChange, children }: CheckboxProps) {
