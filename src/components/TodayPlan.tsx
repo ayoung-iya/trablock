@@ -1,12 +1,12 @@
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 
-type TodayPlanProps = {
-  ImageUrl: StaticImageData;
+interface TodayPlanProps {
+  ImageUrl: StaticImageData; // 추후 string으로 변경 예정 ( 서버에서 받아오는 이미지 )
   TravelTitle: string;
   TravelDate: string;
   TravelSite: string;
-};
+}
 export default function TodayPlan({ ImageUrl, TravelTitle, TravelDate, TravelSite }: TodayPlanProps) {
   return (
     <Link href="/">
