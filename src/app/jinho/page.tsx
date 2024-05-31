@@ -25,7 +25,7 @@ export default function Jinho() {
       name: 'BudgetBlock',
       tag: '태그',
       symbol: 'USD',
-      money: '1000000'
+      money: '1000000.000183'
     }
   };
 
