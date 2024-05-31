@@ -1,5 +1,10 @@
 import React from 'react';
 
+/**
+ * 블록 공통 타입입니다.
+ * @param name string; 이름
+ * @param tag string; 태그
+ */
 export interface DefaultBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
   name: string;
   tag: string;
