@@ -45,9 +45,6 @@ input,
 select {
   margin: 0;
 }
-html {
-  font-size: 62.5%;
-}
 *,
 :after,
 :before {
@@ -82,7 +79,15 @@ button {
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .flex-row-center {
+    @apply flex items-center;
+  }
+
+  .flex-col-center {
+    @apply flex flex-col items-center;
+  }
+
+  .image-cover {
+    @apply h-full w-full object-cover;
   }
 }
