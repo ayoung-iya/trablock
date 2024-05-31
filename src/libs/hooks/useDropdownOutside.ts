@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 interface DropdownOutsideParams {
-  onClickInside: () => void;
+  onClickInside?: () => void;
   onClickOutside: () => void;
 }
 
@@ -21,7 +21,10 @@ const useDropdownOutside = ({ onClickInside, onClickOutside }: DropdownOutsidePa
         onClickOutside();
         return;
       }
-      onClickInside();
+
+      if (onClickInside) {
+        onClickInside();
+      }
     };
 
     document.addEventListener('click', handleClick);
