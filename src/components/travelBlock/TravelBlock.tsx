@@ -4,7 +4,7 @@ import BudgetBlock, { BudgetBlockProps } from '@/components/travelBlock/BudgetBl
 import PlanBlock, { PlanBlockProps } from '@/components/travelBlock/PlanBlock';
 import TransportBlock, { TransportBlockProps } from '@/components/travelBlock/TransportBlock';
 
-interface TravelBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface TravelBlockProps {
   type: 'plan' | 'transport' | 'budget';
   blockProps: PlanBlockProps | TransportBlockProps | BudgetBlockProps;
 }

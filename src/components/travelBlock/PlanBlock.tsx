@@ -2,7 +2,7 @@ import React from 'react';
 
 import Image from 'next/image';
 
-import CoreBlock from '@/components/travelBlock/CoreBlock';
+import CoreBlock, { DefaultBlockProps } from '@/components/travelBlock/CoreBlock';
 
 /**
  * 숙소, 관광지, 식당, 액티비티, 기타 등의 블록입니다.
@@ -11,9 +11,7 @@ import CoreBlock from '@/components/travelBlock/CoreBlock';
  * @param memo string; (optional) 메모
  * @param imageUrl string; (optional) 이미지 주소
  */
-export interface PlanBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
-  name: string;
-  tag: string;
+export interface PlanBlockProps extends DefaultBlockProps {
   memo?: string;
   imageUrl?: string;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CoreBlock from '@/components/travelBlock/CoreBlock';
+import CoreBlock, { DefaultBlockProps } from '@/components/travelBlock/CoreBlock';
 import { addNumberCommas } from '@/libs/utils/moneyFormatter';
 
 /**
@@ -10,9 +10,7 @@ import { addNumberCommas } from '@/libs/utils/moneyFormatter';
  * @param symbol string; 통화
  * @param money string; 금액
  */
-export interface BudgetBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
-  name: string;
-  tag: string;
+export interface BudgetBlockProps extends DefaultBlockProps {
   symbol: string;
   money: string;
 }

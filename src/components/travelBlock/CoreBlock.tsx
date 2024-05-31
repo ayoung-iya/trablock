@@ -1,5 +1,10 @@
 import React from 'react';
 
+export interface DefaultBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
+  name: string;
+  tag: string;
+}
+
 /**
  * 기본 정보를 포함하는 코어 블록입니다.
  * @param name string; 이름
@@ -8,9 +13,7 @@ import React from 'react';
  * @param memo string; (optional) 메모
  * @param imageUrl string; (optional) 이미지 주소
  */
-export interface CoreBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
-  name: string;
-  tag: string;
+export interface CoreBlockProps extends DefaultBlockProps {
   route?: { start: string; end: string };
   memo?: string;
   children?: React.ReactNode;

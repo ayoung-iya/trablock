@@ -2,7 +2,7 @@ import React from 'react';
 
 import Image from 'next/image';
 
-import CoreBlock from '@/components/travelBlock/CoreBlock';
+import CoreBlock, { DefaultBlockProps } from '@/components/travelBlock/CoreBlock';
 
 /**
  * 교통 블록입니다.
@@ -11,9 +11,7 @@ import CoreBlock from '@/components/travelBlock/CoreBlock';
  * @param route \{ start: string; end: string }; 출발지 및 도착지 객체
  * @param memo string; (optional) 메모
  */
-export interface TransportBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
-  name: string;
-  tag: string;
+export interface TransportBlockProps extends DefaultBlockProps {
   route: { start: string; end: string };
   memo?: string;
 }
