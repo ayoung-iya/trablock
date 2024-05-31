@@ -10,7 +10,10 @@ type TodayPlanProps = {
 export default function TodayPlan({ ImageUrl, TravelTitle, TravelDate, TravelSite }: TodayPlanProps) {
   return (
     <Link href="/">
-      <div className="left-5f lex align-center translate-x-2/4transform fixed bottom-0 left-2/4 h-1/4 w-1/4 -translate-x-1/2 justify-center bg-teal-300">
+      <div
+        className="left-5f lex align-center fixed bottom-0 left-2/4 h-1/4 w-1/4 
+      -translate-x-1/2 transform justify-center bg-teal-300"
+      >
         <div className="relative h-1/2 w-1/4 rounded-full">
           <Image src={ImageUrl} fill alt="TravelImage" />
         </div>
