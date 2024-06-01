@@ -2,7 +2,7 @@ import React from 'react';
 
 import Image from 'next/image';
 
-import { DefaultCardProps } from '@/components/card/CircleCard';
+import { DefaultCardProps } from '@/components/card/type';
 
 interface ReviewCardProps extends DefaultCardProps {
   route: string[];

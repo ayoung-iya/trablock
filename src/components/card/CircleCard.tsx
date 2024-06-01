@@ -1,10 +1,6 @@
 import Image from 'next/image';
 
-// eslint-disable-next-line no-undef
-export interface DefaultCardProps extends React.HTMLAttributes<HTMLButtonElement> {
-  imageUrl: string;
-  title: string;
-}
+import { DefaultCardProps } from '@/components/card/type';
 
 export interface CircleCardProps extends DefaultCardProps {}
 
