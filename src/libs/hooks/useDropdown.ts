@@ -1,22 +1,44 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-// dropdown의 열린 상태, 상태 변경을 관리하는 hook
-const useDropdown = () => {
-  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
+interface useDropdownParams {
+  onClickInside?: () => void;
+}
 
-  const handleOpenDropdown = () => {
-    setIsOpenDropdown(true);
+const useDropdown = ({ onClickInside }: useDropdownParams) => {
+  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  const ref = useRef<HTMLUListElement>(null);
+
+  const handleDropdownOpen = () => {
+    setIsDropdownOpened(true);
   };
 
-  const handleCloseDropdown = () => {
-    setIsOpenDropdown(false);
+  const handleDropdownClose = () => {
+    setIsDropdownOpened(false);
   };
 
-  const handleToggleDropdown = () => {
-    setIsOpenDropdown((prev) => !prev);
+  const handleDropdownToggle = () => {
+    setIsDropdownOpened((prev) => !prev);
   };
 
-  return { isOpenDropdown, handleOpenDropdown, handleCloseDropdown, handleToggleDropdown };
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (!ref.current) return;
+
+      if (ref.current.contains(e.target as Node) && onClickInside) {
+        onClickInside();
+      }
+
+      handleDropdownClose();
+    };
+
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  }, [ref, onClickInside]);
+
+  return { ref, isDropdownOpened, handleDropdownOpen, handleDropdownClose, handleDropdownToggle };
 };
 
 export default useDropdown;
