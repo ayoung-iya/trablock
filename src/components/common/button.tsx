@@ -24,9 +24,9 @@ export default function Button({
 
   // 버튼 스타일에 따라 지정
   const VARIANT_STYLES = {
-    primary: 'bg-blue-500 text-white',
-    secondary: 'bg-blue-600 text-white',
-    tertiary: 'bg-blue-700 text-white'
+    primary: 'bg-white text-gray-700',
+    secondary: 'bg-gray-100 text-black',
+    tertiary: 'bg-blue-400 text-white'
   };
 
   // 버튼 사이즈
