@@ -7,7 +7,7 @@ import React from 'react';
 import Image from 'next/image';
 
 import { DefaultCardProps } from '@/components/card/type';
-import useMediaQuery from '@/libs/hooks/useMediaQueryMinWidth';
+import useMediaQuery from '@/libs/hooks/useMediaQuery';
 import useResizeHeight from '@/libs/hooks/useResizeHeight';
 
 interface TravelCardProps extends DefaultCardProps {
