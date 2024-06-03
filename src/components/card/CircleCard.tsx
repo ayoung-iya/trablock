@@ -1,15 +1,14 @@
 import Image from 'next/image';
 
-interface CircleCardProps {
-  title: string;
-  imageUrl: string;
-}
+import { DefaultCardProps } from '@/components/card/type';
 
-export default function CircleCard({ title, imageUrl }: CircleCardProps) {
+export interface CircleCardProps extends DefaultCardProps {}
+
+export default function CircleCard({ title, imageUrl, onClick }: CircleCardProps) {
   return (
-    <div className="relative size-40 overflow-hidden rounded-full">
+    <button className="relative size-40 overflow-hidden rounded-full" type="button" onClick={onClick}>
       <Image src={imageUrl} alt={imageUrl} width={40 * 4} height={40 * 4} className="image-cover" />
       <p className="absolute-center text-white">{title}</p>
-    </div>
+    </button>
   );
 }
