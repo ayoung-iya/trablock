@@ -1,51 +1,25 @@
 import React from 'react';
 
 interface ButtonProps {
-  text?: string;
   onClick: () => void;
-  variant?: 'primary' | 'secondary' | 'tertiary';
-  size?: 'small' | 'medium' | 'large';
-  icon?: string;
+  variant?: 'default' | 'variant2' | 'variant3' | 'ghost' | 'danger';
+  size?: 'sm' | 'lg';
   disabled?: boolean;
+  children: React.ReactNode;
 }
 
-export default function Button({
-  text,
-  onClick,
-  variant = 'primary',
-  size = 'medium',
-  icon,
-  disabled = false
-}: ButtonProps) {
-  // 모든 버튼에 기본으로 들어가는 스타일
-  const baseStyles = 'inline-flex items-center justify-center';
-
-  /* 버튼 스타일 디자인에 따라 추후 수정 */
-
-  // 버튼 스타일에 따라 지정
-  const VARIANT_STYLES = {
-    primary: 'bg-white text-gray-700',
-    secondary: 'bg-gray-100 text-black',
-    tertiary: 'bg-blue-400 text-white'
-  };
-
-  // 버튼 사이즈
-  const SIZE_STYLES = {
-    small: 'px-2 py-1 text-sm',
-    medium: 'px-4 py-2 text-base',
-    large: 'px-6 py-3 text-lg'
-  };
+export default function Button({ children, onClick, variant = 'default', size = 'lg', disabled = false }: ButtonProps) {
+  // 기본스타일
+  const baseStyles = 'flex justify-center items-center items-center gap-[10px] rounded-[5px]';
 
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`${baseStyles} ${VARIANT_STYLES[variant]} ${SIZE_STYLES[size]} ${disabled ? 'opacity-50' : ''}`}
+      className={`${baseStyles} btn-${variant} btn-${size} ${disabled ? 'disabled' : ''}`}
       disabled={disabled}
     >
-      {/* 아이콘 이미지 링크가 있으면 이미지로 랜더링 될 수 있도록 추후 수정 */}
-      {icon}
-      {text}
+      {children}
     </button>
   );
 }
