@@ -1,8 +1,7 @@
 import React from 'react';
 
-import Image from 'next/image';
-
 import { DefaultCardProps } from '@/components/card/type';
+import ImageBox from '@/components/common/ImageBox';
 
 interface ReviewCardProps extends DefaultCardProps {
   route: string[];
@@ -12,7 +11,7 @@ interface ReviewCardProps extends DefaultCardProps {
 export default function ReviewCard({ imageUrl, title, route, user, onClick }: ReviewCardProps) {
   return (
     <button className="relative size-full max-h-80 max-w-80 overflow-hidden" type="button" onClick={onClick}>
-      <Image src={imageUrl} alt={imageUrl} width={80 * 4} height={80 * 4} className="image-cover" />
+      <ImageBox className="size-full" src={imageUrl} alt={imageUrl} width={80} height={80} />
       <div className="absolute bottom-4 left-4 text-white">
         <p>{title}</p>
         {route.map((item, idx) => (
@@ -23,7 +22,7 @@ export default function ReviewCard({ imageUrl, title, route, user, onClick }: Re
         ))}
         <div className="flex-row-center gap-2">
           <div className="relative size-full max-h-8 max-w-8 overflow-hidden rounded-full">
-            <Image src={user.profileImg} alt={user.profileImg} width={8 * 4} height={8 * 4} className="image-cover" />
+            <ImageBox className="size-full" src={user.profileImg} alt={user.profileImg} width={8} height={8} />
           </div>
           <span>{user.name}</span>
         </div>
