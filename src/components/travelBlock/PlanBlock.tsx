@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Image from 'next/image';
-
 import CoreBlock, { DefaultBlockProps } from '@/components/travelBlock/CoreBlock';
+
+import ImageBox from '../common/ImageBox';
 
 /**
  * 숙소, 관광지, 식당, 액티비티, 기타 등의 블록입니다.
@@ -27,11 +27,7 @@ export default function PlanBlock({ name, tag, memo, imageUrl, onClick }: PlanBl
   return (
     <CoreBlock name={name} tag={tag} memo={memo} onClick={onClick}>
       {/* 이미지 크기 조절하기 */}
-      {imageUrl && (
-        <div className="h-full max-w-36 overflow-hidden">
-          <Image src={imageUrl} alt={imageUrl} width={144 * 4} height={144 * 4} className="image-cover" />
-        </div>
-      )}
+      {imageUrl && <ImageBox className="h-full max-w-36" src={imageUrl} alt={imageUrl} width={36} height={36} />}
     </CoreBlock>
   );
 }
