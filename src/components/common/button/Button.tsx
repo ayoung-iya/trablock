@@ -2,13 +2,13 @@ import React from 'react';
 
 interface ButtonProps {
   onClick: () => void;
-  variant?: 'default' | 'variant2' | 'variant3' | 'ghost' | 'danger';
+  variant?: 'solid' | 'light' | 'ghost' | 'outline' | 'gary' | 'red';
   size?: 'sm' | 'lg';
   disabled?: boolean;
   children: React.ReactNode;
 }
 
-export default function Button({ children, onClick, variant = 'default', size = 'lg', disabled = false }: ButtonProps) {
+export default function Button({ children, onClick, variant = 'solid', size = 'lg', disabled = false }: ButtonProps) {
   // 기본스타일
   const baseStyles = 'flex justify-center items-center items-center gap-[10px] rounded-[5px]';
 
