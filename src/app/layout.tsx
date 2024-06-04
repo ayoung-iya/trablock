@@ -2,7 +2,10 @@ import React from 'react';
 
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+
 import '@/styles/globals.css';
+import AsyncBoundary from '@/components/common/AsyncBoundary';
+import ModalProvider from '@/libs/contexts/ModalProvider';
 
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -22,7 +25,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={pretendard.className}>{children}</body>
+      <body className={pretendard.className}>
+        <AsyncBoundary>
+          <ModalProvider>{children}</ModalProvider>
+        </AsyncBoundary>
+        <div id="modal-root" />
+      </body>
     </html>
   );
 }
