@@ -1,8 +1,7 @@
 import React from 'react';
 
+import ImageBox from '@/components/common/ImageBox';
 import CoreBlock, { DefaultBlockProps } from '@/components/travelBlock/CoreBlock';
-
-import ImageBox from '../common/ImageBox';
 
 /**
  * 숙소, 관광지, 식당, 액티비티, 기타 등의 블록입니다.

@@ -1,8 +1,7 @@
 import React from 'react';
 
+import ImageBox from '@/components/common/ImageBox';
 import CoreBlock, { DefaultBlockProps } from '@/components/travelBlock/CoreBlock';
-
-import ImageBox from '../common/ImageBox';
 
 /**
  * 교통 블록입니다.

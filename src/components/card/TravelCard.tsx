@@ -4,9 +4,8 @@
 
 import React from 'react';
 
-import Image from 'next/image';
-
 import { DefaultCardProps } from '@/components/card/type';
+import ImageBox from '@/components/common/ImageBox';
 import useMediaQuery from '@/libs/hooks/useMediaQuery';
 import useResizeHeight from '@/libs/hooks/useResizeHeight';
 
@@ -45,9 +44,13 @@ export default function TravelCard({
         onClick={onClick}
       >
         {/* 대표 이미지 */}
-        <div className="flex-row-center w-full overflow-hidden max-md:max-h-52 md:w-auto md:max-w-64">
-          <Image src={imageUrl} alt={imageUrl} width={80 * 4} height={80 * 4} className="image-cover" />
-        </div>
+        <ImageBox
+          className="w-full max-md:max-h-52 md:w-auto md:max-w-64"
+          src={imageUrl}
+          alt={imageUrl}
+          width={80}
+          height={80}
+        />
         {/* 콘텐츠 */}
         <div className="flex-grow max-md:w-full" ref={divRef}>
           {/* 상단 각종 데이터 */}
@@ -75,15 +78,13 @@ export default function TravelCard({
           {/* 하단 프로필, 카운트 */}
           <div className="flex-row-center justify-between p-3">
             <div className="flex-row-center gap-2">
-              <div className="size-full max-h-8 max-w-8 overflow-hidden rounded-full">
-                <Image
-                  src={user.profileImg}
-                  alt={user.profileImg}
-                  width={8 * 4}
-                  height={8 * 4}
-                  className="image-cover"
-                />
-              </div>
+              <ImageBox
+                className="size-full max-h-8 max-w-8 rounded-full"
+                src={user.profileImg}
+                alt={user.profileImg}
+                width={8}
+                height={8}
+              />
               <p>{user.name}</p>
             </div>
             <div className="flex-row-center gap-2">
