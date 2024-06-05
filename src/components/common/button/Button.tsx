@@ -1,12 +1,14 @@
+'use client';
+
 import React from 'react';
 
 import classNames from 'classnames';
 
 /*
 1. 크기(size) 옵션이 필요한 버튼:
-  <Button variant="solid" size="lg">등록</Button>
+<Button className="solid lg">등록</Button>
 2. 크기(size) 옵션이 필요하지 않은 버튼:
-  <Button variant="sub">커버 이미지 추가</Button>
+<Button className="sub">커버 이미지 추가</Button>
 
 각 버튼의 variant 속성에 따라 스타일이 적용됩니다. 
 size가 필요한 속성은 sm, md, lg 중 하나를 사용할 수 있습니다.
@@ -37,8 +39,6 @@ const buttonSizes: { [key: string]: string } = {
 };
 
 interface ButtonProps {
-  variant?: keyof typeof buttonStyles;
-  size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
   className?: string;
   onClick: () => void;
@@ -46,26 +46,19 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-export default function Button({
-  variant = 'solid',
-  size,
-  children,
-  className,
-  type = 'button',
-  onClick,
-  disabled = false
-}: ButtonProps) {
-  const isAddVariant = typeof variant === 'string' && variant.startsWith('add');
-  const variantClass = isAddVariant ? `${variant}${size ? size.charAt(0).toUpperCase() + size.slice(1) : ''}` : variant;
-  const sizeStyles = isAddVariant ? buttonStyles[variantClass!] || '' : size ? buttonSizes[size] || '' : '';
-  const disabledClass = disabled ? 'cursor-not-allowed' : '';
-  const baseClass = 'flex items-center justify-center ';
+export default function Button({ children, className = '', onClick, type = 'button', disabled = false }: ButtonProps) {
+  const classes = className.split(' ');
+  const variantClass = classes.find((cls) => Object.keys(buttonStyles).includes(cls)) || 'solid';
+  const sizeClass = classes.find((cls) => Object.keys(buttonSizes).includes(cls)) || '';
+  const sizeStyles = sizeClass ? buttonSizes[sizeClass] : '';
+  const baseClass = 'flex items-center justify-center';
+  const disabledClass = disabled ? 'cursor-not-allowed pointer-events-none' : '';
 
-  const buttonClass = classNames(baseClass, variant ? buttonStyles[variant] : '', sizeStyles, disabledClass, className);
+  const buttonClass = classNames(baseClass, buttonStyles[variantClass], sizeStyles, disabledClass, className);
 
   return (
     // eslint-disable-next-line react/button-has-type
-    <button className={buttonClass} type={type} onClick={onClick}>
+    <button className={buttonClass} type={type} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   );
