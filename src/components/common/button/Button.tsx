@@ -19,9 +19,9 @@ const variantStyles = {
 
 // 크기 스타일
 const sizeStyles = {
-  sm: 'px-[24px] py-2 max-h-[56px]',
-  md: 'max-w-[320px] max-h-[48px]',
-  lg: 'max-w-[346px] max-h-[40px]'
+  sm: 'px-6 py-2 max-h-14',
+  md: 'max-w-80 max-h-12',
+  lg: 'max-w-[346px] max-h-10'
 };
 
 export default function Button({ children, onClick, variant = 'solid', size = 'lg' }: ButtonProps) {
