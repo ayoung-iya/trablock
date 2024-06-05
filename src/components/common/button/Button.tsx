@@ -43,6 +43,7 @@ interface ButtonProps {
   className?: string;
   onClick: () => void;
   type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
 export default function Button({
@@ -52,18 +53,19 @@ export default function Button({
   className,
   type = 'button',
   onClick,
-  ...props
+  disabled = false
 }: ButtonProps) {
   const isAddVariant = typeof variant === 'string' && variant.startsWith('add');
   const variantClass = isAddVariant ? `${variant}${size ? size.charAt(0).toUpperCase() + size.slice(1) : ''}` : variant;
   const sizeStyles = isAddVariant ? buttonStyles[variantClass!] || '' : size ? buttonSizes[size] || '' : '';
+  const disabledClass = disabled ? 'cursor-not-allowed' : '';
   const baseClass = 'flex items-center justify-center ';
 
-  const buttonClass = classNames(baseClass, variant ? buttonStyles[variant] : '', sizeStyles, className);
+  const buttonClass = classNames(baseClass, variant ? buttonStyles[variant] : '', sizeStyles, disabledClass, className);
 
   return (
     // eslint-disable-next-line react/button-has-type
-    <button className={buttonClass} type={type} onClick={onClick} {...props}>
+    <button className={buttonClass} type={type} onClick={onClick}>
       {children}
     </button>
   );
