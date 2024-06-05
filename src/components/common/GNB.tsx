@@ -1,8 +1,9 @@
 import { cookies, headers } from 'next/headers';
-import Image from 'next/image';
 
 import mockLogo from '@/icons/googleLogo.png';
 import mockSearchIcon from '@/icons/mockSearchLogo.png';
+
+import ImageBox from './ImageBox';
 
 export default function GNB() {
   const cookieStore = cookies();
@@ -15,9 +16,9 @@ export default function GNB() {
 
   return (
     <nav className="flex h-20 w-full items-center justify-between bg-slate-400 p-3.5">
-      <Image src={mockLogo} alt="logo" width="100" height="50" />
+      <ImageBox src={mockLogo} alt="logo" width={40} height={20} />
       <ul className="flex gap-3.5">
-        <li>{!skipIcons && <Image src={mockSearchIcon} alt="searchIcon" width="20" height="20" />}</li>
+        <li>{!skipIcons && <ImageBox src={mockSearchIcon} alt="searchIcon" width={10} height={10} />}</li>
         <li>
           <button type="button">계획 생성하기</button>
         </li>
