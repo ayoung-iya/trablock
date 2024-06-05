@@ -2,13 +2,13 @@
 
 import React from 'react';
 
-interface OutlineButtonProps {
+interface SubButtonProps {
   onClick: () => void;
   disabled?: boolean;
   children: React.ReactNode;
 }
 
-export default function OutlineButton({ onClick, disabled = false, children }: OutlineButtonProps) {
+export default function SubButton({ onClick, disabled = false, children }: SubButtonProps) {
   const baseStyles =
     'flex justify-center items-center h-8 px-4 gap-2 rounded-md border-2 border-gray-500 text-gray-700  bg-white';
   const disabledStyles = 'cursor-not-allowed opacity-50';
