@@ -39,7 +39,7 @@ interface ButtonProps {
   size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
   className?: string;
-  onClick?: () => void;
+  onClick: () => void;
   type?: 'button' | 'submit' | 'reset';
 }
 
