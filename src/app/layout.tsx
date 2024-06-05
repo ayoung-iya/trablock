@@ -3,7 +3,6 @@ import React from 'react';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
-import GNB from '@/components/common/GNB';
 import '@/styles/globals.css';
 
 const pretendard = localFont({
@@ -24,11 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={pretendard.className}>
-        <GNB />
-        {children}
-        <p>footer</p>
-      </body>
+      <body className={pretendard.className}>{children}</body>
     </html>
   );
 }
