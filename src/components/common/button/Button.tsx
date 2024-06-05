@@ -3,11 +3,13 @@ import React from 'react';
 import classNames from 'classnames';
 
 /*
-크기가 필요한 버튼은
-<Button variant="solid" size="lg"> 으로
-크기가 필요하지 않은 기타 버튼은 
-<Button variant="sub">커버 이미지 추가</Button> 으로
-사용하시면 됩니다
+1. 크기(size) 옵션이 필요한 버튼:
+  <Button variant="solid" size="lg">등록</Button>
+2. 크기(size) 옵션이 필요하지 않은 버튼:
+  <Button variant="sub">커버 이미지 추가</Button>
+
+각 버튼의 variant 속성에 따라 스타일이 적용됩니다. 
+size가 필요한 속성은 sm, md, lg 중 하나를 사용할 수 있습니다.
 */
 
 const buttonStyles: { [key: string]: string } = {
