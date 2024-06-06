@@ -1,8 +1,7 @@
 import CircleCard from '@/components/card/CircleCard';
 import ReviewCard from '@/components/card/ReviewCard';
 import TravelCard from '@/components/card/TravelCard';
-import ImageBox from '@/components/common/ImageBox';
-import TestSvg from '@/icons/test.svg?url';
+import LogoSvg from '@/icons/logo.svg';
 
 export default function Home() {
   const cardList = {
@@ -39,8 +38,7 @@ export default function Home() {
 
   return (
     <div className="flex-col-center gap-12 p-8">
-      <ImageBox src={TestSvg} alt="test" width={300} height={300} />
-      {/* <TestSvg /> */}
+      <LogoSvg className="h-32 w-60 border border-solid" />
       <div className="flex-row-center gap-4">
         <CircleCard {...cardList.circle} />
       </div>
