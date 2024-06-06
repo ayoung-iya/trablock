@@ -2,7 +2,6 @@
 
 import React, { useMemo, useState } from 'react';
 
-import AsyncBoundary from '@/components/common/AsyncBoundary';
 import ModalLoader from '@/components/modal/ModalLoader';
 import { OpenedModalType } from '@/components/modal/type';
 import { ModalDispatchContext, ModalStateContext } from '@/contexts/modalContext';
@@ -36,7 +35,7 @@ export default function ModalProvider({ children }: ModalProviderProps) {
     <ModalStateContext.Provider value={openedModal}>
       <ModalDispatchContext.Provider value={dispatch}>
         {children}
-        <AsyncBoundary loadingFallback={<div>Loading modal...</div>}>{openedModal && <ModalLoader />}</AsyncBoundary>
+        {openedModal && <ModalLoader />}
       </ModalDispatchContext.Provider>
     </ModalStateContext.Provider>
   );
