@@ -4,10 +4,10 @@ import GNB from '@/components/common/GNB';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <section>
+    <>
       <GNB />
-      {children}
+      <main>{children}</main>
       <footer>푸터</footer>
-    </section>
+    </>
   );
 }
