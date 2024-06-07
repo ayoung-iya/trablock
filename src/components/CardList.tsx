@@ -1,22 +1,15 @@
 'use client';
 
-import { useEffect, useState, MouseEventHandler } from 'react';
+import { useEffect, useState } from 'react';
 
+import ReviewCard from '@/components/card/ReviewCard';
 import useIntersectingState from '@/libs/hooks/useIntersectingState';
 
-import ReviewCard from './card/ReviewCard';
+import { ReviewCardProps } from './card/type';
 
 export default function CardList() {
   const [isIntersecting, observerRef] = useIntersectingState<HTMLDivElement>();
-  const [cardList, setCardList] = useState<
-    {
-      imageUrl: string;
-      title: string;
-      route: string[];
-      user: { name: string; profileImg: string };
-      onClick: MouseEventHandler<HTMLButtonElement> | undefined;
-    }[]
-  >([
+  const [cardList, setCardList] = useState<ReviewCardProps[]>([
     {
       imageUrl: '',
       title: '리뷰다!',
