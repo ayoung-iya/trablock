@@ -1,16 +1,24 @@
 import crypto from 'crypto';
 
-interface EncryptedData {
-  iv: Buffer;
-  content: string;
+interface decryptedInvitedProps {
+  data: string;
   secretKey: Buffer;
 }
+export default function decryptInviteUrl(decryptInviteProp: decryptedInvitedProps) {
+  const { data, secretKey } = decryptInviteProp;
+  const textParts = data.split(':');
 
-export default function decryptInviteUrl(encryptedData: EncryptedData) {
-  const { iv, content, secretKey } = encryptedData;
-  const decipher = crypto.createCipheriv('aes-128-cbc', secretKey, iv);
-  let decrypted = decipher.update(content, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
+  const ivString = textParts.shift();
+  if (!ivString) {
+    throw new Error('Invalid IV format');
+  }
 
-  return decrypted;
+  const iv = Buffer.from(ivString, 'hex');
+  const encryptedText = Buffer.from(textParts.join(':'), 'hex');
+  const decipher = crypto.createDecipheriv('aes-128-cbc', secretKey, iv);
+  let decrypted = decipher.update(encryptedText);
+
+  decrypted = Buffer.concat([decrypted, decipher.final()]);
+
+  return decrypted.toString();
 }
