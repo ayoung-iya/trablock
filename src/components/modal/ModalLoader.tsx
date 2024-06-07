@@ -8,11 +8,13 @@ export default function ModalLoader() {
   const OpenedModal = useContext<OpenedModalType>(ModalStateContext);
   const { close } = useContext(ModalDispatchContext);
 
-  if (!OpenedModal) return null;
+  const { component: ModalComponent, props } = OpenedModal;
+
+  if (!ModalComponent) return null;
 
   const onClose = () => {
     close();
   };
 
-  return <OpenedModal onClose={onClose} />;
+  return <ModalComponent {...props} onClose={onClose} />;
 }

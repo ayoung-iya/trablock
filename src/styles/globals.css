@@ -95,6 +95,10 @@ button {
     @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
   }
 
+  .bg-overlay {
+    @apply bg-[rgba(0,0,0,0.6)];
+  }
+
   .font-title-1 {
     font-size: 32px;
     font-weight: 700;
