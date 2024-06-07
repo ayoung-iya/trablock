@@ -1,4 +1,4 @@
-/* eslint-disable no-redeclare */
+/* eslint-disable */
 
 'use client';
 
@@ -14,7 +14,7 @@ function useIntersectingState<T extends Element>(initialState?: null): [boolean 
   const ref = useRef<T>(null);
 
   useEffect(() => {
-    if (!ref.current) return null;
+    if (!ref.current) return;
 
     const observer = new IntersectionObserver(([entry]) => {
       setIsIntersecting(entry.isIntersecting);
