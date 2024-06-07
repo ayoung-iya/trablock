@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 
 // Dynamically import TextEditor with ssr: false
-const TextEditor = dynamic(() => import('@/components/common/TextEditor'), {
+const TextEditor = dynamic(() => import('../../components/common/TextEditor'), {
   ssr: false,
   loading: () => <p>Loading...</p>
 });
@@ -37,7 +37,7 @@ function TestPage() {
       <button
         type="button" // Add the explicit type attribute
         onClick={handlePrint}
-        className="mt-4 rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
+        className="text-white·mt-4·rounded·bg-blue-500·px-4·py-2 hover:bg-blue-600"
       >
         Print Review and Values
       </button>
