@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "husky install",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -13,6 +14,9 @@
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
     "next": "14.2.3",
+    "quill": "^2.0.2",
+    "quill-image-drop-module": "^1.0.3",
+    "quill-image-resize-module-react": "^3.0.0",
     "react": "^18",
     "react-beautiful-dnd": "^13.1.1",
     "react-day-picker": "^8.10.1",
@@ -21,6 +25,7 @@
     "react-quill": "^2.0.0"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
