@@ -6,10 +6,11 @@ import Input from './Input';
 
 interface ExpenseInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
+  digit?: number;
 }
 
 const ExpenseInput = forwardRef(function ExpenseInput(
-  { id, ...rest }: ExpenseInputProps,
+  { id, digit = 12, ...rest }: ExpenseInputProps,
   ref: React.ForwardedRef<HTMLInputElement>
 ) {
   const [expense, setExpense] = useState('');
@@ -35,6 +36,11 @@ const ExpenseInput = forwardRef(function ExpenseInput(
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const nextExpense = e.target.value.replace(/[^\d.]/g, '');
+
+    if (e.target.value.length > digit) {
+      setExpense(expense);
+      return;
+    }
 
     if (e.target.value.split('.').length > 2 || e.target.value === '.') {
       setExpense(expense);
