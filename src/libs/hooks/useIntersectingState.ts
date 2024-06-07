@@ -14,19 +14,20 @@ function useIntersectingState<T extends Element>(initialState?: null): [boolean 
   const ref = useRef<T>(null);
 
   useEffect(() => {
+    if (!ref.current) return null;
+
     const observer = new IntersectionObserver(([entry]) => {
       setIsIntersecting(entry.isIntersecting);
     });
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
+    observer.observe(ref.current);
+
     return () => {
       if (ref.current) {
         observer.unobserve(ref.current);
       }
     };
-  }, []);
+  }, [ref.current]);
 
   return [isIntersecting, ref];
 }
