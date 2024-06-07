@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
-import ReviewCard from '@/components/card/ReviewCard';
+import ReviewCard, { ReviewCardProps } from '@/components/card/ReviewCard';
 import useIntersectingState from '@/libs/hooks/useIntersectingState';
-
-import { ReviewCardProps } from './card/type';
 
 export default function CardList() {
   const [isIntersecting, observerRef] = useIntersectingState<HTMLDivElement>();

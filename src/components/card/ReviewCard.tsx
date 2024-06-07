@@ -1,7 +1,12 @@
 import React from 'react';
 
-import { ReviewCardProps } from '@/components/card/type';
+import { DefaultCardProps } from '@/components/card/type';
 import ImageBox from '@/components/common/ImageBox';
+
+export interface ReviewCardProps extends DefaultCardProps {
+  route: string[];
+  user: { name: string; profileImg: string };
+}
 
 export default function ReviewCard({ imageUrl, title, route, user, onClick }: ReviewCardProps) {
   return (
