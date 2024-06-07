@@ -1,24 +1,26 @@
+'use client';
+
 import React from 'react';
 
+import classNames from 'classnames';
+
 interface ButtonProps {
-  onClick: () => void;
-  variant?: 'default' | 'variant2' | 'variant3' | 'ghost' | 'danger';
-  size?: 'sm' | 'lg';
-  disabled?: boolean;
   children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
-export default function Button({ children, onClick, variant = 'default', size = 'lg', disabled = false }: ButtonProps) {
-  // 기본스타일
-  const baseStyles = 'flex justify-center items-center items-center gap-[10px] rounded-[5px]';
+export default function Button({ children, className = '', onClick, type = 'button', disabled = false }: ButtonProps) {
+  const baseClass = 'flex-row-center justify-center';
+  const disabledClass = disabled ? 'cursor-not-allowed pointer-events-none' : '';
+
+  const buttonClass = classNames(baseClass, className, disabledClass);
 
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`${baseStyles} btn-${variant} btn-${size} ${disabled ? 'disabled' : ''}`}
-      disabled={disabled}
-    >
+    // eslint-disable-next-line react/button-has-type
+    <button className={buttonClass} type={type} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   );
