@@ -39,10 +39,7 @@ export default function Modal({ children, onClose, onAfterOpen, onAfterClose, cl
       parentSelector={() => modalRoot}
       appElement={modalRoot}
     >
-      <p>
-        모달입니다. 여기에 내용을 넣어주세요. 모달입니다. 여기에 내용을 넣어주세요. 모달입니다. 여기에 내용을
-        넣어주세요.{' '}
-      </p>
+      <p>모달입니다. 여기에 내용을 넣어주세요. 이곳에서 X 버튼을 우측 상단에 배치할 예정입니다.</p>
       {children}
       <button onClick={onClose} type="button">
         닫기
