@@ -41,7 +41,25 @@ const config: Config = {
           '01': '#F5BA07',
           '02': '#FFF6DC'
         },
-        point: '#FF6060'
+        point: '#FF6060',
+        block: {
+          pink: {
+            '01': '#FB2F85',
+            '02': '#FFEFF4'
+          },
+          green: {
+            '01': '#55B135',
+            '02': '#F1FBED'
+          },
+          purple: {
+            '01': '#9747FF',
+            '02': '#F4ECFF'
+          },
+          orange: {
+            '01': '#F35802',
+            '02': '#FFF0EA'
+          }
+        }
       }
     }
   },

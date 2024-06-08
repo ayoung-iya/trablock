@@ -3,7 +3,7 @@ import React from 'react';
 import { DefaultCardProps } from '@/components/card/type';
 import ImageBox from '@/components/common/ImageBox';
 
-interface ReviewCardProps extends DefaultCardProps {
+export interface ReviewCardProps extends DefaultCardProps {
   route: string[];
   user: { name: string; profileImg: string };
 }
