@@ -3,6 +3,6 @@
 import React from 'react';
 
 export type OpenedModalType = {
-  component: React.ComponentType<any> | null;
+  component: React.ComponentType<any>;
   props: any;
-};
+} | null;
