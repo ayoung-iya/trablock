@@ -2,4 +2,7 @@
 
 import React from 'react';
 
-export type OpenedModalType = React.ComponentType<any> | null;
+export type OpenedModalType = {
+  component: React.ComponentType<any>;
+  props: any;
+} | null;
