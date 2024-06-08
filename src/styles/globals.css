@@ -200,4 +200,12 @@ button {
     font-weight: 600;
     line-height: 18.2px;
   }
+
+  .modal-title {
+    @apply font-title-4 md:font-title-3;
+  }
+
+  .modal-subtitle {
+    @apply font-subtitle-2 md:font-title-4;
+  }
 }
