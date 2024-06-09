@@ -2,6 +2,8 @@ import React from 'react';
 
 import useMediaQuery from '@/hooks/useMediaQuery';
 
+import ImageBox from '../ImageBox';
+
 interface ProfileCardProps {
   name: string;
   bio?: string;
@@ -32,28 +34,27 @@ export default function ProfileCard({
   const isDesktop = useMediaQuery('(min-width: 1024px)');
 
   const displayBio = bio || '한 줄 소개가 없습니다.';
-  const displayImageUrl = imageUrl || '';
+  const displayImageUrl = imageUrl || '/icons/profile-default.svg';
 
   return (
     <div className={`bg-white rounded-lg p-4 shadow-md ${isDesktop ? 'w-96' : 'w-full'}`}>
       {isDesktop ? (
         <div className="flex flex-col items-center">
           <div className="relative flex h-32 w-32 items-center justify-center rounded-full bg-gray-200">
-            {displayImageUrl ? (
-              <img src={displayImageUrl} alt="Profile" className="h-full w-full rounded-full object-cover" />
-            ) : (
-              <span className="text-4xl text-gray-500">👤</span>
-            )}
+            <ImageBox src={displayImageUrl} alt="Profile Image" width={32} height={32} className="rounded-full" />
             {canEdit && isEditing && (
-              // eslint-disable-next-line max-len
-              <div className="bg-white absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200">
-                <span className="text-sm text-gray-500">📷</span>
+              <button
+                type="button"
+                // eslint-disable-next-line max-len
+                className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border-solid border-gray-02 bg-white-01"
+              >
+                <ImageBox src="/icons/camera.svg" alt="Camera Icon" width={8} height={8} className="rounded-full" />
                 <input
                   type="file"
                   className="absolute inset-0 cursor-pointer opacity-0"
                   onChange={(e) => e.target.files && onImageChange(URL.createObjectURL(e.target.files[0]))}
                 />
-              </div>
+              </button>
             )}
           </div>
           <div className="mt-4 text-center">
@@ -89,7 +90,7 @@ export default function ProfileCard({
                   className="rounded border border-primary-01 px-4 py-1 text-primary-01"
                   onClick={onEdit}
                 >
-                  수정하기
+                  편집하기
                 </button>
               ) : (
                 <div className="flex space-x-2">
@@ -115,11 +116,7 @@ export default function ProfileCard({
             className="relative flex h-16 w-16 items-center justify-center rounded-full bg-gray-200"
             onClick={!isDesktop && canEdit ? onEdit : undefined}
           >
-            {displayImageUrl ? (
-              <img src={displayImageUrl} alt="Profile" className="h-full w-full rounded-full object-cover" />
-            ) : (
-              <span className="text-2xl text-gray-500">👤</span>
-            )}
+            <ImageBox src={displayImageUrl} alt="Profile Image" width={32} height={32} className="rounded-full" />
             {canEdit && isEditing && (
               // eslint-disable-next-line max-len
               <input
@@ -158,15 +155,15 @@ export default function ProfileCard({
             <div className="ml-auto">
               {!isEditing ? (
                 <button type="button" className="text-primary-01" onClick={onEdit}>
-                  수정
+                  편집하기
                 </button>
               ) : (
                 <>
-                  <button type="button" className="mr-2 text-primary-01" onClick={onSave}>
-                    완료
-                  </button>
                   <button type="button" className="text-gray-500" onClick={onCancel}>
                     취소
+                  </button>
+                  <button type="button" className="mr-2 text-primary-01" onClick={onSave}>
+                    완료
                   </button>
                 </>
               )}
