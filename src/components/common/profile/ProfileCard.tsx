@@ -41,7 +41,13 @@ export default function ProfileCard({
       {isDesktop ? (
         <div className="flex flex-col items-center">
           <div className="relative flex h-32 w-32 items-center justify-center rounded-full bg-gray-200">
-            <ImageBox src={displayImageUrl} alt="Profile Image" width={32} height={32} className="rounded-full" />
+            <ImageBox
+              src={displayImageUrl}
+              alt="Profile Image"
+              width={32}
+              height={32}
+              className="h-full w-full rounded-full"
+            />
             {canEdit && isEditing && (
               <button
                 type="button"
@@ -61,7 +67,7 @@ export default function ProfileCard({
             {!isEditing ? (
               <>
                 <h2 className="text-xl font-semibold">{name}</h2>
-                <p className={`text-gray-600 ${!bio ? 'italic' : ''}`}>{displayBio}</p>
+                <p className={`text-black-02 ${!bio ? 'text-black-03' : ''}`}>{displayBio}</p>
               </>
             ) : (
               <>
@@ -112,17 +118,23 @@ export default function ProfileCard({
       ) : (
         <div className="flex items-center space-x-4">
           {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
-          <div
-            className="relative flex h-16 w-16 items-center justify-center rounded-full bg-gray-200"
-            onClick={!isDesktop && canEdit ? onEdit : undefined}
-          >
-            <ImageBox src={displayImageUrl} alt="Profile Image" width={32} height={32} className="rounded-full" />
+          <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-gray-200">
+            <ImageBox
+              src={displayImageUrl}
+              alt="Profile Image"
+              width={32}
+              height={32}
+              className="h-full w-full rounded-full"
+            />
             {canEdit && isEditing && (
-              // eslint-disable-next-line max-len
               <input
                 type="file"
                 className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                onChange={(e) => e.target.files && onImageChange(URL.createObjectURL(e.target.files[0]))}
+                onChange={(e) => {
+                  if (e.target.files) {
+                    onImageChange(URL.createObjectURL(e.target.files[0]));
+                  }
+                }}
               />
             )}
           </div>
@@ -130,7 +142,7 @@ export default function ProfileCard({
             {!isEditing ? (
               <>
                 <h2 className="text-lg font-semibold">{name}</h2>
-                <p className={`text-gray-600 ${!bio ? 'italic' : ''}`}>{displayBio}</p>
+                <p className={`text-black-02 ${!bio ? 'text-black-03' : ''}`}>{displayBio}</p>
               </>
             ) : (
               <>
