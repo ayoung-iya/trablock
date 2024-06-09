@@ -2,6 +2,7 @@ import React from 'react';
 
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+
 import '@/styles/globals.css';
 
 const pretendard = localFont({
