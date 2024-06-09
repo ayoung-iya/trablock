@@ -7,6 +7,11 @@ import KakaoScript from '../../KaKaoScript';
 
 import '@/styles/globals.css';
 
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
   display: 'swap',
