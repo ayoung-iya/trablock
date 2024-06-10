@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
-import useDropdownOutside from '@/libs/hooks/useDropdownOutside';
+interface DropdownProps extends React.PropsWithChildren {}
 
-interface DropdownProps extends React.PropsWithChildren {
-  handleCloseDropdown: () => void;
-}
+const Dropdown = forwardRef(function Dropdown({ children }: DropdownProps, ref: React.ForwardedRef<HTMLUListElement>) {
+  return (
+    <ul className="bg-white-01 rounded-[10px] p-5 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]" ref={ref}>
+      {children}
+    </ul>
+  );
+});
 
-export default function DropDown({ handleCloseDropdown, children }: DropdownProps) {
-  const dropdownRef = useDropdownOutside({ onClickOutside: handleCloseDropdown });
-
-  return <ul ref={dropdownRef}>{children}</ul>;
-}
+export default Dropdown;
