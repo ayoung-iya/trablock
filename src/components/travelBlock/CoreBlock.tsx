@@ -35,7 +35,7 @@ export interface CoreBlockProps extends DefaultBlockProps {
 export default function CoreBlock({ name, tag, route, memo, children, onClick }: CoreBlockProps) {
   return (
     <button
-      className="flex-row-center w-full justify-between border border-solid border-black p-4"
+      className="flex-row-center border-black w-full justify-between border border-solid p-4"
       type="button"
       onClick={onClick}
     >

@@ -12,6 +12,9 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
       },
+      boxShadow: {
+        modal: '0 0 0.625rem 0 rgba(0, 0, 0, 0.10)'
+      },
       colors: {
         black: {
           '01': '#363636',
@@ -38,7 +41,25 @@ const config: Config = {
           '01': '#F5BA07',
           '02': '#FFF6DC'
         },
-        point: '#FF6060'
+        point: '#FF6060',
+        block: {
+          pink: {
+            '01': '#FB2F85',
+            '02': '#FFEFF4'
+          },
+          green: {
+            '01': '#55B135',
+            '02': '#F1FBED'
+          },
+          purple: {
+            '01': '#9747FF',
+            '02': '#F4ECFF'
+          },
+          orange: {
+            '01': '#F35802',
+            '02': '#FFF0EA'
+          }
+        }
       }
     }
   },

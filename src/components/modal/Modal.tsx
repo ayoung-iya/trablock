@@ -1,10 +1,17 @@
+/* eslint-disable max-len */
+
+'use client';
+
 import React from 'react';
 
 import ReactModal from 'react-modal';
 
-interface ModalProps extends ReactModal.Props {
-  children: React.ReactNode;
+import CloseSvg from '@/icons/x.svg';
+
+export interface ModalProps extends ReactModal.Props {
+  children?: React.ReactNode;
   onClose?: () => void;
+  className?: string;
 }
 
 /**
@@ -15,24 +22,16 @@ interface ModalProps extends ReactModal.Props {
  * @param {function} onAfterOpen - (optional) Callback function called after the modal is opened.
  * @param {function} onAfterClose - (optional) Callback function called after the modal is closed.
  * @param {string} className - (optional) Additional CSS class names for the modal container.
- * @param {string} overlayClassName - (optional) Additional CSS class names for the modal overlay.
  */
 
-export default function Modal({
-  children,
-  onClose,
-  onAfterOpen,
-  onAfterClose,
-  className,
-  overlayClassName
-}: ModalProps) {
+export default function Modal({ children, onClose, onAfterOpen, onAfterClose, className = '' }: ModalProps) {
   const modalRoot = document.querySelector<HTMLElement>('#modal-root') ?? document.body;
 
   return (
     <ReactModal
       isOpen
-      className={className}
-      overlayClassName={overlayClassName}
+      className={`absolute-center relative w-full rounded-[0.625rem] bg-white-01 p-[1.25rem] shadow-modal md:p-[2.5rem] ${className}`}
+      overlayClassName="bg-overlay absolute-center size-full"
       onRequestClose={onClose}
       onAfterOpen={onAfterOpen}
       onAfterClose={onAfterClose}
@@ -42,8 +41,12 @@ export default function Modal({
       parentSelector={() => modalRoot}
       appElement={modalRoot}
     >
-      모달
+      <CloseSvg className="absolute right-5 top-5 size-[0.875rem] cursor-pointer md:size-5" onClick={onClose} />
+      <p className="modal-subtitle text-center">모달입니다. 여기에 내용을 넣어주세요.</p>
       {children}
+      <button onClick={onClose} type="button">
+        닫기
+      </button>
     </ReactModal>
   );
 }

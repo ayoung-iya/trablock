@@ -4,10 +4,10 @@ import modalList from '@/components/modal/modalList/modalList';
 import useModal from '@/libs/hooks/useModal';
 
 export default function ModalTest() {
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
 
   const handleClick = () => {
-    openModal(modalList.Modal);
+    openModal(modalList.Modal({ className: 'max-w-[20rem] md:max-w-[36.875rem]', onClose: closeModal, isOpen: true }));
   };
 
   return (

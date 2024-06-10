@@ -3,7 +3,7 @@ import React from 'react';
 import { DefaultCardProps } from '@/components/card/type';
 import ImageBox from '@/components/common/ImageBox';
 
-interface ReviewCardProps extends DefaultCardProps {
+export interface ReviewCardProps extends DefaultCardProps {
   route: string[];
   user: { name: string; profileImg: string };
 }
@@ -12,7 +12,7 @@ export default function ReviewCard({ imageUrl, title, route, user, onClick }: Re
   return (
     <button className="relative size-full max-h-80 max-w-80 overflow-hidden" type="button" onClick={onClick}>
       <ImageBox className="size-full" src={imageUrl} alt={imageUrl} width={80} height={80} />
-      <div className="absolute bottom-4 left-4 text-white">
+      <div className="text-white absolute bottom-4 left-4">
         <p>{title}</p>
         {route.map((item, idx) => (
           <>

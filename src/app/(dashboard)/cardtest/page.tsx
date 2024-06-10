@@ -1,8 +1,7 @@
-/* eslint-disable max-len */
-
 import CircleCard from '@/components/card/CircleCard';
 import ReviewCard from '@/components/card/ReviewCard';
 import TravelCard from '@/components/card/TravelCard';
+import LogoSvg from '@/icons/logo.svg';
 
 export default function Home() {
   const cardList = {
@@ -39,6 +38,7 @@ export default function Home() {
 
   return (
     <div className="flex-col-center gap-12 p-8">
+      <LogoSvg className="h-32 w-60 border border-solid" />
       <div className="flex-row-center gap-4">
         <CircleCard {...cardList.circle} />
       </div>

@@ -95,6 +95,10 @@ button {
     @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
   }
 
+  .bg-overlay {
+    @apply bg-[rgba(0,0,0,0.6)];
+  }
+
   .font-title-1 {
     font-size: 32px;
     font-weight: 700;
@@ -195,5 +199,13 @@ button {
     font-size: 14px;
     font-weight: 600;
     line-height: 18.2px;
+  }
+
+  .modal-title {
+    @apply font-title-4 md:font-title-3;
+  }
+
+  .modal-subtitle {
+    @apply font-subtitle-2 md:font-title-4;
   }
 }
