@@ -174,12 +174,18 @@ button {
   }
 
   .font-btn-1 {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 23.4px;
+  }
+
+  .font-btn-2 {
     font-size: 16px;
     font-weight: 700;
     line-height: 20.8px;
   }
 
-  .font-btn-2 {
+  .font-btn-3 {
     font-size: 14px;
     font-weight: 700;
     line-height: 18.2px;
@@ -195,5 +201,71 @@ button {
     font-size: 14px;
     font-weight: 600;
     line-height: 18.2px;
+  }
+
+  /* Button Variants */
+  .btn-solid {
+    @apply bg-primary-01 text-white-01;
+  }
+
+  .btn-light {
+    @apply bg-primary-03 text-primary-01;
+  }
+
+  .btn-ghost {
+    @apply border border-solid border-primary-01 bg-white-01 text-primary-01;
+  }
+
+  .btn-outline {
+    @apply border border-solid border-gray-02 text-black-02;
+  }
+
+  .btn-gray {
+    @apply pointer-events-none cursor-not-allowed bg-gray-02 text-white-01;
+  }
+
+  .btn-red {
+    @apply bg-red-01 text-white-01;
+  }
+
+  .btn-add {
+    @apply h-12 rounded-md bg-primary-03;
+  }
+
+  .btn-arrow {
+    @apply h-12 w-12 rounded-full bg-white-01 shadow-md;
+  }
+
+  .btn-sub {
+    @apply font-caption-2 h-8 gap-2.5 rounded-md border border-solid border-gray-02 bg-white-01 px-4 py-1.5 text-black-03;
+  }
+
+  .btn-plus {
+    @apply h-8 w-8 rounded-full bg-primary-01;
+  }
+
+  /* Button Sizes */
+  .btn-sm {
+    @apply font-btn-3 h-10 gap-x-2.5 rounded-md px-6 py-1.5;
+  }
+
+  .btn-md {
+    @apply font-btn-2 h-10 min-w-[20rem] gap-x-2.5 rounded-md;
+  }
+
+  .btn-lg {
+    @apply font-subtitle-1 h-12 min-w-[20rem] gap-x-2.5 rounded-md;
+  }
+
+  .add-sm {
+    @apply w-[17.5rem];
+  }
+
+  .add-md {
+    @apply w-[20rem];
+  }
+
+  .add-lg {
+    @apply w-[21.625rem];
   }
 }
