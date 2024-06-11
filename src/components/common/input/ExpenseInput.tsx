@@ -1,15 +1,19 @@
 import React, { forwardRef, useState } from 'react';
 
-import Input from '@/components/common/input/Input';
 import { addNumberCommas, removeNumberCommas } from '@/libs/utils/moneyFormatter';
 
-interface ExpenseInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+import Input from './Input';
+
+interface ExpenseInputProps {
   id: string;
   digit?: number;
+  placeholder?: string;
+  onlyInteger?: boolean;
+  onChangeExpense: (newValue: number) => void;
 }
 
 const ExpenseInput = forwardRef(function ExpenseInput(
-  { id, digit = 12, ...rest }: ExpenseInputProps,
+  { id, digit = 12, placeholder, onlyInteger, onChangeExpense }: ExpenseInputProps,
   ref: React.ForwardedRef<HTMLInputElement>
 ) {
   const [expense, setExpense] = useState('');
@@ -31,12 +35,18 @@ const ExpenseInput = forwardRef(function ExpenseInput(
 
     const formattedNumber = addNumberCommas(e.target.value);
     setExpense(formattedNumber);
+    onChangeExpense(+e.target.value);
   };
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const nextExpense = e.target.value.replace(/[^\d.]/g, '');
 
     if (e.target.value.length > digit) {
+      setExpense(expense);
+      return;
+    }
+
+    if (e.target.value.includes('.') && onlyInteger) {
       setExpense(expense);
       return;
     }
@@ -58,8 +68,8 @@ const ExpenseInput = forwardRef(function ExpenseInput(
       onChange={handleChange}
       onFocus={handleFocus}
       onBlur={handleBlur}
+      placeholder={placeholder}
       ref={ref}
-      {...rest}
     />
   );
 });
