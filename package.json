@@ -17,7 +17,8 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
     "react-hook-form": "^7.51.5",
-    "react-quill": "^2.0.0"
+    "react-quill": "^2.0.0",
+    "return-fetch": "^0.4.6"
   },
   "devDependencies": {
     "@types/node": "^20",
