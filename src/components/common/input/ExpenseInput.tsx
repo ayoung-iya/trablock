@@ -9,7 +9,7 @@ interface ExpenseInputProps {
   digit?: number;
   placeholder?: string;
   onlyInteger?: boolean;
-  onChangeExpense: (newValue: number) => void;
+  onChangeExpense?: (newValue: number) => void;
 }
 
 const ExpenseInput = forwardRef(function ExpenseInput(
@@ -35,7 +35,7 @@ const ExpenseInput = forwardRef(function ExpenseInput(
 
     const formattedNumber = addNumberCommas(e.target.value);
     setExpense(formattedNumber);
-    onChangeExpense(+e.target.value);
+    onChangeExpense?.(+e.target.value);
   };
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
