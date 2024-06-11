@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 
-import { apiRequestor } from '@/apis/requestor';
+import { apiRequestor } from '@/_apis/requestor';
 
 class ExampleService {
   postExample(options: any, payload: any) {

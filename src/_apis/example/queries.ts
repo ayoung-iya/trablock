@@ -1,4 +1,4 @@
-import ExampleService from '@/apis/example/example.service';
+import ExampleService from '@/_apis/example/example.service';
 
 const queryKeys = {
   postExample: (options: any, payload: any) => ['postExample', options, payload] as const,

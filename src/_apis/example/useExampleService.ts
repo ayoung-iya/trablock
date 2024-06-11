@@ -6,9 +6,9 @@ import {
   PostExampleRes,
   PutExamplePayload,
   PutExampleRes
-} from '@/apis/example/example.type';
-import queryOptions from '@/apis/example/queries';
-import { selectData } from '@/apis/utils';
+} from '@/_apis/example/example.type';
+import queryOptions from '@/_apis/example/queries';
+import { selectData } from '@/_apis/utils';
 
 /**
  * description
