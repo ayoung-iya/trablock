@@ -1,8 +1,7 @@
 import React, { forwardRef, useState } from 'react';
 
+import Input from '@/components/common/input/Input';
 import { addNumberCommas, removeNumberCommas } from '@/libs/utils/moneyFormatter';
-
-import Input from './Input';
 
 interface ExpenseInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
