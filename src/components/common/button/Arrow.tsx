@@ -1,24 +1,22 @@
 import React from 'react';
 
 import Button from '@/components/common/button/Button';
-
-import ImageBox from '../ImageBox';
+import ArrowBtnLeft from '@/icons/arrow-btn-left.svg';
+import ArrowBtnRight from '@/icons/arrow-btn-right.svg';
 
 interface ArrowButtonProps {
   onClick: () => void;
-  direction: 'left' | 'right';
   disabled?: boolean;
+  direction?: 'left' | 'right';
 }
 
-const arrowIcons = {
-  left: '/icons/arrow-btn-left.svg',
-  right: '/icons/arrow-btn-right.svg'
-};
+export default function ArrowButton({ onClick, disabled, direction = 'left' }: ArrowButtonProps) {
+  const fillColor = disabled ? '#DDE2E9' : '#363636';
+  const ArrowIcon = direction === 'left' ? ArrowBtnLeft : ArrowBtnRight;
 
-export default function ArrowButton({ onClick, direction, disabled }: ArrowButtonProps) {
   return (
     <Button className="btn-arrow" onClick={onClick} type="button" disabled={disabled}>
-      <ImageBox src={arrowIcons[direction]} alt={`${direction} arrow`} width={20} height={20} />
+      <ArrowIcon fill={fillColor} width="20" height="20" />
     </Button>
   );
 }
