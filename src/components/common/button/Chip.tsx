@@ -9,40 +9,43 @@ import classNames from 'classnames';
  * @param {('day' | 'default')} [variant='default'] - 칩의 변형
  * @param {boolean} selected - 칩의 선택 상태
  *
- * const [isSelectedLarge, setIsSelectedLarge] = useState(false);
- * <Chip size="lg" selected={isSelectedLarge} onClick={() => void}>
+ * const [isSelected, setIsSelected] = useState(false);
+ * <Chip variant="day" selected={isSelected} onClick={() => void}>
  *    Day 1
  * </Chip>
  */
 
-const chipStyles: { [key: string]: string } = {
+const chipStyles = {
   base: 'flex px-5 py-1.75 justify-center items-center gap-2.5 rounded-full font-caption-1',
-  selectedDay: 'bg-black-01 text-white-01',
-  selectedDefault: 'border-solid border-secondary-01 bg-white text-secondary-01',
-  unselectedDay: 'border-solid border-gray-02 bg-white-01 text-black-02',
-  unselectedDefault: 'border-solid border-gray-02 bg-white-01 text-black-02',
-  day: 'h-10',
-  default: 'h-9'
-};
+  selected: {
+    day: 'bg-black-01 text-white-01',
+    default: 'border-solid border-secondary-01 bg-white text-secondary-01'
+  },
+  unselected: {
+    day: 'border-solid border-gray-02 bg-white-01 text-black-02',
+    default: 'border-solid border-gray-02 bg-white-01 text-black-02'
+  },
+  height: {
+    day: 'h-10',
+    default: 'h-9'
+  }
+} as const;
+
+type Variant = 'day' | 'default';
+type State = 'selected' | 'unselected';
 
 interface ChipProps {
   children: React.ReactNode;
-  variant?: 'day' | 'default';
+  variant?: Variant;
   selected: boolean;
   onClick: () => void;
 }
 
 export default function Chip({ children, variant = 'default', selected, onClick }: ChipProps) {
-  const variantClass = variant === 'day' ? chipStyles.day : chipStyles.default;
-  const stateClass = selected
-    ? variant === 'day'
-      ? chipStyles.selectedDay
-      : chipStyles.selectedDefault
-    : variant === 'day'
-      ? chipStyles.unselectedDay
-      : chipStyles.unselectedDefault;
+  const variantKey: Variant = variant || 'default';
+  const stateKey: State = selected ? 'selected' : 'unselected';
 
-  const chipClass = classNames(chipStyles.base, variantClass, stateClass);
+  const chipClass = classNames(chipStyles.base, chipStyles[stateKey][variantKey], chipStyles.height[variantKey]);
 
   return (
     <button type="button" className={chipClass} onClick={onClick}>
