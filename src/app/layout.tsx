@@ -3,8 +3,15 @@ import React from 'react';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
+import KakaoScript from '../../KaKaoScript';
+
 import '@/styles/globals.css';
 
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
   display: 'swap',
@@ -24,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={pretendard.className}>{children}</body>
+      <KakaoScript />
     </html>
   );
 }

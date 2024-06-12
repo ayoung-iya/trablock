@@ -203,6 +203,22 @@ button {
     line-height: 18.2px;
   }
 
+  .font-tab-1 {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 140%;
+  }
+  .font-tab-2 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 140%;
+  }
+  .font-tab-3 {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 130%;
+  }
+
   /* Button Variants */
   .btn-solid {
     @apply bg-primary-01 text-white-01;

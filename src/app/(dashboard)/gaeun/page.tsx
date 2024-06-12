@@ -1,3 +1,7 @@
+'use client';
+
+import ShareModal from '@/components/ShareModal';
+
 export default function gaeun() {
-  return <p>가은</p>;
+  return <ShareModal />;
 }
