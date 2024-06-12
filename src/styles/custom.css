@@ -15,15 +15,11 @@
 }
 
 .tab-bar-button {
-  @apply font-tab-3 flex;
+  @apply font-tab-3 flex text-gray-01;
 }
 
 .tab-bar-button-active {
   @apply text-black-01;
-}
-
-.tab-bar-button-inactive {
-  @apply text-gray-01;
 }
 
 .tab-bar-hr {
@@ -37,6 +33,6 @@
   @apply border-black-01;
 }
 
-.tab-bar-hr-inactive {
+.tab-bar-hr {
   @apply opacity-0;
 }

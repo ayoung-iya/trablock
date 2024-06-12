@@ -69,18 +69,13 @@ export default function TabBar({ tabBarList, handleTabBarClick, size }: TabBarPr
     <nav>
       <ul className={tabBarCss[size].ulClassName}>
         {tabBarList.map((item) => {
-          const className = classNames(
-            {
-              'tab-bar-button-active': clickedTab === item,
-              'tab-bar-button-inactive': clickedTab !== item
-            },
-            'tab-bar-button'
-          );
+          const className = classNames('tab-bar-button', {
+            'tab-bar-button-active': clickedTab === item
+          });
 
           const hrClassName = classNames(
             {
-              'tab-bar-hr-active': clickedTab === item,
-              'tab-bar-hr-inactive': clickedTab !== item
+              'tab-bar-hr-active': clickedTab === item
             },
             tabBarCss[size].hrClassName
           );
