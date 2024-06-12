@@ -3,7 +3,8 @@ import React from 'react';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
-import KakaoScript from '../../KaKaoScript';
+import ReactQueryProvider from '@/apis/components/ReactQueryProvider';
+import KakaoScript from '@/components/social/KaKaoScript';
 
 import '@/styles/globals.css';
 
@@ -30,8 +31,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={pretendard.className}>{children}</body>
-      <KakaoScript />
+      <body className={pretendard.className}>
+        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <KakaoScript />
+      </body>
     </html>
   );
 }
