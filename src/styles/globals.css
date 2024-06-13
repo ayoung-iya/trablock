@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 /* css reset */
+body {
+  color: #2d3136;
+}
 blockquote,
 body,
 dd,
