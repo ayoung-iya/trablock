@@ -13,8 +13,8 @@ import React, { useEffect, useState } from 'react';
 import { useJsApiLoader, Libraries } from '@react-google-maps/api';
 import dynamic from 'next/dynamic';
 
-import { Coordinate } from '@/components/map/Map';
-import GOOGLE_MAPS from '@/libs/constants/googleMaps';
+import { Coordinate } from '@/components/map/type';
+import { DEFAULT_COORDINATE_LIST, GOOGLE_MAPS } from '@/libs/constants/googleMaps';
 
 const Map = dynamic(() => import('@/components/map/Map'), { ssr: false });
 const PlaceSearch = dynamic(() => import('@/components/map/PlaceSearch'), { ssr: false });
@@ -24,12 +24,6 @@ const mapContainerStyle = {
   width: '100%',
   height: '400px'
 };
-
-const defaultCoordinateList: Coordinate[] = [
-  { lat: 37.7749, lng: -122.4194 }, // San Francisco
-  { lat: 34.0522, lng: -118.2437 }, // Los Angeles
-  { lat: 40.7128, lng: -74.006 } // New York
-];
 
 const LIBRARIES: Libraries = ['places', 'marker'];
 
@@ -42,7 +36,7 @@ function Page() {
 
   const [firstPlace, setFirstPlace] = useState<google.maps.places.PlaceResult | null>(null);
   const [secondPlace, setSecondPlace] = useState<google.maps.places.PlaceResult | null>(null);
-  const [coordinateList, setCoordinateList] = useState<Coordinate[]>(defaultCoordinateList);
+  const [coordinateList, setCoordinateList] = useState<Coordinate[]>(DEFAULT_COORDINATE_LIST);
 
   const handlePlaceSelect = (place: google.maps.places.PlaceResult, isFirst: boolean) => {
     if (isFirst) {
@@ -59,8 +53,23 @@ function Page() {
   };
 
   useEffect(() => {
-    console.log('coordinateList', coordinateList);
-  }, [coordinateList]);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setCoordinateList([{ lat: latitude, lng: longitude }]);
+        },
+        (error) => {
+          console.error('Error fetching user location', error);
+          // 기본 좌표 설정
+          setCoordinateList(DEFAULT_COORDINATE_LIST);
+        }
+      );
+    } else {
+      // Geolocation을 지원하지 않는 경우 기본 좌표 설정
+      setCoordinateList(DEFAULT_COORDINATE_LIST);
+    }
+  }, []);
 
   if (loadError) {
     return <div>Error loading maps</div>;
