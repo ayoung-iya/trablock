@@ -25,7 +25,7 @@ export default function SearchInput({ searchString: initialSearchString = '', on
   };
 
   return (
-    <div className="bg-gray-03 flex h-10 rounded-[5px] px-3 pb-2 pt-[10px]">
+    <div className="flex h-10 rounded-[5px] bg-gray-03 px-3 pb-2 pt-[10px]">
       <Input id="search" value={searchString} className="w-full bg-inherit" onChange={handleSearchStringChange} />
       {searchString && (
         <button type="button" onClick={handleSearchStringReset}>

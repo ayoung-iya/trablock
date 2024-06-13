@@ -3,6 +3,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
+import 'react-day-picker/dist/style.css';
 import '@/styles/globals.css';
 
 const pretendard = localFont({
