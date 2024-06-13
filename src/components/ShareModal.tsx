@@ -31,6 +31,7 @@ export default function ShareModal() {
         카카오톡 공유하기
       </button>
       <br />
+      {/* eslint-disable-next-line no-alert */}
       <CopyToClipboard text={mockData.link.webUrl} onCopy={() => alert('링크가 복사되었습니다.')}>
         <button type="button">링크 복사하기</button>
       </CopyToClipboard>
