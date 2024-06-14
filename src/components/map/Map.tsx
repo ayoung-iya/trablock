@@ -1,7 +1,6 @@
-/* eslint-disable consistent-return */
-
 'use client';
 
+/* eslint-disable consistent-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-return-assign */
