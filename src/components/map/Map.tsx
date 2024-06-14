@@ -24,7 +24,7 @@ interface MapProps extends GoogleMapProps {
 
 export default function Map({ mapContainerStyle, coordinateList }: MapProps) {
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [markers, setMarkers] = useState<any[]>([]);
+  const [markers, setMarkers] = useState<google.maps.marker.AdvancedMarkerElement[]>([]);
   const [polyline, setPolyline] = useState<google.maps.Polyline | null>(null);
 
   // 맵 load
