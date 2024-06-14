@@ -12,11 +12,12 @@ export default function BadgeWithDelete({ onClickDeleteButton, children }: Badge
   return (
     <button
       type="button"
-      className="font-tag flex-row-center h-6 gap-[6px] rounded-[5px] bg-[#ECF4FF] px-2 py-[3px] text-primary-01"
+      // eslint-disable-next-line max-len
+      className="font-tag flex-row-center h-6 gap-[0.375rem] rounded-[0.3125rem] bg-[#ECF4FF] px-2 py-[0.1875rem] text-primary-01"
       onClick={onClickDeleteButton}
     >
       {children}
-      <ImageBox src={xIcon} className="size-[14px]" alt="삭제" width={14} height={14} />
+      <ImageBox src={xIcon} className="size-[0.875rem]" alt="삭제" width={14} height={14} />
     </button>
   );
 }
