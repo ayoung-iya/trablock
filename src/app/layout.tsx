@@ -3,10 +3,18 @@ import React from 'react';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
-import '@/styles/globals.css';
+import ReactQueryProvider from '@/apis/components/ReactQueryProvider';
 import AsyncBoundary from '@/components/common/AsyncBoundary';
+import KakaoScript from '@/components/social/KaKaoScript';
 import ModalProvider from '@/libs/contexts/ModalProvider';
 
+import '@/styles/globals.css';
+
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
   display: 'swap',
@@ -27,9 +35,12 @@ export default function RootLayout({
     <html lang="ko">
       <body className={pretendard.className}>
         <AsyncBoundary>
-          <ModalProvider>{children}</ModalProvider>
+          <ReactQueryProvider>
+            <ModalProvider>{children}</ModalProvider>
+            <div id="modal-root" />
+          </ReactQueryProvider>
         </AsyncBoundary>
-        <div id="modal-root" />
+        <KakaoScript />
       </body>
     </html>
   );
