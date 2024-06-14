@@ -10,7 +10,7 @@ interface InputFieldProps {
 
 const WrapperGap = {
   sm: 'gap-3',
-  md: 'gap-[9px] md:gap-3'
+  md: 'gap-[0.5625rem] md:gap-3'
 };
 
 export default function InputWithTitle({ title, size = 'md', children }: InputFieldProps) {
