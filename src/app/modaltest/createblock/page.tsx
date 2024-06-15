@@ -10,6 +10,7 @@ import {
   CreateEtcBlockData,
   CreateTransportBlockData,
   CreatedBlockData,
+  DefaultCreatedBlockData,
   OnEtcSelect,
   OnPlaceSelect,
   OnTransportSelect
@@ -22,7 +23,7 @@ export default function Page() {
   const { isLoaded } = useGoogleMapsApi();
   const { openModal, closeModal } = useModal();
   const [createdBlockData, setCreatedBlockData] = useState<
-    CreatedBlockData | CreateTransportBlockData | CreateEtcBlockData
+    DefaultCreatedBlockData | CreatedBlockData | CreateTransportBlockData | CreateEtcBlockData
   >({
     category: DEFAULT_CATEGORY,
     place: null
@@ -35,8 +36,8 @@ export default function Page() {
   };
 
   // 교통 블록 데이터
-  const handleTransportSelect: OnTransportSelect = ({ category, firstPlace, secondPlace }) => {
-    setCreatedBlockData({ category, firstPlace, secondPlace });
+  const handleTransportSelect: OnTransportSelect = ({ category, transport, firstPlace, secondPlace }) => {
+    setCreatedBlockData({ category, transport, firstPlace, secondPlace });
     closeModal();
   };
 
@@ -60,6 +61,7 @@ export default function Page() {
     );
   };
 
+  // 디버깅
   useEffect(() => {
     console.log('createdBlockData', createdBlockData);
   }, [createdBlockData]);

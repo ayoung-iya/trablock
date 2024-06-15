@@ -28,10 +28,6 @@ export default function CreateBlockModal({
     setSelectedCategory(category);
   };
 
-  const handlePlaceSelect: OnPlaceSelect = ({ category, place }) => {
-    if (onPlaceSelect) onPlaceSelect({ category, place });
-  };
-
   return (
     <Modal {...props}>
       <p className="modal-h1 mb-[3.125rem] mt-5 text-center md:mb-[3.75rem] md:mt-0">블록 생성</p>
@@ -58,7 +54,7 @@ export default function CreateBlockModal({
       {isLoaded && (
         <CreateBlockModalContent
           category={selectedCategory}
-          onPlaceSelect={handlePlaceSelect}
+          onPlaceSelect={onPlaceSelect}
           onTransportSelect={onTransportSelect}
           onEtcSelect={onEtcSelect}
         />

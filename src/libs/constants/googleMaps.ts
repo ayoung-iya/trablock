@@ -1,6 +1,7 @@
 import { Libraries } from '@react-google-maps/api';
 
 import { Coordinate } from '@/components/map/type';
+import { Transport } from '@/components/modal/modalList/type';
 
 // 구글맵 API
 export const GOOGLE_MAPS = {
@@ -18,6 +19,9 @@ export const DEFAULT_COORDINATE_LIST: Coordinate[] = [
 
 // 라이브러리 목록
 export const LIBRARIES: Libraries = ['places', 'marker'];
+
+// Directions API 이동 수단 목록
+export const TRANSPORT_LIST: Transport[] = ['자동차', '도보', '자전거', '대중교통'];
 
 // places.types[0] 한국어로 번역
 export const PLACE_TYPES: { [key: string]: string } = {

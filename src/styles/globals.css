@@ -304,6 +304,12 @@ button {
     @apply font-subtitle-2;
   }
 
+  .modal-dropdown {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 125%;
+  }
+
   /* Custom scrollbar styles */
   .scrollbar-custom::-webkit-scrollbar {
     width: 8px; /* 스크롤바 너비 */

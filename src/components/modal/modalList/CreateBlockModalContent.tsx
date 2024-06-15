@@ -22,7 +22,9 @@ export default function CreateBlockModalContent({
   if (category === CATEGORY.교통)
     return (
       <PlaceSearchTransport
-        onPlaceSelect={(firstPlace, secondPlace) => onTransportSelect({ category, firstPlace, secondPlace })}
+        onTransportSelect={(transport, firstPlace, secondPlace) =>
+          onTransportSelect({ category, transport, firstPlace, secondPlace })
+        }
       />
     );
   if (category === CATEGORY.기타) return <PlaceEtcInput onPlaceInput={(name) => onEtcSelect({ category, name })} />;
