@@ -69,6 +69,7 @@ export default function Page() {
   return (
     <div>
       <Button onClick={handleClick}>Open Modal</Button>
+      {createdBlockData && <pre>{JSON.stringify(createdBlockData, null, 2)}</pre>}
     </div>
   );
 }
