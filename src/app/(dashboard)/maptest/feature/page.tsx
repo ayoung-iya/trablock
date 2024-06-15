@@ -1,20 +1,14 @@
 'use client';
 
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-return-assign */
 /* eslint-disable no-undef */
-/* eslint-disable no-shadow */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-new */
 
 import React, { useEffect, useState } from 'react';
 
-import { useJsApiLoader, Libraries } from '@react-google-maps/api';
 import dynamic from 'next/dynamic';
 
 import { Coordinate } from '@/components/map/type';
-import { DEFAULT_COORDINATE_LIST, GOOGLE_MAPS } from '@/libs/constants/googleMaps';
+import { DEFAULT_COORDINATE_LIST } from '@/libs/constants/googleMaps';
+import useGoogleMapsApi from '@/libs/hooks/useGoogleMapsApi';
 
 const Map = dynamic(() => import('@/components/map/Map'), { ssr: false });
 const PlaceSearch = dynamic(() => import('@/components/map/PlaceSearch'), { ssr: false });
@@ -25,14 +19,8 @@ const mapContainerStyle = {
   height: '400px'
 };
 
-const LIBRARIES: Libraries = ['places', 'marker'];
-
 function Page() {
-  const { isLoaded, loadError } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: GOOGLE_MAPS.API_KEY,
-    libraries: LIBRARIES
-  });
+  const { isLoaded, loadError } = useGoogleMapsApi();
 
   const [firstPlace, setFirstPlace] = useState<google.maps.places.PlaceResult | null>(null);
   const [secondPlace, setSecondPlace] = useState<google.maps.places.PlaceResult | null>(null);
