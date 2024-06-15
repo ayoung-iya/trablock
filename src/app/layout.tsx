@@ -3,9 +3,16 @@ import React from 'react';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
+import ReactQueryProvider from '@/apis/components/ReactQueryProvider';
+import KakaoScript from '@/components/social/KaKaoScript';
 import 'react-day-picker/dist/style.css';
 import '@/styles/globals.css';
 
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
   display: 'swap',
@@ -24,7 +31,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={pretendard.className}>{children}</body>
+      <body className={pretendard.className}>
+        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <KakaoScript />
+      </body>
     </html>
   );
 }
