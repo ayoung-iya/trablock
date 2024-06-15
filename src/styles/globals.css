@@ -81,6 +81,10 @@ button {
   font: inherit;
 }
 
+.rdp {
+  --rdp-accent-color: #4f80ff;
+}
+
 @layer utilities {
   .flex-row-center {
     @apply flex items-center;

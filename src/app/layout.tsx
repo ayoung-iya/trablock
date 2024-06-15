@@ -5,7 +5,7 @@ import localFont from 'next/font/local';
 
 import ReactQueryProvider from '@/apis/components/ReactQueryProvider';
 import KakaoScript from '@/components/social/KaKaoScript';
-
+import 'react-day-picker/dist/style.css';
 import '@/styles/globals.css';
 
 declare global {
