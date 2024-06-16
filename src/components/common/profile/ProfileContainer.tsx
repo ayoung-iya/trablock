@@ -39,6 +39,11 @@ export default function ProfileContainer({ profile, onSave }: ProfileContainerPr
   };
 
   const handleCancel = () => {
+    setTempProfile({
+      name: profile.name,
+      bio: profile.bio || '',
+      imageUrl: profile.imageUrl || ''
+    });
     setIsEditing(false);
   };
 
