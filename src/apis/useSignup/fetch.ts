@@ -19,6 +19,22 @@ const serviceSignup = {
     });
     const result = response.json();
     return result;
+  },
+  postEmailCheck: async (data: string) => {
+    const response = await fetchSignup('api/v1/auth/아직 없음', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+    const result = response.json();
+    return result;
+  },
+  postNicknameCheck: async (data: string) => {
+    const response = await fetchSignup('api/v1/auth/nickname', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+    const result = response.json();
+    return result;
   }
 };
 
