@@ -9,7 +9,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Button from '@/components/common/button/Button';
 import Dropdown from '@/components/common/Dropdown';
@@ -21,6 +21,7 @@ import { Transport } from '@/components/modal/modalList/type';
 import ChevronUpSvg from '@/icons/chevron-up.svg';
 import { TRANSPORT_LIST } from '@/libs/constants/googleMaps';
 import useDropdown from '@/libs/hooks/useDropdown';
+import useGoogleMapsPlaceSearch from '@/libs/hooks/useGoogleMapsPlaceSearch';
 
 interface PlaceSearchTransportProps {
   className?: string;
@@ -32,10 +33,7 @@ interface PlaceSearchTransportProps {
 }
 
 export default function PlaceSearchTransport({ className, onTransportSelect }: PlaceSearchTransportProps) {
-  const [query, setQuery] = useState('');
-  const [places, setPlaces] = useState<google.maps.places.PlaceResult[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const { query, setQuery, places, error, loading } = useGoogleMapsPlaceSearch();
   const [firstPlace, setFirstPlace] = useState<google.maps.places.PlaceResult | null>(null);
   const [selectedTransport, setSelectedTransport] = useState<Transport>(TRANSPORT_LIST[0]);
   const { ref, isDropdownOpened, handleDropdownToggle } = useDropdown({
@@ -56,49 +54,6 @@ export default function PlaceSearchTransport({ className, onTransportSelect }: P
   const handleSecondPlaceSelect = (place: google.maps.places.PlaceResult) => {
     if (firstPlace && place) onTransportSelect(selectedTransport, firstPlace, place);
   };
-
-  useEffect(() => {
-    const handleSearch = () => {
-      setLoading(true); // 로딩 상태 시작
-
-      try {
-        if (!google || !google.maps || !google.maps.places) {
-          console.log('Google Maps JavaScript API failed to load');
-          throw new Error('서버에 연결할 수 없습니다.');
-        }
-
-        const service = new google.maps.places.PlacesService(document.createElement('div'));
-
-        const request: google.maps.places.TextSearchRequest = {
-          query,
-          language: 'ko'
-        };
-
-        service.textSearch(request, (results, status) => {
-          setLoading(false); // 로딩 상태 종료
-
-          if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-            setPlaces(results);
-            setError(null);
-          } else {
-            setPlaces([]);
-            setError('검색 결과가 없습니다.');
-          }
-        });
-      } catch (error: any) {
-        setLoading(false); // 로딩 상태 종료
-        console.error('Error loading Google Maps API', error);
-        setError(error.message);
-      }
-    };
-
-    if (query) {
-      handleSearch();
-    } else {
-      setPlaces([]);
-      setError(null);
-    }
-  }, [query]);
 
   return (
     <div className={className}>
