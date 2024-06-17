@@ -20,8 +20,8 @@ const serviceSignup = {
     const result = response.json();
     return result;
   },
-  postEmailCheck: async (data: string) => {
-    const response = await fetchSignup('api/v1/auth/아직 없음', {
+  postUsernameCheck: async (data: string) => {
+    const response = await fetchSignup('api/v1/auth/username', {
       method: 'POST',
       body: JSON.stringify(data)
     });
