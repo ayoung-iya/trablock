@@ -7,7 +7,7 @@ export default function ModalTest() {
   const { openModal, closeModal } = useModal();
 
   const handleClick = () => {
-    openModal(modalList.Modal({ className: 'max-w-[20rem] md:max-w-[36.875rem]', onClose: closeModal, isOpen: true }));
+    openModal(modalList.Modal({ className: 'max-w-[20rem] md:max-w-[36.875rem]', onClose: closeModal }));
   };
 
   return (

@@ -4,10 +4,9 @@ import React from 'react';
 
 import classNames from 'classnames';
 
-interface ButtonProps {
+interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   className?: string;
-  onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
 }
