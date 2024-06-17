@@ -7,14 +7,14 @@ import SignInput from '@/components/common/input/SignInput';
 import PlanInputTitle from '@/components/PlanInputTitle';
 import { validate } from '@/libs/constants/validation';
 
-// interface signupProps {
-//   username: string;
-//   password: string;
-//   nickname: string;
-//   pw_question_id: number;
-//   pw_answer: string;
-//   is_agreement: boolean;
-// }
+export interface signupProps {
+  username: string;
+  password: string;
+  nickname: string;
+  pw_question_id: number;
+  pw_answer: string;
+  is_agreement: boolean;
+}
 
 export default function SignupForm() {
   const {
