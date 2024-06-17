@@ -8,6 +8,7 @@ import AsyncBoundary from '@/components/common/AsyncBoundary';
 import KakaoScript from '@/components/social/KaKaoScript';
 import ModalProvider from '@/libs/contexts/ModalProvider';
 
+import 'react-day-picker/dist/style.css';
 import '@/styles/globals.css';
 
 declare global {
