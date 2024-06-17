@@ -66,7 +66,6 @@ export default function SignupForm() {
     }
   };
   const validateNickname = () => {
-    //fetch해서 결과에 따라 seterror or not(409)
     console.log(payload.nickname as string);
     postNicknameCheckMutate(payload.nickname, {
       onSuccess: (response) => {
@@ -90,7 +89,6 @@ export default function SignupForm() {
   const onSubmit: SubmitHandler<FieldValues> = () => {
     postSignupMutate(payload, {
       onSuccess: (data) => {
-        console.log(data);
         redirect('/');
       }
     });
