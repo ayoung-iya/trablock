@@ -114,9 +114,8 @@ function SlateEditor() {
     <Slate editor={editor} value={value} onChange={(newValue) => setValue(newValue)}>
       <div>
         <Toolbar />
-        <input placeholder="제목을 입력해주세요" className="input" />
 
-        <div style={{ border: '1px solid #f3f3f3', padding: '0 10px' }}>
+        <div className="px-40 pt-[300px]">
           <Editable
             placeholder="글을 작성해보세요"
             renderElement={renderElement}
@@ -127,7 +126,7 @@ function SlateEditor() {
 
         <div className="w-full">
           <button onClick={handleButtonClick} className="text-white mt-4 rounded bg-blue-500 p-2" type="button">
-            Show HTML
+            Show HTML 발행하기
           </button>
           <h2>HTML Output:</h2>
           <div>{serializedValue}</div>

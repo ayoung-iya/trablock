@@ -21,23 +21,23 @@ const toolbarGroups: ToolbarGroup[] = [
       format: 'color',
       type: 'dropdown',
       options: [
-        { text: '검정⚫', value: 'black' },
-        { text: '빨강🔴', value: 'red' },
-        { text: '파랑🔵', value: 'blue' },
-        { text: '회색⚪', value: 'gray' }
-      ]
-    },
-    {
-      id: 3,
-      format: 'color',
-      type: 'popover',
-      options: [
-        { text: '검정', value: 'black' },
-        { text: '빨강', value: 'red' },
-        { text: '파랑', value: 'blue' },
-        { text: '회색', value: 'gray' }
+        { text: '⚫', value: 'black' },
+        { text: '🔴', value: 'red' },
+        { text: '🔵', value: 'blue' },
+        { text: '⚪', value: 'gray' }
       ]
     }
+    // {
+    //   id: 3,
+    //   format: 'color',
+    //   type: 'popover',
+    //   options: [
+    //     { text: '검정', value: 'black' },
+    //     { text: '빨강', value: 'red' },
+    //     { text: '파랑', value: 'blue' },
+    //     { text: '회색', value: 'gray' }
+    //   ]
+    // }
   ],
   [
     {

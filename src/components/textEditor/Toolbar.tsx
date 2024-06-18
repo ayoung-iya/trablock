@@ -24,9 +24,9 @@ const Toolbar: React.FC = function Toolbar() {
   }, [isTable, toolbarGroups]);
 
   return (
-    <div className="bg-white my-5 flex flex-wrap items-center justify-center">
+    <div className="bg-white my-5 flex flex-wrap items-center justify-center border-b-2 pb-5">
       {toolbarGroups.map((group) => (
-        <span key={group[0]?.id ?? 'default-group'} className="mx-2 flex flex-wrap">
+        <span key={group[0]?.id ?? 'default-group'} className="mx-2 flex flex-wrap gap-1">
           {group.map((element: ToolbarElement) => {
             switch (element.type) {
               case 'dropdown':
