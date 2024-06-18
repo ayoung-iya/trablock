@@ -2,6 +2,24 @@ import { BaseEditor, Descendant } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { ReactEditor } from 'slate-react';
 
+export type MarkFormat =
+  | 'bold'
+  | 'italic'
+  | 'underline'
+  | 'strikethrough'
+  | 'superscript'
+  | 'subscript'
+  | 'color'
+  | 'bgColor'
+  | 'fontSize'
+  | 'fontFamily';
+
+export type BlockFormat = 'alignLeft' | 'alignCenter' | 'alignRight' | 'orderedList' | 'unorderedList';
+
+export type EmbedFormat = 'image' | 'video';
+
+export type ToolbarFormat = MarkFormat | BlockFormat | EmbedFormat;
+
 export type CustomText = {
   text: string;
   bold?: boolean;
