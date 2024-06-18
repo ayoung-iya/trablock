@@ -36,7 +36,6 @@ const useDropdown = <T extends HTMLElement>({ onClickInside, onClickOutside }: u
       }
 
       onClickOutside?.(e);
-      handleDropdownClose(e);
     };
 
     document.addEventListener('click', handleClick);

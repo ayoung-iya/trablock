@@ -47,7 +47,9 @@ function Plan() {
       if (searchInputRef.current && searchInputRef.current.contains(e?.target as Node)) {
         return;
       }
+
       setSearchString('');
+      handleSearchListClose(e);
     }
   });
   const {
