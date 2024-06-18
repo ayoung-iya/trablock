@@ -4,7 +4,10 @@ export type Category = '숙소' | '식당' | '관광지' | '액티비티' | '교
 export type Transport = '자동차' | '도보' | '자전거' | '대중교통';
 
 // 장소 선택 함수 타입
-export type OnPlaceSelectProps = { category: Category; place: google.maps.places.PlaceResult };
+export type OnPlaceSelectProps = {
+  category: Category;
+  place: google.maps.places.PlaceResult;
+};
 export type OnPlaceSelect = ({ category, place }: OnPlaceSelectProps) => void;
 
 export type OnTransportSelectProps = {
@@ -33,7 +36,7 @@ export type CommonBlockDetailData = {
   category: Category;
   name: string;
   startAt: string;
-  endAt: string;
+  duration: string;
   budget: string;
   memo?: string;
 };
@@ -55,3 +58,12 @@ export type TransportBlockDetailData = CommonBlockDetailData & {
 
 // 일정 상세 - 기타
 export type EtcBlockDetailData = CommonBlockDetailData;
+
+// 일정 상세 편집 타입
+export type OnBlockDetailEditProps = {
+  startAt: string;
+  duration: string;
+  budget: string;
+  memo?: string;
+};
+export type OnBlockDetailEdit = ({ startAt, duration, budget, memo }: OnBlockDetailEditProps) => void;

@@ -59,7 +59,12 @@ export default function PlaceSearchTransport({ className, onTransportSelect }: P
       <form onSubmit={(e) => e.preventDefault()}>
         <div className="mb-10">
           <p className="modal-h2 mb-3">교통수단</p>
-          <DropdownInput value={selectedTransport} dropdownList={TRANSPORT_LIST} onClickInside={handleDropdownSelect} />
+          <DropdownInput
+            id="transport"
+            value={selectedTransport}
+            dropdownList={TRANSPORT_LIST}
+            onClickInside={handleDropdownSelect}
+          />
         </div>
         <p className="modal-h2 mb-3">장소 검색</p>
         <p className="font-subtitle-3 mb-2 text-gray-01">출발지</p>

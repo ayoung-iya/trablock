@@ -12,6 +12,7 @@ import {
   CreatedBlockData,
   DefaultCreatedBlockData,
   EtcBlockDetailData,
+  OnBlockDetailEdit,
   OnEtcSelect,
   OnPlaceSelect,
   OnTransportSelect,
@@ -25,17 +26,17 @@ import useModal from '@/libs/hooks/useModal';
 export default function Page() {
   const { isLoaded } = useGoogleMapsApi();
   const { openModal, closeModal } = useModal();
-  const [blockData, setBlockData] = useState<PlaceBlockDetailData | TransportBlockDetailData | EtcBlockDetailData>(
-    DEFAULT_BLOCK_DATA
-  );
   const [createdBlockData, setCreatedBlockData] = useState<
     DefaultCreatedBlockData | CreatedBlockData | CreateTransportBlockData | CreateEtcBlockData
   >({
     category: DEFAULT_CATEGORY,
     place: null
   });
+  const [blockData, setBlockData] = useState<PlaceBlockDetailData | TransportBlockDetailData | EtcBlockDetailData>(
+    DEFAULT_BLOCK_DATA
+  );
 
-  // 숙소, 식당, 관광지, 액티비티 블록 데이터
+  // 숙소, 식당, 관광지, 액티비티 블록 생성
   const handlePlaceSelect: OnPlaceSelect = ({ category, place }) => {
     const newData: PlaceBlockDetailData = {
       ...blockData,
@@ -48,7 +49,7 @@ export default function Page() {
     closeModal();
   };
 
-  // 교통 블록 데이터
+  // 교통 블록 생성
   const handleTransportSelect: OnTransportSelect = ({ category, transport, place, secondPlace }) => {
     const newData: TransportBlockDetailData = {
       ...blockData,
@@ -63,7 +64,7 @@ export default function Page() {
     closeModal();
   };
 
-  // 기타 블록 데이터
+  // 기타 블록 생성
   const handleEtcSelect: OnEtcSelect = ({ category, name }) => {
     const newData: EtcBlockDetailData = { ...blockData, category, name };
     setCreatedBlockData({ category, name });
@@ -71,7 +72,7 @@ export default function Page() {
     closeModal();
   };
 
-  // 블록 생성 버튼
+  // 블록 생성 모달 열기 버튼
   const handleFirstButtonClick = () => {
     if (!isLoaded) return;
     openModal(
@@ -86,9 +87,13 @@ export default function Page() {
     );
   };
 
-  // 일정 상세 버튼
-  const handleDetailSubmit = () => {};
+  // 일정 상세 편집 완료 버튼
+  const handleDetailSubmit: OnBlockDetailEdit = ({ startAt, duration, budget, memo }) => {
+    setBlockData({ ...blockData, startAt, duration, budget, memo });
+    closeModal();
+  };
 
+  // 일정 상세 모달 열기 버튼
   const handleSecondButtonClick = () => {
     openModal(
       modalList.BlockDetail({
@@ -96,12 +101,12 @@ export default function Page() {
         onClose: closeModal,
         blockData,
         isLoaded,
+        isEdit: true,
         onSubmit: handleDetailSubmit
       })
     );
   };
 
-  // 디버깅
   useEffect(() => {
     console.log('createdBlockData', createdBlockData);
   }, [createdBlockData]);
@@ -110,7 +115,7 @@ export default function Page() {
     <div>
       <Button onClick={handleFirstButtonClick}>블록 생성 모달</Button>
       <Button onClick={handleSecondButtonClick}>일정 상세 모달</Button>
-      {createdBlockData && <pre>{JSON.stringify(createdBlockData, null, 2)}</pre>}
+      {blockData && <pre>{JSON.stringify(blockData, null, 2)}</pre>}
     </div>
   );
 }

@@ -41,16 +41,20 @@ export default function BlockDetailModalContentPlace({ blockData, isLoaded }: Bl
       <div className="mb-3 md:mb-4">
         <Map mapContainerStyle={MODAL_MAP_STYLE} coordinateList={coordinateList} category={blockData.category} />
       </div>
-      <div className="mb-3 rounded-[0.3125rem] bg-gray-03 px-5 py-4 md:mb-4">
-        <p className="font-subtitle-2 mb-3">
+      <div className="mb-3 flex flex-col gap-3 rounded-[0.3125rem] bg-gray-03 px-5 py-4 md:mb-4">
+        <p className="font-subtitle-2">
           주소<span className="font-caption-1 ml-3 break-words text-black-03">{place.formatted_address}</span>
         </p>
-        <p className="font-subtitle-2 mb-3">
-          전화<span className="font-caption-1 ml-3 text-black-03">{place.formatted_phone_number}</span>
-        </p>
-        <p className="font-subtitle-2">
-          홈페이지<span className="font-caption-1 ml-3 break-all text-black-03">{place.website}</span>
-        </p>
+        {place.formatted_phone_number && (
+          <p className="font-subtitle-2">
+            전화<span className="font-caption-1 ml-3 text-black-03">{place.formatted_phone_number}</span>
+          </p>
+        )}
+        {place.website && (
+          <p className="font-subtitle-2">
+            홈페이지<span className="font-caption-1 ml-3 break-all text-black-03">{place.website}</span>
+          </p>
+        )}
       </div>
       <div className="flex-row-center justify-between gap-1 md:gap-2">
         {photos.map((photo) => (

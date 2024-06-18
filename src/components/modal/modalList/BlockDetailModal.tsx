@@ -2,16 +2,60 @@
 
 'use client';
 
+import { useState } from 'react';
+
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/button/Button';
+import DropdownInput from '@/components/common/input/DropdownInput';
+import Input from '@/components/common/input/Input';
 import Modal, { ModalProps } from '@/components/modal/Modal';
 import BlockDetailModalContent from '@/components/modal/modalList/BlockDetailModalContent';
-import { EtcBlockDetailData, PlaceBlockDetailData, TransportBlockDetailData } from '@/components/modal/modalList/type';
+import {
+  EtcBlockDetailData,
+  OnBlockDetailEdit,
+  PlaceBlockDetailData,
+  TransportBlockDetailData
+} from '@/components/modal/modalList/type';
+import {
+  DROPDOWN_AMPM,
+  DROPDOWN_HOUR,
+  DROPDOWN_MINUTE,
+  DropdownAmPm,
+  DropdownHour,
+  DropdownMinute
+} from '@/libs/constants/modal';
 import { GoogleMapsApiReturn } from '@/libs/hooks/useGoogleMapsApi';
+
+// startAt으로부터 오전/오후를 반환하는 함수
+function getAmPmFromStartAt(startAt: string): DropdownAmPm {
+  const hour = Number(startAt.slice(0, 2));
+  if (hour < 12) return '오전';
+  return '오후';
+}
+
+// startAt으로부터 24H -> 12H로 변환하는 함수
+function getHourAtFromStartAt(startAt: string): DropdownHour {
+  const hour = Number(startAt.slice(0, 2)) % 12;
+  if (hour === 0) return '12';
+  if (hour >= 1 && hour <= 9) return `0${hour.toString()}` as DropdownHour;
+  return hour.toString() as DropdownHour;
+}
+
+// 오전/오후를 반영하여 12H -> 24H로 변환하는 함수
+function getHourAtByAmPm(amPm: DropdownAmPm, hour: DropdownHour) {
+  if (amPm === '오전' && hour === '12') return '00';
+  if (amPm === '오후') {
+    const newHour = Number(hour) + 12;
+    if (newHour === 24) return '12';
+    return newHour.toString();
+  }
+  return hour;
+}
 
 export interface BlockDetailModalProps extends ModalProps, GoogleMapsApiReturn {
   blockData: PlaceBlockDetailData | TransportBlockDetailData | EtcBlockDetailData;
-  onSubmit?: () => void;
+  onSubmit?: OnBlockDetailEdit;
+  isEdit?: boolean;
 }
 
 // edit 모드 여부 설정해야 함
@@ -19,10 +63,55 @@ export default function BlockDetailModal({
   blockData,
   onSubmit = () => {},
   isLoaded,
+  isEdit = false,
   ...props
 }: BlockDetailModalProps) {
-  const handleSubmit = () => {
-    onSubmit();
+  const [amPm, setAmPm] = useState<DropdownAmPm>(getAmPmFromStartAt(blockData.startAt));
+  const [startAt, setStartAt] = useState<{ hour: DropdownHour; minute: DropdownMinute }>({
+    hour: getHourAtFromStartAt(blockData.startAt.slice(0, 2)) as DropdownHour,
+    minute: blockData.startAt.slice(2, 4) as DropdownMinute
+  });
+  const [duration, setDuration] = useState<{ hour: DropdownHour; minute: DropdownMinute }>({
+    hour: blockData.duration.slice(0, 2) as DropdownHour,
+    minute: blockData.duration.slice(2, 4) as DropdownMinute
+  });
+  const [memo, setMemo] = useState(blockData.memo);
+
+  // 드롭다운 입력
+  const handleDropdownSelect = {
+    ApPm: (e: any) => {
+      const newAmPm = e.target.textContent;
+      setAmPm(newAmPm);
+    },
+    startAtHour: (e: any) => {
+      const hour = e.target.textContent;
+      setStartAt({ ...startAt, hour });
+    },
+    startAtMinute: (e: any) => {
+      const minute = e.target.textContent;
+      setStartAt({ ...startAt, minute });
+    },
+    durationHour: (e: any) => {
+      const hour = e.target.textContent;
+      setDuration({ ...duration, hour });
+    },
+    durationMinute: (e: any) => {
+      const minute = e.target.textContent;
+      setDuration({ ...duration, minute });
+    }
+  };
+
+  const handleMemoChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setMemo(e.target.value);
+  };
+
+  // 편집 완료 버튼 클릭
+  const handleSubmitButtonClick = () => {
+    const newHour = getHourAtByAmPm(amPm, startAt.hour);
+    const newStartAt = newHour + startAt.minute;
+    const newDuration = duration.hour + duration.minute;
+    const newBlockData = { ...blockData, startAt: newStartAt, duration: newDuration, memo };
+    onSubmit(newBlockData);
   };
 
   return (
@@ -35,25 +124,98 @@ export default function BlockDetailModal({
           <p className="modal-h1 mb-3">{blockData.name}</p>
           <BlockDetailModalContent blockData={blockData} isLoaded={isLoaded} />
         </div>
-        <div>
+        {/* 방문 시간 */}
+        <div className="font-body-2 z-10">
           <p className="modal-h2 mb-4">방문 시간</p>
-          {blockData.startAt}
+          {isEdit ? (
+            <div className="flex-row-center">
+              <DropdownInput
+                id="amPm"
+                containerClassName="w-[5.5rem] mr-3"
+                listClassName="text-center"
+                value={amPm}
+                dropdownList={DROPDOWN_AMPM}
+                onClickInside={handleDropdownSelect.ApPm}
+              />
+              <DropdownInput
+                id="startAtHour"
+                containerClassName="w-20 mr-2"
+                dropdownClassName="h-[9rem]"
+                listClassName="text-center"
+                value={startAt.hour}
+                dropdownList={DROPDOWN_HOUR}
+                onClickInside={handleDropdownSelect.startAtHour}
+              />
+              <p className="mr-3">시</p>
+              <DropdownInput
+                id="startAtMinute"
+                containerClassName="w-20 mr-2"
+                dropdownClassName="h-[9rem]"
+                listClassName="text-center"
+                value={startAt.minute}
+                dropdownList={DROPDOWN_MINUTE}
+                onClickInside={handleDropdownSelect.startAtMinute}
+              />
+              <p>분</p>
+            </div>
+          ) : (
+            <p>
+              {startAt.hour}시 {startAt.minute}분
+            </p>
+          )}
         </div>
-        <div>
+        {/* 소요 시간 */}
+        <div className="font-body-2">
           <p className="modal-h2 mb-4">소요 시간</p>
-          {blockData.endAt}
+          {isEdit ? (
+            <div className="flex-row-center z-10">
+              <DropdownInput
+                id="durationHour"
+                containerClassName="w-20 mr-2"
+                dropdownClassName="h-[9rem]"
+                listClassName="text-center"
+                value={duration.hour}
+                dropdownList={DROPDOWN_HOUR}
+                onClickInside={handleDropdownSelect.durationHour}
+              />
+              <p className="mr-3">시간</p>
+              <DropdownInput
+                id="durationMinute"
+                containerClassName="w-20 mr-2"
+                dropdownClassName="h-[9rem]"
+                listClassName="text-center"
+                value={duration.minute}
+                dropdownList={DROPDOWN_MINUTE}
+                onClickInside={handleDropdownSelect.durationMinute}
+              />
+              <p>분</p>
+            </div>
+          ) : (
+            <p>
+              {duration.hour}시간 {duration.minute}분
+            </p>
+          )}
         </div>
-        <div>
-          <p className="modal-h2 mb-4">비용 추가</p>
-          {blockData.budget}
-        </div>
-        <div>
-          <p className="modal-h2 mb-4">메모</p>
-          {blockData.memo}
-        </div>
-        <Button onClick={handleSubmit} className="btn-lg btn-solid w-full flex-shrink-0">
-          완료하기
-        </Button>
+        {/* 메모 */}
+        <form onSubmit={handleSubmitButtonClick}>
+          <div className="font-body-2">
+            <p className="modal-h2 mb-4">메모</p>
+            <p>{blockData.memo}</p>
+            <Input
+              id="blockDetailMemo"
+              className="w-full rounded-[0.3125rem] border border-solid border-gray-01 px-4 py-3"
+              value={memo}
+              placeholder="메모를 입력하세요."
+              onChange={handleMemoChange}
+            />
+          </div>
+        </form>
+        {/* 편집 완료 버튼 */}
+        {isEdit && (
+          <Button onClick={handleSubmitButtonClick} className="btn-lg btn-solid w-full flex-shrink-0">
+            완료하기
+          </Button>
+        )}
       </div>
     </Modal>
   );
