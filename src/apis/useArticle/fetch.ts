@@ -1,6 +1,7 @@
 import returnFetch from 'return-fetch';
 
 import type { ArticleFormData, ArticleRequestFormData } from '@/apis/useArticle/article.type';
+import { dateRequestFormat } from '@/libs/utils/dateFormatter';
 
 import API_URL from '../constants/url';
 import interceptor from '../interceptors/interceptor';
@@ -34,9 +35,9 @@ const ArticleService = {
   postRegisterArticle: async ({ title, location, date, expense, travelCompanion, travelStyle }: ArticleFormData) => {
     const formatData: ArticleRequestFormData = {
       title,
-      location,
-      start_at: date.from,
-      end_at: date.to,
+      location: location.map(({ placeId, address, city }) => ({ place_id: placeId, address, city })),
+      start_at: dateRequestFormat(date.from),
+      end_at: dateRequestFormat(date.to),
       travel_companion: travelCompanion
     };
 

@@ -13,10 +13,12 @@ export interface ArticleFormData {
   travelStyle: string[];
 }
 
-export interface ArticleRequestFormData extends Pick<ArticleFormData, 'title' | 'location'> {
-  start_at: Date;
-  end_at: Date;
-  travel_companion: string;
+export interface ArticleRequestFormData {
+  title: string;
+  location: { place_id: string; address: string; city: string }[];
+  start_at: string;
+  end_at: string;
   expense?: string;
+  travel_companion: string;
   style?: string[];
 }
