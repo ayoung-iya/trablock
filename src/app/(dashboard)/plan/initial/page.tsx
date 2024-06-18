@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { Controller, useForm } from 'react-hook-form';
 
+import type { ArticleFormData } from '@/apis/useArticle/article.type';
 import BadgeWithDelete from '@/components/badge/badgeWithDelete';
 import ImageBox from '@/components/common/ImageBox';
 import ExpenseInput from '@/components/common/input/ExpenseInput';
@@ -21,25 +22,19 @@ import { TRAVEL_STYLE, WITH_WHOM } from '@/libs/constants/travelTags';
 const dateFormat = (date: Date) => `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`;
 
 function Plan() {
-  const { control, register, getValues, handleSubmit } = useForm<{
-    title: string;
-    places: string[];
-    date: { from: Date; to: Date };
-    expense: number;
-    withWhom: string[];
-    travelStyle: string[];
-  }>({
-    defaultValues: { title: '', places: [], date: {}, withWhom: ['alone'], travelStyle: [] }
+  const { control, register, getValues, handleSubmit } = useForm<ArticleFormData>({
+    defaultValues: { title: '', location: [], date: {}, travelCompanion: '혼자서', travelStyle: [] }
   });
+
   const [showCalendar, setShowCalendar] = useState(false);
   const [showSearchList, setShowSearchList] = useState(false);
   const [searchString, setSearchString] = useState('');
 
   const date = getValues('date');
   const title = register('title', { required: true });
-  register('places', { validate: { moreThanOne: (placeList) => placeList.length > 0 } });
+  register('location', { validate: { moreThanOne: (placeList) => placeList.length > 0 } });
   register('date', { validate: { dateRange: (dateRange) => !!dateRange?.from && !!dateRange?.to } });
-  register('withWhom', { validate: { moreThanOne: (whom) => whom.length > 0 } });
+  register('travelCompanion', { validate: { moreThanOne: (whom) => whom.length > 0 } });
 
   const onSubmit = (data: any) => {
     // 이후 api 작업
@@ -82,7 +77,7 @@ function Plan() {
           </InputWithTitle>
           <Controller
             control={control}
-            name="places"
+            name="location"
             render={({ field: { value, onChange } }) => {
               return (
                 <div className={`relative ${value.length ? 'pt-2' : ''}`}>
@@ -203,11 +198,11 @@ function Plan() {
             <InputWithTitle title="누구와" size="sm">
               <Controller
                 control={control}
-                name="withWhom"
+                name="travelCompanion"
                 rules={{ validate: { required: (withWhom) => withWhom.length > 0 } }}
                 render={({ field: { value, onChange } }) => {
                   const handleCheckboxChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-                    onChange([e.target.value]);
+                    onChange(e.target.value);
                   };
 
                   return (
