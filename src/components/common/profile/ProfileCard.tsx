@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 
 import Button from '@/components/common/button/Button';
+import ImageBox from '@/components/common/ImageBox';
+import Input from '@/components/common/input/Input';
+import Textarea from '@/components/common/input/Textarea';
 import useMediaQuery from '@/hooks/useMediaQuery';
-
-import ImageBox from '../ImageBox';
 
 interface ProfileCardProps {
   name: string;
@@ -152,19 +153,18 @@ export default function ProfileCard({
             </>
           ) : (
             <>
-              {/* 인풋 컴포넌트 추후 수정 */}
-              <input
-                type="text"
+              <Input
+                id="name"
                 value={name}
                 onChange={(e) => onNameChange(e.target.value)}
                 className="mb-2 w-full rounded border px-2 py-1"
                 placeholder="닉네임을 입력하세요"
               />
-              <input
-                type="text"
+              <Textarea
+                id="bio"
                 value={bio}
                 onChange={(e) => onBioChange(e.target.value)}
-                className="w-full rounded border px-2 py-1"
+                className="w-full resize-none rounded border px-2 py-1 focus:outline-none"
                 placeholder="한 줄 소개를 입력하세요"
               />
             </>
