@@ -2,10 +2,12 @@
 
 import React, { useRef, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
 import { DateRange } from 'react-day-picker';
 import { Controller, useForm } from 'react-hook-form';
 
 import type { ArticleFormData } from '@/apis/useArticle/article.type';
+import ArticleService from '@/apis/useArticle/fetch';
 import BadgeWithDelete from '@/components/badge/badgeWithDelete';
 import CitySearchList from '@/components/CitySearchList';
 import Button from '@/components/common/button/Button';
@@ -25,6 +27,8 @@ import useDropdown from '@/libs/hooks/useDropdown';
 const dateFormat = (date: Date) => `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`;
 
 function Plan() {
+  const router = useRouter();
+
   const { control, register, getValues, handleSubmit, watch } = useForm<ArticleFormData>({
     defaultValues: { title: '', location: [], date: {}, travelCompanion: '혼자서', travelStyle: [] }
   });
@@ -84,9 +88,15 @@ function Plan() {
     setSearchString('');
   };
 
-  const onSubmit = (data: any) => {
-    // 이후 api 작업
-    console.log(data);
+  const onSubmit = async (formData: ArticleFormData) => {
+    try {
+      const articleId = await ArticleService.postRegisterArticle(formData);
+
+      // 임시
+      router.push(`/plan/detail/${articleId}`);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
