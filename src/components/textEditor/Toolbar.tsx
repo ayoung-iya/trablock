@@ -2,76 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 import { useSlate } from 'slate-react';
 
-import Button from './ToolButton';
-import Icon from './ToolIcon';
 import { ToolbarGroup, ToolbarElement, MarkFormat, BlockFormat } from './types';
-import {
-  toggleBlock,
-  toggleMark,
-  isMarkActive,
-  addMarkData,
-  isBlockActive,
-  activeMark
-} from './utils/slateUtilityFunctions';
+import BlockButton from './utilButtons/BlockButton';
+import Dropdown from './utilButtons/Dropdown';
+import MarkButton from './utilButtons/MarkButton';
 import defaultToolbarGroups from './utils/toolbarGroups';
 import useTable from './utils/useTable';
-
-const BlockButton: React.FC<{ format: BlockFormat }> = function BlockButton({ format }) {
-  const editor = useSlate();
-  return (
-    <Button
-      active={isBlockActive(editor, format)}
-      format={format}
-      onMouseDown={(e) => {
-        e.preventDefault();
-        toggleBlock(editor, format);
-      }}
-    >
-      <Icon icon={format} />
-    </Button>
-  );
-};
-
-const MarkButton: React.FC<{ format: MarkFormat }> = function MarkButton({ format }) {
-  const editor = useSlate();
-  return (
-    <Button
-      active={isMarkActive(editor, format)}
-      format={format}
-      onMouseDown={(e) => {
-        e.preventDefault();
-        toggleMark(editor, format);
-      }}
-    >
-      <Icon icon={format} />
-    </Button>
-  );
-};
-
-const Dropdown: React.FC<{
-  format: MarkFormat;
-  options: { value: string; text: string }[];
-}> = function Dropdown({ format, options }) {
-  const editor = useSlate();
-  const changeMarkData = (event: React.ChangeEvent<HTMLSelectElement> | string, dropdownFormat: MarkFormat) => {
-    const value = typeof event === 'string' ? event : event.target.value;
-    addMarkData(editor, { format: dropdownFormat, value });
-  };
-  return (
-    <select
-      value={activeMark(editor, format)}
-      onChange={(e) => {
-        changeMarkData(e, format);
-      }}
-    >
-      {options.map((item) => (
-        <option key={item.value} value={item.value}>
-          {item.text}
-        </option>
-      ))}
-    </select>
-  );
-};
 
 const Toolbar: React.FC = function Toolbar() {
   const editor = useSlate();
@@ -88,9 +24,9 @@ const Toolbar: React.FC = function Toolbar() {
   }, [isTable, toolbarGroups]);
 
   return (
-    <div>
+    <div className="bg-white my-5 flex flex-wrap items-center justify-center">
       {toolbarGroups.map((group) => (
-        <span key={group[0]?.id ?? 'default-group'}>
+        <span key={group[0]?.id ?? 'default-group'} className="mx-2 flex flex-wrap">
           {group.map((element: ToolbarElement) => {
             switch (element.type) {
               case 'dropdown':
