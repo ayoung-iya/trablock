@@ -35,6 +35,7 @@ export default function Page() {
   const [blockData, setBlockData] = useState<PlaceBlockDetailData | TransportBlockDetailData | EtcBlockDetailData>(
     DEFAULT_BLOCK_DATA
   );
+  const [isEdit, setIsEdit] = useState(false);
 
   // 숙소, 식당, 관광지, 액티비티 블록 생성
   const handlePlaceSelect: OnPlaceSelect = ({ category, place }) => {
@@ -101,7 +102,7 @@ export default function Page() {
         onClose: closeModal,
         blockData,
         isLoaded,
-        isEdit: true,
+        isEdit,
         onSubmit: handleDetailSubmit
       })
     );
@@ -115,6 +116,7 @@ export default function Page() {
     <div>
       <Button onClick={handleFirstButtonClick}>블록 생성 모달</Button>
       <Button onClick={handleSecondButtonClick}>일정 상세 모달</Button>
+      <Button onClick={() => setIsEdit(!isEdit)}>편집모드 토글 {isEdit.toString()}</Button>
       {blockData && <pre>{JSON.stringify(blockData, null, 2)}</pre>}
     </div>
   );

@@ -200,14 +200,17 @@ export default function BlockDetailModal({
         <form onSubmit={handleSubmitButtonClick}>
           <div className="font-body-2">
             <p className="modal-h2 mb-4">메모</p>
-            <p>{blockData.memo}</p>
-            <Input
-              id="blockDetailMemo"
-              className="w-full rounded-[0.3125rem] border border-solid border-gray-01 px-4 py-3"
-              value={memo}
-              placeholder="메모를 입력하세요."
-              onChange={handleMemoChange}
-            />
+            {isEdit ? (
+              <Input
+                id="blockDetailMemo"
+                className="w-full rounded-[0.3125rem] border border-solid border-gray-01 px-4 py-3"
+                value={memo}
+                placeholder="메모를 입력하세요."
+                onChange={handleMemoChange}
+              />
+            ) : (
+              <p>{blockData.memo}</p>
+            )}
           </div>
         </form>
         {/* 편집 완료 버튼 */}
