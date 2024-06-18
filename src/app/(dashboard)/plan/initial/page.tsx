@@ -23,8 +23,7 @@ import SearchIcon from '@/icons/search.svg?url';
 import { TRAVEL_STYLE, WITH_WHOM } from '@/libs/constants/travelTags';
 import useDebounce from '@/libs/hooks/useDebounce';
 import useDropdown from '@/libs/hooks/useDropdown';
-
-const dateFormat = (date: Date) => `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`;
+import { dateDotFormat } from '@/libs/utils/dateFormatter';
 
 function Plan() {
   const router = useRouter();
@@ -176,7 +175,7 @@ function Plan() {
                 placeholder="여행 날짜를 선택하세요"
                 onClick={handleCalendarOpen}
                 readOnly
-                value={date?.from && date?.to && `${dateFormat(date.from)} ~ ${dateFormat(date.to)}`}
+                value={date?.from && date?.to && `${dateDotFormat(date.from)} ~ ${dateDotFormat(date.to)}`}
               />
               <button type="button" onClick={handleCalendarOpen}>
                 <ImageBox src={calendarIcon} alt="달력" className="h-[18px] w-[18px]" width={18} height={18} />
