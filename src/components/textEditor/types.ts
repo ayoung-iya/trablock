@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { BaseEditor, Descendant } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { ReactEditor } from 'slate-react';
@@ -37,7 +39,15 @@ export type CustomText = {
 export interface CustomElement {
   type: string;
   children: Descendant[];
-  [key: string]: any;
+}
+
+export interface ImageElement extends CustomElement {
+  type: 'image';
+  url: string;
+  width: string;
+  height: string;
+  alt?: string;
+  attr?: React.HTMLAttributes<HTMLDivElement>;
 }
 
 export interface CustomLeaf {

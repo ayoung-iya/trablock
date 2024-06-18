@@ -6,9 +6,10 @@ import { createEditor, Descendant, Transforms, Editor } from 'slate';
 import { withHistory } from 'slate-history';
 import { Slate, Editable, withReact, RenderElementProps, RenderLeafProps } from 'slate-react';
 
+import ImageEmbed from './ImageEmbed';
 import Toolbar from './Toolbar';
+import { ImageElement } from './types';
 import serialize from './utils/serialize';
-// import { CustomElement, CustomLeaf } from '../textEditor/types';
 
 function Element(props: RenderElementProps) {
   const { attributes, children, element } = props;
@@ -39,6 +40,15 @@ function Element(props: RenderElementProps) {
           {children}
         </div>
       );
+    case 'image': {
+      const imageElement = element as ImageElement;
+      return (
+        <ImageEmbed attributes={attributes} element={imageElement}>
+          {children}
+        </ImageEmbed>
+      );
+    }
+
     default:
       return <p {...attributes}>{children}</p>;
   }
@@ -111,7 +121,13 @@ function SlateEditor() {
   };
 
   return (
-    <Slate editor={editor} value={value} onChange={(newValue) => setValue(newValue)}>
+    <Slate
+      editor={editor}
+      value={value}
+      onChange={(newValue) => {
+        setValue(newValue);
+      }}
+    >
       <div>
         <Toolbar />
 
