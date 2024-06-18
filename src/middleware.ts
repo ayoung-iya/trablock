@@ -10,14 +10,14 @@ export function middleware(request: NextRequest) {
     response.headers.set('X-Skip-Icons', 'true');
     return response;
   }
-  if (!accessToken) {
+  if (!accessToken && url !== '/signup' && url !== '/login') {
     // 아예 로그인 경력이 없을 때
-    return NextResponse.redirect('localhost://3000/login');
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/']
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|login|signup).*)']
 };
