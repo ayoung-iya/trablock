@@ -21,7 +21,8 @@ const options: { [key: string]: ReturnFetchDefaultOptions } = {
   checkNickname: {
     baseUrl: 'https://be.travel-laboratory.site',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'localhost://3000'
     }
   }
 };

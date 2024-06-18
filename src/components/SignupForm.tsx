@@ -47,7 +47,6 @@ export default function SignupForm() {
   const { mutate: postUsernameCheckMutate } = usePostUsernameCheck();
 
   const validateUsername = () => {
-    //username fetch
     postUsernameCheckMutate(payload.username, {
       onSuccess: (response) => {
         if (response.available) {
@@ -69,9 +68,11 @@ export default function SignupForm() {
     console.log(payload.nickname as string);
     postNicknameCheckMutate(payload.nickname, {
       onSuccess: (response) => {
+        console.log('nicknamefetch');
         if (response.available) {
           clearErrors('nickname');
         } else {
+          console.log('실패');
           setError('nickname', { message: '중복된 닉네임입니다.' });
         }
       }
@@ -90,6 +91,10 @@ export default function SignupForm() {
     postSignupMutate(payload, {
       onSuccess: (data) => {
         redirect('/');
+        //로그인fetch 하고 토큰 받아서 저장.
+      },
+      onError: (error) => {
+        console.log(error);
       }
     });
   };
