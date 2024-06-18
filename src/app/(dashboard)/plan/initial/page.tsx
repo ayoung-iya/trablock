@@ -28,7 +28,6 @@ function Plan() {
     defaultValues: { title: '', location: [], date: {}, travelCompanion: '혼자서', travelStyle: [] }
   });
 
-  const [showCalendar, setShowCalendar] = useState(false);
   const [searchString, setSearchString] = useState('');
   const debounceSearchString = useDebounce(searchString, 300);
 
@@ -47,6 +46,12 @@ function Plan() {
       setSearchString('');
     }
   });
+  const {
+    ref: calendarRef,
+    isDropdownOpened: isCalendarOpened,
+    handleDropdownOpen: handleCalendarOpen,
+    handleDropdownClose: handleCalendarClose
+  } = useDropdown<HTMLDivElement>({ onClickInside: () => {} });
 
   const date = getValues('date');
   const title = register('title', { required: true });
@@ -151,17 +156,17 @@ function Plan() {
                 id="place"
                 className="w-full cursor-pointer"
                 placeholder="여행 날짜를 선택하세요"
-                onClick={() => setShowCalendar(true)}
+                onClick={handleCalendarOpen}
                 readOnly
                 value={date?.from && date?.to && `${dateFormat(date.from)} ~ ${dateFormat(date.to)}`}
               />
-              <button type="button" onClick={() => setShowCalendar(true)}>
+              <button type="button" onClick={handleCalendarOpen}>
                 <ImageBox src={calendarIcon} alt="달력" className="h-[18px] w-[18px]" width={18} height={18} />
               </button>
             </div>
           </InputWithTitle>
           <div className="relative">
-            {showCalendar && (
+            {isCalendarOpened && (
               <Controller
                 control={control}
                 name="date"
@@ -170,8 +175,9 @@ function Plan() {
                     initialRange={value}
                     onDateRangeChange={(range: DateRange | undefined) => {
                       onChange(range);
-                      setShowCalendar(false);
+                      handleCalendarClose();
                     }}
+                    ref={calendarRef}
                   />
                 )}
               />
