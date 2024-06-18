@@ -15,9 +15,12 @@ export interface ArticleFormData {
 
 export interface ArticleRequestFormData {
   title: string;
-  location: { place_id: string; address: string; city: string }[];
-  start_at: string;
-  end_at: string;
+  location: string[];
+  start_at: Date;
+  end_at: Date;
+  // location: { place_id: string; address: string; city: string }[];
+  // start_at: string;
+  // end_at: string;
   expense?: string;
   travel_companion: string;
   style?: string[];

@@ -1,7 +1,7 @@
 import returnFetch from 'return-fetch';
 
 import type { ArticleFormData, ArticleRequestFormData } from '@/apis/useArticle/article.type';
-import { dateRequestFormat } from '@/libs/utils/dateFormatter';
+// import { dateRequestFormat } from '@/libs/utils/dateFormatter';
 
 import API_URL from '../constants/url';
 import interceptor from '../interceptors/interceptor';
@@ -33,29 +33,41 @@ const fetchService = returnFetch({ fetch: interceptor.logging(options) });
 
 const ArticleService = {
   postRegisterArticle: async ({ title, location, date, expense, travelCompanion, travelStyle }: ArticleFormData) => {
-    const formatData: ArticleRequestFormData = {
-      title,
-      location: location.map(({ placeId, address, city }) => ({ place_id: placeId, address, city })),
-      start_at: dateRequestFormat(date.from),
-      end_at: dateRequestFormat(date.to),
-      travel_companion: travelCompanion
-    };
+    try {
+      const formatData: ArticleRequestFormData = {
+        title,
+        // location: location.map(({ placeId, address, city }) => ({ place_id: placeId, address, city })),
+        // start_at: dateRequestFormat(date.from),
+        // end_at: dateRequestFormat(date.to),
+        location: location.map(({ city }) => city),
+        start_at: date.from,
+        end_at: date.to,
+        travel_companion: travelCompanion
+      };
 
-    if (expense) {
-      formatData.expense = String(expense);
+      if (expense) {
+        formatData.expense = String(expense);
+      }
+
+      if (travelStyle.length) {
+        formatData.style = travelStyle;
+      }
+
+      const response = await fetchService('api/v1/register/article', {
+        method: 'POST',
+        body: JSON.stringify(formatData)
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.local_message);
+      }
+
+      return responseData;
+    } catch (err) {
+      throw (err as Error).message;
     }
-
-    if (travelStyle.length) {
-      formatData.style = travelStyle;
-    }
-
-    const response = await fetchService('api/v1/register/article', {
-      method: 'POST',
-      body: JSON.stringify(formatData)
-    });
-
-    const responseData = response.json();
-    return responseData;
   }
 };
 
