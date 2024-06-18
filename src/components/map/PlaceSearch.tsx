@@ -29,7 +29,7 @@ export default function PlaceSearch({ className, onPlaceSelect }: PlaceSearchPro
       <p className="modal-h2 mb-3">장소 검색</p>
       <form onSubmit={(e) => e.preventDefault()}>
         <SearchInput
-          className="mb-4"
+          className="mb-4 px-4 py-3"
           onClickSearchIcon={(searchString: string) => {
             setQuery(searchString);
           }}

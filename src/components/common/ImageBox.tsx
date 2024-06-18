@@ -2,6 +2,7 @@ import Image, { ImageProps } from 'next/image';
 
 interface ImageBoxProps extends ImageProps {
   className?: string;
+  placeholderClassName?: string;
   width: number;
   height: number;
 }
@@ -15,7 +16,23 @@ interface ImageBoxProps extends ImageProps {
  * @param ...restImageProps 기타 모든 ImageProps를 대응합니다.
  */
 
-export default function ImageBox({ className, src, alt, width, height, ...restImageProps }: ImageBoxProps) {
+export default function ImageBox({
+  className,
+  placeholderClassName,
+  src,
+  alt,
+  width,
+  height,
+  ...restImageProps
+}: ImageBoxProps) {
+  if (!src) {
+    return (
+      <div className={`overflow-hidden ${className}`}>
+        <div className={placeholderClassName} />
+      </div>
+    );
+  }
+
   return (
     <div className={`overflow-hidden ${className}`}>
       <Image src={src} alt={alt} width={width * 4} height={height * 4} className="image-cover" {...restImageProps} />

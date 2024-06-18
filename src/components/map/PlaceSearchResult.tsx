@@ -18,7 +18,7 @@ export default function PlaceSearchResult({
   onPlaceSelect,
   loading
 }: PlaceSearchResultProps) {
-  const containerStyle = `flex-col-center scrollbar-styled scrollbar-custom h-full w-full gap-4 overflow-auto max-md:mb-5 max-md:scrollbar-hide md:h-[24.75rem] ${className}`;
+  const containerStyle = `scrollbar-styled scrollbar-custom h-full w-full overflow-auto max-md:mb-5 max-md:scrollbar-hide md:h-[24.75rem] ${className}`;
 
   // 로딩 중
   if (loading) {

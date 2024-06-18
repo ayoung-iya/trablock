@@ -10,7 +10,7 @@ export const GOOGLE_MAPS = {
 };
 
 // 맵 최대 줌 레벨
-export const MAX_ZOOM = 20;
+export const MAX_ZOOM = 18;
 
 // 맵 초기 위치
 export const DEFAULT_COORDINATE_LIST: Coordinate[] = [

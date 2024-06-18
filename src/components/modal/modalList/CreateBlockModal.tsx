@@ -12,7 +12,6 @@ export interface CreateBlockModalProps extends ModalProps, GoogleMapsApiReturn {
   onPlaceSelect?: OnPlaceSelect;
   onTransportSelect?: OnTransportSelect;
   onEtcSelect?: OnEtcSelect;
-  onSubmit?: () => void;
 }
 
 export default function CreateBlockModal({

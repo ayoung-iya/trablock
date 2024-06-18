@@ -32,14 +32,13 @@ export default function Modal({ children, onClose, onAfterOpen, onAfterClose, cl
   return (
     <ReactModal
       isOpen
-      className={`absolute-center relative w-full overflow-hidden rounded-[0.625rem] bg-white-01 shadow-modal ${className}`}
-      overlayClassName="bg-overlay absolute-center size-full"
+      className={`fixed-center relative size-full overflow-hidden rounded-[0.625rem] bg-white-01 shadow-modal ${className}`}
+      overlayClassName="bg-overlay fixed-center size-full"
       onRequestClose={onClose}
       onAfterOpen={onAfterOpen}
       onAfterClose={onAfterClose}
       shouldCloseOnOverlayClick
       shouldCloseOnEsc
-      preventScroll
       parentSelector={() => modalRoot}
       appElement={modalRoot}
     >

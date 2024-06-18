@@ -1,9 +1,8 @@
 import PlaceSearch from '@/components/map/PlaceSearch';
 import PlaceSearchTransport from '@/components/map/PlaceSearchTransport';
+import PlaceEtcInput from '@/components/modal/modalList/PlaceEtcInput';
 import { Category, OnEtcSelect, OnPlaceSelect, OnTransportSelect } from '@/components/modal/modalList/type';
 import { CATEGORY } from '@/libs/constants/modal';
-
-import PlaceEtcInput from './PlaceEtcInput';
 
 /* eslint-disable no-undef */
 interface CreateBlockModalContentProps {
@@ -22,8 +21,8 @@ export default function CreateBlockModalContent({
   if (category === CATEGORY.교통)
     return (
       <PlaceSearchTransport
-        onTransportSelect={(transport, firstPlace, secondPlace) =>
-          onTransportSelect({ category, transport, firstPlace, secondPlace })
+        onTransportSelect={(transport, place, secondPlace) =>
+          onTransportSelect({ category, transport, place, secondPlace })
         }
       />
     );

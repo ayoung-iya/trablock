@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Category } from '@/components/modal/modalList/type';
 
-type BadgeType = Category & 'hashtag';
+type BadgeType = Category | '해시태그' | '태그';
 
 const BADGE_STYLE: {
   [key in BadgeType]: string;
@@ -14,7 +14,8 @@ const BADGE_STYLE: {
   액티비티: 'bg-block-green-02 text-block-green-01',
   관광지: 'bg-block-purple-02 text-block-purple-01',
   기타: 'bg-secondary-02 text-secondary-01',
-  해시태그: 'bg-secondary-02 text-secondary-01'
+  해시태그: 'bg-secondary-02 text-secondary-01',
+  태그: 'bg-secondary-02 text-secondary-01'
 };
 
 interface BadgeProps {
@@ -26,7 +27,7 @@ interface BadgeProps {
 export default function Badge({ type, className = '', children }: BadgeProps) {
   return (
     <div
-      className={`font-tag flex h-[1.25rem] items-center justify-center gap-[0.75rem] rounded px-[0.5rem] py-[0.0625rem] ${BADGE_STYLE[type]} ${className}`}
+      className={`font-tag inline-flex h-[1.25rem] items-center justify-center gap-[0.75rem] rounded px-[0.5rem] py-[0.0625rem] ${BADGE_STYLE[type]} ${className}`}
     >
       {type === '해시태그' && <span>#</span>}
       {children}
