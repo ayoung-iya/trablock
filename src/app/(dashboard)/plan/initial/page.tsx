@@ -8,6 +8,7 @@ import { Controller, useForm } from 'react-hook-form';
 import type { ArticleFormData } from '@/apis/useArticle/article.type';
 import BadgeWithDelete from '@/components/badge/badgeWithDelete';
 import CitySearchList from '@/components/CitySearchList';
+import Button from '@/components/common/button/Button';
 import ImageBox from '@/components/common/ImageBox';
 import ExpenseInput from '@/components/common/input/ExpenseInput';
 import Input from '@/components/common/input/Input';
@@ -24,7 +25,7 @@ import useDropdown from '@/libs/hooks/useDropdown';
 const dateFormat = (date: Date) => `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`;
 
 function Plan() {
-  const { control, register, getValues, handleSubmit } = useForm<ArticleFormData>({
+  const { control, register, getValues, handleSubmit, watch } = useForm<ArticleFormData>({
     defaultValues: { title: '', location: [], date: {}, travelCompanion: '혼자서', travelStyle: [] }
   });
 
@@ -58,6 +59,13 @@ function Plan() {
   register('location', { validate: { moreThanOne: (placeList) => placeList.length > 0 } });
   register('date', { validate: { dateRange: (dateRange) => !!dateRange?.from && !!dateRange?.to } });
   register('travelCompanion', { validate: { moreThanOne: (whom) => whom.length > 0 } });
+
+  const isFormFilled = () => {
+    // eslint-disable-next-line no-shadow
+    const { title, location, date, travelCompanion } = watch();
+
+    return title && !!location.length && date.from && date.to && travelCompanion;
+  };
 
   const handleSearchStringChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearchString(e.target.value);
@@ -253,7 +261,13 @@ function Plan() {
           </div>
         </div>
 
-        <button type="submit">submit</button>
+        <Button
+          type="submit"
+          className={`${isFormFilled() ? 'btn-solid' : 'btn-gray'} btn-lg sm:h-14`}
+          disabled={!isFormFilled()}
+        >
+          일정 짜러 가기
+        </Button>
       </form>
     </div>
   );
