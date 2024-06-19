@@ -1,8 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import API_URL from '@/apis/constants/url';
-
-const API_KEY = 'AIzaSyCmTzTXJ2kwGM89k5nqo2xHRtOvj78Usu8';
+import { GOOGLE_MAPS } from '@/libs/constants/googleMaps';
 
 interface GooglePlaceResponse {
   suggestions: {
@@ -22,7 +21,7 @@ export async function POST(request: NextRequest) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-Goog-Api-Key': API_KEY,
+      'X-Goog-Api-Key': GOOGLE_MAPS.API_KEY,
       'Accept-Language': 'ko'
     },
     body: JSON.stringify(body)
