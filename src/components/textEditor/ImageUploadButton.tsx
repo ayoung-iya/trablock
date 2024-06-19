@@ -4,42 +4,43 @@ import React, { ChangeEvent, useState } from 'react';
 
 import uploadImage from './utils/uploadImage';
 
-const ImageUploadButton: React.FC = function ImageUploadButton() {
-  const [image, setImage] = useState<File | null>(null);
+interface ImageUploadButtonProps {
+  onUploadSuccess: (url: string) => void;
+  handleFormSubmit: () => void;
+}
+
+const ImageUploadButton: React.FC<ImageUploadButtonProps> = function ImageUploadButton({
+  onUploadSuccess,
+  handleFormSubmit
+}) {
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setImage(e.target.files[0]);
-    }
-  };
-
-  const handleUpload = async () => {
-    console.log('handleUpload');
-    if (image) {
+  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
       setLoading(true);
       try {
-        const url = await uploadImage(image);
+        const url = await uploadImage(file);
         if (url) {
           console.log(url);
+          onUploadSuccess(url);
+          handleFormSubmit();
         }
       } catch (error) {
         console.error('Error uploading image:', error);
       } finally {
         setLoading(false);
       }
-    } else {
-      console.log('No image selected');
     }
   };
 
   return (
-    <div>
+    <div className="flex flex-col">
       <input type="file" accept="image/*" onChange={handleChange} />
-      <button type="button" onClick={handleUpload} disabled={loading}>
+      {/* <button className="bg-blue-200 text-center" type="button" onClick={handleUpload} disabled={loading}>
         Upload
-      </button>
-      {loading && <p>Uploading...</p>}
+      </button> */}
+      {loading && <div className="text-red-200">Uploading...</div>}
     </div>
   );
 };

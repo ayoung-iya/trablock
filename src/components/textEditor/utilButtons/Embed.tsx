@@ -2,6 +2,7 @@ import React, { useRef, useState, useCallback, FormEvent } from 'react';
 
 import { BaseSelection, Transforms, Editor } from 'slate';
 
+import ImageUploadButton from '../ImageUploadButton';
 import Button from '../ToolButton';
 import Icon from '../ToolIcon';
 import { insertEmbed } from '../utils/embed';
@@ -22,6 +23,7 @@ interface FormData {
 
 function Embed({ editor, format }: EmbedProps) {
   const urlInputRef = useRef<HTMLInputElement>(null);
+  const submitButtonRef = useRef<HTMLButtonElement>(null);
   const [showInput, setShowInput] = usePopup(urlInputRef);
   const [formData, setFormData] = useState<FormData>({ url: '', width: '', height: '' });
   const [selection, setSelection] = useState<BaseSelection | null>(null);
@@ -37,9 +39,10 @@ function Embed({ editor, format }: EmbedProps) {
   );
 
   const handleFormSubmit = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
-      console.log('handleFormSubmit');
-      e.preventDefault();
+    (e?: FormEvent<HTMLFormElement>) => {
+      if (e) {
+        e.preventDefault();
+      }
       if (!isTable && selection) {
         Transforms.select(editor, selection);
       }
@@ -54,15 +57,17 @@ function Embed({ editor, format }: EmbedProps) {
     [editor, formData, format, isTable, selection]
   );
 
-  const handleImageUpload = useCallback(() => {
-    setShowInput(false);
-  }, []);
+  const handleImageUploadSuccess = (url: string) => {
+    console.log('url', url);
+    setFormData((prev) => ({ ...prev, url }));
+    handleFormSubmit();
+  };
 
   return (
     <div ref={urlInputRef} className="relative">
       <Button
         active={isBlockActive(editor, format)}
-        style={{ border: showInput ? '1px solid lightgray' : '', borderBottom: 'none' }}
+        className={`${showInput ? 'rounded-md bg-gray-200 p-2' : ''} border-b-none`}
         format={format}
         onClick={handleButtonClick}
       >
@@ -74,10 +79,10 @@ function Embed({ editor, format }: EmbedProps) {
             <div>
               <div
                 style={{ display: 'flex', gap: '10px' }}
-                onClick={handleImageUpload}
+                onClick={() => {}}
                 onKeyPress={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
-                    handleImageUpload();
+                    handleImageUploadSuccess(formData.url);
                   }
                 }}
                 role="button"
@@ -115,9 +120,12 @@ function Embed({ editor, format }: EmbedProps) {
               <Button format="submit" active={false} type="submit">
                 Save
               </Button>
-              <button type="submit">submit</button>
+              <button ref={submitButtonRef} type="submit" style={{ display: 'none' }}>
+                submit
+              </button>
             </div>
           </form>
+          <ImageUploadButton onUploadSuccess={handleImageUploadSuccess} handleFormSubmit={handleFormSubmit} />
         </div>
       )}
     </div>
