@@ -5,7 +5,7 @@ import { useSlate } from 'slate-react';
 import { ToolbarGroup, ToolbarElement, MarkFormat, BlockFormat, EmbedFormat } from './types';
 import BlockButton from './utilButtons/BlockButton';
 import Dropdown from './utilButtons/Dropdown';
-import Embed from './utilButtons/Embed';
+import Embed2 from './utilButtons/Embed2';
 import MarkButton from './utilButtons/MarkButton';
 import defaultToolbarGroups from './utils/toolbarGroups';
 import useTable from './utils/useTable';
@@ -52,7 +52,7 @@ const Toolbar: React.FC = function Toolbar() {
               case 'mark':
                 return <MarkButton key={element.id} format={element.format as MarkFormat} />;
               case 'embed':
-                return <Embed key={element.id} editor={editor} format={element.format as EmbedFormat} />;
+                return <Embed2 key={element.id} editor={editor} format={element.format as EmbedFormat} />;
 
               default:
                 return (

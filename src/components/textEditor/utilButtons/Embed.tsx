@@ -87,31 +87,17 @@ function Embed({ editor, format }: EmbedProps) {
         <Icon icon={format} />
       </Button>
       {showInput && (
-        <div className="absolute top-[50px] rounded-xl border-2 bg-white-01">
-          {format === 'image' && (
-            <div>
-              <div
-                style={{ display: 'flex', gap: '10px' }}
-                onClick={() => {}}
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    handleImageUploadSuccess(formData.url);
-                  }
-                }}
-                role="button"
-                tabIndex={0}
-              >
-                <Icon icon="upload" />
-                <span>Upload</span>
-              </div>
-              <p style={{ textAlign: 'center', opacity: '0.7', width: '100%' }}>OR</p>
-            </div>
-          )}
-          <div>{formData.url}</div>
-          <button type="button" onClick={handleEmbedSubmit}>
-            SUBMIT
-          </button>
+        <div className="absolute top-[50px] rounded-xl border-2 bg-white-01 p-5">
           <ImageUploadButton onUploadSuccess={handleImageUploadSuccess} />
+          <div className="text-end">
+            <button
+              className="mt-[30px] rounded-md bg-gray-400 px-5 py-2 text-end text-slate-50"
+              type="button"
+              onClick={handleEmbedSubmit}
+            >
+              SUBMIT
+            </button>
+          </div>
         </div>
       )}
     </div>
