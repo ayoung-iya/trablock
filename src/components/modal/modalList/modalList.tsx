@@ -1,6 +1,7 @@
 import loadable from '@loadable/component';
 
 import { ModalProps } from '@/components/modal/Modal';
+import { BlockDetailModalProps } from '@/components/modal/modalList/BlockDetailModal';
 import { CreateBlockModalProps } from '@/components/modal/modalList/CreateBlockModal';
 
 // Loading 컴포넌트 정의
@@ -14,6 +15,9 @@ const importList = {
   }),
   CreateBlock: loadable(() => import('@/components/modal/modalList/CreateBlockModal'), {
     fallback: <Loading />
+  }),
+  BlockDetail: loadable(() => import('@/components/modal/modalList/BlockDetailModal'), {
+    fallback: <Loading />
   })
 };
 
@@ -23,6 +27,9 @@ const modalList = {
   },
   CreateBlock: (props: CreateBlockModalProps) => {
     return { component: importList.CreateBlock, props };
+  },
+  BlockDetail: (props: BlockDetailModalProps) => {
+    return { component: importList.BlockDetail, props };
   }
 };
 

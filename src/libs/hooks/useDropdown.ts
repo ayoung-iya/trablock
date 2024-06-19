@@ -8,13 +8,11 @@ const useDropdown = ({ onClickInside }: useDropdownParams) => {
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const ref = useRef<HTMLUListElement>(null);
 
-  const handleDropdownOpen = (e: MouseEvent) => {
-    e.stopPropagation();
+  const handleDropdownOpen = () => {
     setIsDropdownOpened(true);
   };
 
-  const handleDropdownClose = (e: MouseEvent) => {
-    e.stopPropagation();
+  const handleDropdownClose = () => {
     setIsDropdownOpened(false);
   };
 
@@ -28,16 +26,14 @@ const useDropdown = ({ onClickInside }: useDropdownParams) => {
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (!ref.current) return;
-
       if (ref.current.contains(e.target as Node) && onClickInside) {
         onClickInside(e);
       }
 
-      handleDropdownClose(e);
+      handleDropdownClose();
     };
 
     document.addEventListener('click', handleClick);
-
     return () => {
       document.removeEventListener('click', handleClick);
     };

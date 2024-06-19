@@ -34,7 +34,7 @@ export default function SearchInput({
   };
 
   return (
-    <div className={`flex h-10 rounded-[5px] bg-gray-03 px-3 pb-2 pt-[10px] ${className}`}>
+    <div className={`flex rounded-[0.375rem] bg-gray-03 px-3 py-[0.625rem] ${className}`}>
       <Input
         id="search"
         value={searchString}
