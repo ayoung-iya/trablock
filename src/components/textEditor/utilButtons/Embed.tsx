@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback, FormEvent } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 
 import { BaseSelection, Transforms, Editor } from 'slate';
 
@@ -23,7 +23,7 @@ interface FormData {
 
 function Embed({ editor, format }: EmbedProps) {
   const urlInputRef = useRef<HTMLInputElement>(null);
-  const submitButtonRef = useRef<HTMLButtonElement>(null);
+  // const submitButtonRef = useRef<HTMLButtonElement>(null);
   const [showInput, setShowInput] = usePopup(urlInputRef);
   const [formData, setFormData] = useState<FormData>({ url: '', width: '', height: '' });
   const [selection, setSelection] = useState<BaseSelection | null>(null);
@@ -38,29 +38,42 @@ function Embed({ editor, format }: EmbedProps) {
     [editor.selection]
   );
 
-  const handleFormSubmit = useCallback(
-    (e?: FormEvent<HTMLFormElement>) => {
-      if (e) {
-        e.preventDefault();
-      }
-      if (!isTable && selection) {
-        Transforms.select(editor, selection);
-      }
-      insertEmbed(editor, { ...formData }, format);
-      setShowInput(false);
-      setFormData({
-        url: '',
-        width: '',
-        height: ''
-      });
-    },
-    [editor, formData, format, isTable, selection]
-  );
+  // const handleFormSubmit = useCallback(
+  //   (e?: FormEvent<HTMLFormElement>) => {
+  //     if (e) {
+  //       e.preventDefault();
+  //     }
+  //     if (!isTable && selection) {
+  //       Transforms.select(editor, selection);
+  //     }
+  //     insertEmbed(editor, { ...formData }, format);
+  //     setShowInput(false);
+  //     setFormData({
+  //       url: '',
+  //       width: '',
+  //       height: ''
+  //     });
+  //   },
+  //   [editor, formData, format, isTable, selection]
+  // );
+
+  const handleEmbedSubmit = useCallback(() => {
+    console.log('handleEmbedSubmit');
+    if (!isTable && selection) {
+      Transforms.select(editor, selection);
+    }
+    insertEmbed(editor, { ...formData }, format);
+    setShowInput(false);
+    setFormData({
+      url: '',
+      width: '',
+      height: ''
+    });
+  }, [editor, formData, format, isTable, selection]);
 
   const handleImageUploadSuccess = (url: string) => {
     console.log('url', url);
     setFormData((prev) => ({ ...prev, url }));
-    handleFormSubmit();
   };
 
   return (
@@ -94,38 +107,11 @@ function Embed({ editor, format }: EmbedProps) {
               <p style={{ textAlign: 'center', opacity: '0.7', width: '100%' }}>OR</p>
             </div>
           )}
-          <form onSubmit={handleFormSubmit}>
-            <div className="flex flex-col gap-1 p-5">
-              <div>
-                <input
-                  type="text"
-                  placeholder="Enter url"
-                  value={formData.url}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, url: e.target.value }))}
-                />
-                <input
-                  type="text"
-                  placeholder="Enter width of frame"
-                  value={formData.width}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, width: e.target.value }))}
-                />
-                <input
-                  type="text"
-                  placeholder="Enter height of frame"
-                  value={formData.height}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, height: e.target.value }))}
-                />
-              </div>
-
-              <Button format="submit" active={false} type="submit">
-                Save
-              </Button>
-              <button ref={submitButtonRef} type="submit" style={{ display: 'none' }}>
-                submit
-              </button>
-            </div>
-          </form>
-          <ImageUploadButton onUploadSuccess={handleImageUploadSuccess} handleFormSubmit={handleFormSubmit} />
+          <div>{formData.url}</div>
+          <button type="button" onClick={handleEmbedSubmit}>
+            SUBMIT
+          </button>
+          <ImageUploadButton onUploadSuccess={handleImageUploadSuccess} />
         </div>
       )}
     </div>

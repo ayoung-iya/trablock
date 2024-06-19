@@ -6,13 +6,9 @@ import uploadImage from './utils/uploadImage';
 
 interface ImageUploadButtonProps {
   onUploadSuccess: (url: string) => void;
-  handleFormSubmit: () => void;
 }
 
-const ImageUploadButton: React.FC<ImageUploadButtonProps> = function ImageUploadButton({
-  onUploadSuccess,
-  handleFormSubmit
-}) {
+const ImageUploadButton: React.FC<ImageUploadButtonProps> = function ImageUploadButton({ onUploadSuccess }) {
   const [loading, setLoading] = useState(false);
 
   const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +20,6 @@ const ImageUploadButton: React.FC<ImageUploadButtonProps> = function ImageUpload
         if (url) {
           console.log(url);
           onUploadSuccess(url);
-          handleFormSubmit();
         }
       } catch (error) {
         console.error('Error uploading image:', error);
