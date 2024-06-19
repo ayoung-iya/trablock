@@ -1,7 +1,7 @@
 import returnFetch from 'return-fetch';
 
 import type { ArticleFormData, ArticleRequestFormData } from '@/apis/useArticle/article.type';
-// import { dateRequestFormat } from '@/libs/utils/dateFormatter';
+import { dateRequestFormat } from '@/libs/utils/dateFormatter';
 
 import API_URL from '../constants/url';
 import interceptor from '../interceptors/interceptor';
@@ -11,7 +11,7 @@ const options = {
   headers: {
     'Content-Type': 'application/json',
     'authorization-token':
-      'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjMsImV4cCI6MTcxODcyODcwMX0.Vz6JR41J2M6tT2hifcTqGCuympdPMcpkeeqVT3wXLcI'
+      'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjMsImV4cCI6MTcxODkwNDUyNX0.Cxue2RKkziWbyTSuj5gsG3_TesOdazxcokRuGVYLfiU'
   },
   interceptors: {
     request: async (args: any) => {
@@ -36,12 +36,9 @@ const ArticleService = {
     try {
       const formatData: ArticleRequestFormData = {
         title,
-        // location: location.map(({ placeId, address, city }) => ({ place_id: placeId, address, city })),
-        // start_at: dateRequestFormat(date.from),
-        // end_at: dateRequestFormat(date.to),
-        location: location.map(({ city }) => city),
-        start_at: date.from,
-        end_at: date.to,
+        location: location.map(({ placeId, address, city }) => ({ place_id: placeId, address, city })),
+        start_at: dateRequestFormat(date.from),
+        end_at: dateRequestFormat(date.to),
         travel_companion: travelCompanion
       };
 
@@ -64,7 +61,7 @@ const ArticleService = {
         throw new Error(responseData.local_message);
       }
 
-      return responseData;
+      return { articleId: responseData.article_id };
     } catch (err) {
       throw (err as Error).message;
     }
