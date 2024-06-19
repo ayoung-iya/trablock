@@ -1,22 +1,48 @@
-// 'use client';
+'use client';
 
-// import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
+import Cookies from 'js-cookie';
+import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
-// import Cookies from 'js-cookie';
+const authorizationToken = Cookies.get('authorization-token');
+const refreshToken = Cookies.get('refresh-token');
 
-// const authorizationToken = Cookies.get('authorization-token');
-// const refreshToken = Cookies.get('refresh-token');
-// const options: { [key: string]: ReturnFetchDefaultOptions } = {
-//   reissue: {
-//     baseUrl: 'https://be.travel-laboratory.site',
-//     headers: {
-//       'Content-Type': 'application/json'
-//     }
-//   }
-// };
+const options: { [key: string]: ReturnFetchDefaultOptions } = {
+  reissue: {
+    baseUrl: 'https://be.travel-laboratory.site',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+};
 
-// const fetchReissue = returnFetch(options.reissue);
+const fetchReissue = returnFetch(options.reissue);
 
+const serviceReissueToken = {
+  postReissueToken: async () => {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json'
+    };
+    if (authorizationToken) {
+      headers['authorization-token'] = authorizationToken;
+    }
+
+    if (refreshToken) {
+      headers.cookie = refreshToken;
+    }
+
+    const response = await fetchReissue('/api/v1/auth/reissue-token', {
+      method: 'POST',
+      headers
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    return response.json();
+  }
+};
+export default serviceReissueToken;
 // const serviceReissueToken = {
 //   postReissueToken: async (): Promise<void> => {
 //     const response = await fetchReissue('/api/v1/auth/reissue-token', {

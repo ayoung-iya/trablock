@@ -1,6 +1,7 @@
 'use client';
 
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 
 import usePostSignin from '@/apis/useSignin/usePostSignin';
@@ -8,18 +9,13 @@ import { validate } from '@/libs/constants/validation';
 
 import SignInput from './common/input/SignInput';
 
-export interface signinProps {
-  username: string;
-  password: string;
-}
-
 export default function SigninForm() {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isValid }
-  } = useForm();
+  } = useForm({ username: '', password: '' });
 
   const { mutate: postSigninMutate } = usePostSignin();
 
@@ -32,23 +28,29 @@ export default function SigninForm() {
     username: watch('username'),
     password: watch('password')
   };
-  console.log(payload);
 
+  const router = useRouter();
   const onSubmit: SubmitHandler<FieldValues> = () => {
     // login fetch
-    console.log(payload);
+
     postSigninMutate(
       { username: payload.username, password: payload.password },
       {
         onSuccess: (response) => {
-          console.log('성공이다!');
           // 쿠키에 토큰두개 , 끝나는 시간 세팅
-          Cookies.set('authorization-token', response.headers['authorization-token'], { secure: true });
-          Cookies.set('expires-at', response.headers['authorization-token-expired-at']);
-          Cookies.set('refresh-token', response.headers['set-cookie'], { secure: true });
-          console.log('성공');
+          const authorizationToken = response.headers.get('Authorization-Token');
+          const expiresAt = response.headers.get('authorization-token-expired-at');
+          const refreshToken = response.headers.get('set-cookie');
+
+          if (authorizationToken && expiresAt && refreshToken) {
+            Cookies.set('authorization-token', authorizationToken, { secure: true });
+            Cookies.set('expires-at', expiresAt);
+            Cookies.set('refresh-token', refreshToken, { secure: true });
+
+            router.push('/');
+          }
         },
-        onError: (error) => console.error(error)
+        onError: (error) => console.log(error)
       }
     );
   };

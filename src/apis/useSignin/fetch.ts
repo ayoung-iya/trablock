@@ -1,6 +1,6 @@
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
-// import { signinProps } from '@/components/SigninForm';
+import { signinProps } from '@/libs/constants/auth.type';
 
 const options: { [key: string]: ReturnFetchDefaultOptions } = {
   signin: {
@@ -12,13 +12,15 @@ const options: { [key: string]: ReturnFetchDefaultOptions } = {
 const fetchSignin = returnFetch(options.signin);
 
 const serviceSignin = {
-  postSignin: async (data: { username: string; password: string }) => {
+  postSignin: async (data: signinProps) => {
     const response = await fetchSignin('/api/v1/auth/login', {
       method: 'POST',
       body: JSON.stringify(data)
     });
-    const result = response.json();
-    return result;
+    if (!response.ok) {
+      throw new Error('network errror');
+    }
+    return response;
   }
 };
 

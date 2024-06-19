@@ -2,7 +2,7 @@
 
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
-import { signupProps } from '@/components/SignupForm';
+import { signupProps } from '@/libs/constants/auth.type';
 
 const options: { [key: string]: ReturnFetchDefaultOptions } = {
   signup: {
@@ -21,8 +21,8 @@ const options: { [key: string]: ReturnFetchDefaultOptions } = {
   checkNickname: {
     baseUrl: 'https://be.travel-laboratory.site',
     headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': 'localhost://3000'
+      'Content-Type': 'application/json'
+      //'Access-Control-Allow-Origin': 'localhost://3000'
     }
   }
 };
@@ -43,7 +43,7 @@ const serviceSignup = {
   postUsernameCheck: async (data: string) => {
     const response = await fetchCheckUsername('/api/v1/auth/username', {
       method: 'POST',
-      body: JSON.stringify(data)
+      body: JSON.stringify({ username: data })
     });
     const result = response.json();
     return result;
@@ -51,7 +51,7 @@ const serviceSignup = {
   postNicknameCheck: async (data: string) => {
     const response = await fetchCheckNickname('/api/v1/auth/nickname', {
       method: 'POST',
-      body: JSON.stringify(data)
+      body: JSON.stringify({ nickname: data })
     });
     const result = response.json();
     return result;
