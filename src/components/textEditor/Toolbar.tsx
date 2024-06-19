@@ -22,7 +22,7 @@ const Toolbar: React.FC = function Toolbar() {
       filteredGroups = filteredGroups.filter((elem) => elem.length);
     }
     setToolbarGroups(filteredGroups);
-  }, [isTable, toolbarGroups]);
+  }, [isTable]);
 
   return (
     <div className="bg-white my-5 flex flex-wrap items-center justify-center border-b-2 pb-5">

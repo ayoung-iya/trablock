@@ -1,3 +1,5 @@
+'use client';
+
 import React, { ChangeEvent, useState } from 'react';
 
 import uploadImage from './utils/uploadImage';
@@ -13,6 +15,7 @@ const ImageUploadButton: React.FC = function ImageUploadButton() {
   };
 
   const handleUpload = async () => {
+    console.log('handleUpload');
     if (image) {
       setLoading(true);
       try {

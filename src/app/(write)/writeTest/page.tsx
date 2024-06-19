@@ -1,6 +1,7 @@
 import React from 'react';
 
 import DayButton from '@/components/textEditor/DayButton';
+import ImageUploadButton from '@/components/textEditor/ImageUploadButton';
 import SlateEditor from '@/components/textEditor/SlateEditor';
 
 const page = () => {
@@ -8,6 +9,7 @@ const page = () => {
     <div className="relative flex-col gap-10">
       <div>1</div>
       <div>1</div>
+      <ImageUploadButton />
       <div className="border-b-500 absolute top-[200px] w-full px-40 ">
         <div className="flex flex-col gap-[20px]">
           <input
