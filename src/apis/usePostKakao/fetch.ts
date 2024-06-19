@@ -1,4 +1,5 @@
-import { URLSearchParams } from 'next/dist/compiled/@edge-runtime/primitives/url';
+import { URLSearchParams } from 'url';
+
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
 const options: {

@@ -2,8 +2,8 @@
 
 import { useMutation } from '@tanstack/react-query';
 
+import { signupProps } from '@/apis/constants/auth.type';
 import serviceSignup from '@/apis/useSignup/fetch';
-import { signupProps } from '@/libs/constants/auth.type';
 
 export default function usePostSignup() {
   return useMutation({

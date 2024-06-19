@@ -8,6 +8,7 @@ import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 import usePostNicknameCheck from '@/apis/useSignup/usePostNicknameCheck';
 import usePostSignup from '@/apis/useSignup/usePostSignup';
 import usePostUsernameCheck from '@/apis/useSignup/usePostUsernamCheck';
+import Button from '@/components/common/button/Button';
 import Checkbox from '@/components/common/input/Checkbox';
 import SignInput from '@/components/common/input/SignInput';
 import PlanInputTitle from '@/components/PlanInputTitle';
@@ -61,7 +62,7 @@ export default function SignupForm() {
   };
   const validatePasswordCheck = () => {
     if (payload.password !== passwordCheckWatch) {
-      console.log('passworderror');
+      console.log(payload.password, passwordCheckWatch);
       setError('password_confirm', { type: 'password-mismatch', message: '비밀번호가 일치하지 않습니다.' });
     } else {
       clearErrors('password_confirm');
@@ -82,7 +83,7 @@ export default function SignupForm() {
   const registerList = {
     username: register('username', { ...validate.username, onBlur: () => validateUsername() }),
     password: register('password', validate.password),
-    password_confirm: register('password_confirm', { onBlur: () => validatePasswordCheck() }),
+    password_confirm: register('password_confirm', { onChange: () => validatePasswordCheck() }),
     nickname: register('nickname', { ...validate.nickname, onBlur: () => validateNickname() }),
     pw_answer: register('pw_answer', validate.pw_answer),
     pw_question_id: register('pw_question_id'),
@@ -114,44 +115,50 @@ export default function SignupForm() {
       }
     });
   };
-
+  const buttonStyle = 'bg-primary-01 text-white-01 w-full rounded font-signin-button h-12 ';
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex-col-start m-0 w-80 gap-6 pt-10">
       <PlanInputTitle>기본 정보 입력</PlanInputTitle>
-      <SignInput
-        label="닉네임"
-        id="nickname"
-        errorMessage={errors.nickname?.message as string}
-        {...registerList.nickname}
-      />
-      <SignInput
-        label="이메일"
-        id="username"
-        errorMessage={errors.username?.message as string}
-        {...registerList.username}
-      />
-      <SignInput
-        label="비밀번호"
-        id="password"
-        errorMessage={errors.password?.message as string}
-        {...registerList.password}
-      />
-      <SignInput
-        label="비밀번호 확인"
-        id="password_confirm"
-        errorMessage={errors.password_confirm?.message as string}
-      />
+      <section className="mg-0 mb-14 flex w-full flex-col gap-5">
+        <SignInput
+          label="닉네임"
+          id="nickname"
+          errorMessage={errors.nickname?.message as string}
+          {...registerList.nickname}
+        />
+        <SignInput
+          label="이메일"
+          id="username"
+          errorMessage={errors.username?.message as string}
+          {...registerList.username}
+        />
+        <SignInput
+          label="비밀번호"
+          id="password"
+          type="password"
+          errorMessage={errors.password?.message as string}
+          {...registerList.password}
+        />
+        <SignInput
+          label="비밀번호 확인"
+          type="password"
+          id="password_confirm"
+          errorMessage={errors.password_confirm?.message as string}
+        />
+      </section>
       <PlanInputTitle>비밀번호 정보 입력</PlanInputTitle>
-      <SignInput label="질문" id="pw_question_id" {...registerList.pw_question_id} />
-      <SignInput label="답변" id="pw_answer" {...registerList.pw_answer} />
+      <section className="mg-0 mb-14 flex w-full flex-col gap-5">
+        <SignInput label="질문" id="pw_question_id" {...registerList.pw_question_id} />
+        <SignInput label="답변" id="pw_answer" {...registerList.pw_answer} />
+      </section>
       <PlanInputTitle>약관 동의</PlanInputTitle>
-      <Checkbox id="is_agreement" type="radio" {...registerList.is_agreement}>
+      <Checkbox id="is_agreement" {...registerList.is_agreement}>
         개인정보 수집 및 이용 동의
       </Checkbox>
 
-      <button disabled={!isValid} type="submit">
+      <Button disabled={!isValid} type="submit" className={buttonStyle}>
         회원가입
-      </button>
+      </Button>
     </form>
   );
 }

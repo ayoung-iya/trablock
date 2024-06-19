@@ -2,8 +2,8 @@
 
 import { useMutation } from '@tanstack/react-query';
 
+import { signinProps } from '@/apis/constants/auth.type';
 import serviceSignin from '@/apis/useSignin/fetch';
-import { signinProps } from '@/libs/constants/auth.type';
 
 export default function usePostSignin() {
   return useMutation({

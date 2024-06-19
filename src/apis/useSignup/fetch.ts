@@ -2,7 +2,7 @@
 
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
-import { signupProps } from '@/libs/constants/auth.type';
+import { signupProps } from '@/apis/constants/auth.type';
 
 const options: { [key: string]: ReturnFetchDefaultOptions } = {
   signup: {
