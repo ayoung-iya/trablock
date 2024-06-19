@@ -4,7 +4,10 @@ import type { ArticleFormData, ArticleRequestFormData } from '@/apis/useArticle/
 
 import API_URL from '../constants/url';
 import interceptor from '../interceptors/interceptor';
-import { formatArticleInitialDataForRequest } from '../utils/formatArticleInitialData';
+import {
+  formatArticleInitialDataForRequest,
+  formatArticleInitialDataFromResponse
+} from '../utils/formatArticleInitialData';
 
 const options = {
   baseUrl: API_URL.API_BASE_URL,
@@ -46,6 +49,40 @@ const ArticleService = {
       }
 
       return { articleId: responseData.article_id };
+    } catch (err) {
+      throw (err as Error).message;
+    }
+  },
+  getArticle: async (articleId?: string) => {
+    if (!articleId) {
+      throw new Error('no article id');
+    }
+
+    const response = await fetchService(`api/v1/find/article/${articleId}`, { method: 'GET' });
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.local_message);
+    }
+
+    const formattedData: ArticleFormData = formatArticleInitialDataFromResponse(data);
+
+    return formattedData;
+  },
+  putArticle: async (articleId: string, data: ArticleFormData) => {
+    try {
+      const formatData: ArticleRequestFormData = formatArticleInitialDataForRequest(data);
+      const response = await fetchService(`/api/v1/update/article/${articleId}`, {
+        method: 'PUT',
+        body: JSON.stringify(formatData)
+      });
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.local_message);
+      }
+
+      return responseData;
     } catch (err) {
       throw (err as Error).message;
     }
