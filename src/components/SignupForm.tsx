@@ -62,7 +62,6 @@ export default function SignupForm() {
   };
   const validatePasswordCheck = () => {
     if (payload.password !== passwordCheckWatch) {
-      console.log(payload.password, passwordCheckWatch);
       setError('password_confirm', { type: 'password-mismatch', message: '비밀번호가 일치하지 않습니다.' });
     } else {
       clearErrors('password_confirm');
@@ -90,9 +89,7 @@ export default function SignupForm() {
     is_agreement: register('is_agreement')
   };
 
-  useEffect(() => {
-    console.log(isValid);
-  }, [isValid]);
+  useEffect(() => {}, [isValid]);
 
   const onSubmit: SubmitHandler<FieldValues> = () => {
     const payloadValue = {
@@ -105,17 +102,15 @@ export default function SignupForm() {
     };
     postSignupMutate(payloadValue, {
       onSuccess: (data) => {
-        console.log(payloadValue);
-        console.log(data);
+        console.log(data); // login 로직으로 전환
         router.push('/');
         // 로그인fetch 하고 토큰 받아서 저장.
       },
-      onError: (error) => {
-        console.log(error);
-      }
+      onError: (error) => console.log(error)
     });
   };
   const buttonStyle = 'bg-primary-01 text-white-01 w-full rounded font-signin-button h-12 ';
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex-col-start m-0 w-80 gap-6 pt-10">
       <PlanInputTitle>기본 정보 입력</PlanInputTitle>
