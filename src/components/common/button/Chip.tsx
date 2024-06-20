@@ -18,12 +18,12 @@ import classNames from 'classnames';
 const chipStyles = {
   base: 'flex px-5 py-1.75 justify-center items-center gap-2.5 rounded-full font-caption-1',
   selected: {
-    day: 'bg-black-01 text-white-01',
-    default: 'border-solid border-secondary-01 bg-white text-secondary-01'
+    day: 'border bg-black-01 text-white-01',
+    default: 'border border-solid border-secondary-01 bg-white text-secondary-01'
   },
   unselected: {
-    day: 'border-solid border-gray-02 bg-white-01 text-black-02',
-    default: 'border-solid border-gray-02 bg-white-01 text-black-02'
+    day: 'border border-solid border-gray-02 bg-white-01 text-black-02',
+    default: 'border border-solid border-gray-02 bg-white-01 text-black-02'
   },
   height: {
     day: 'h-10',

@@ -14,22 +14,54 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, GoogleMapProps } from '@react-google-maps/api';
 
 import { Coordinate } from '@/components/map/type';
+import { Category } from '@/components/modal/modalList/type';
 import { GOOGLE_MAPS, MAX_ZOOM } from '@/libs/constants/googleMaps';
+
+const MARKER_COLOR: { [key in Category]: { bg: string; text: string } } = {
+  숙소: {
+    bg: '#FB2F85',
+    text: '#FFEFF4'
+  },
+  식당: {
+    bg: '#F35802',
+    text: '#FFF0EA'
+  },
+  관광지: {
+    bg: '#9C27B0',
+    text: '#F4ECFF'
+  },
+  액티비티: {
+    bg: '#55B135',
+    text: '#F1FBED'
+  },
+  교통: {
+    bg: '#4F80FF',
+    text: '#DEEBFF'
+  },
+  기타: {
+    bg: '#F5BA07',
+    text: '#FFF6DC'
+  }
+};
 
 interface MapProps extends GoogleMapProps {
   mapContainerStyle: React.CSSProperties;
   coordinateList: Coordinate[];
+  category?: Category;
 }
 
-export default function Map({ mapContainerStyle, coordinateList }: MapProps) {
+export default function Map({ mapContainerStyle, coordinateList, category = '교통' }: MapProps) {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [markers, setMarkers] = useState<google.maps.marker.AdvancedMarkerElement[]>([]);
   const [polyline, setPolyline] = useState<google.maps.Polyline | null>(null);
 
   // 맵 load
-  const handleOnLoad = useCallback((map: google.maps.Map) => {
-    setMap(map);
-  }, []);
+  const handleOnLoad = useCallback(
+    (map: google.maps.Map) => {
+      setMap(map);
+    },
+    [map, coordinateList]
+  );
 
   // 맵 unmount
   const handleOnUnmount = useCallback(() => {
@@ -47,15 +79,17 @@ export default function Map({ mapContainerStyle, coordinateList }: MapProps) {
   // 커스텀 마커 스타일
   const createMarkerElement = (number: number) => {
     const markerDiv = document.createElement('div');
-    markerDiv.style.backgroundColor = 'blue';
-    markerDiv.style.width = '32px';
-    markerDiv.style.height = '32px';
+    markerDiv.style.backgroundColor = MARKER_COLOR[category].bg;
+    markerDiv.style.width = '2rem';
+    markerDiv.style.height = '2rem';
     markerDiv.style.borderRadius = '50%';
-    markerDiv.style.color = 'white';
+    markerDiv.style.color = MARKER_COLOR[category].text;
+    markerDiv.style.font = 'Pretendard';
+    markerDiv.style.fontWeight = '700';
     markerDiv.style.display = 'flex';
     markerDiv.style.alignItems = 'center';
     markerDiv.style.justifyContent = 'center';
-    markerDiv.style.fontSize = '16px';
+    markerDiv.style.fontSize = '1rem';
     markerDiv.textContent = number.toString();
     markerDiv.style.transform = 'translateY(50%)';
     return markerDiv;
@@ -94,9 +128,9 @@ export default function Map({ mapContainerStyle, coordinateList }: MapProps) {
       const newPolyline = new google.maps.Polyline({
         path: coordinateList,
         map,
-        strokeColor: '#FF0000',
+        strokeColor: '#4F80FF',
         strokeOpacity: 1.0,
-        strokeWeight: 2
+        strokeWeight: 4
       });
       setPolyline(newPolyline);
 
@@ -113,16 +147,25 @@ export default function Map({ mapContainerStyle, coordinateList }: MapProps) {
 
       return () => window.google.maps.event.removeListener(listener);
     }
-  }, [map, coordinateList]);
+  }, [map, coordinateList, category]);
+
+  if (!coordinateList) return null;
+  if (coordinateList.length === 0) return null;
 
   return (
     <GoogleMap
       mapContainerStyle={mapContainerStyle}
-      center={coordinateList.length > 0 ? coordinateList[0] : { lat: 0, lng: 0 }}
+      center={coordinateList[0]}
       zoom={MAX_ZOOM}
       onLoad={handleOnLoad}
       onUnmount={handleOnUnmount}
-      options={{ mapId: GOOGLE_MAPS.MAP_ID }}
+      options={{
+        mapId: GOOGLE_MAPS.MAP_ID,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
+        zoomControl: false
+      }}
     />
   );
 }
