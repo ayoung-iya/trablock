@@ -1,16 +1,56 @@
-// 여기를 redirection 페이지로 설정하고 (카카오에서) 여기다가 쿼리 파람 확딘하고 해야함
-//   const tokenData = useManageKakaoLogin();
-//   if (tokenData) {
-//     const { data: responseData, error, isLoading } = useGetKakaoUserData(tokenData);
+'use client';
 
-//     useEffect(() => {
-//       if (responseData) {
-//         console.log(responseData);
-//         // const { profile_nickname, profile_image, account_email } = responseData;
-//         // console.log(profile_image, profile_nickname, account_email);
-//         // 백엔드로 전달
-//       }
-//       if (error) {
-//         console.error('Error fetching user data:', error);
-//       }
-//     }, [responseData, error]);
+import { useEffect, useState } from 'react';
+
+import useGetKakaoUserData from '@/apis/useGetKakaoUserData/useGetKakaoUserData';
+import usePostKakaoToken from '@/apis/usePostKakao/usePostKakaoToken';
+import useManageKakaoLogin from '@/libs/hooks/useManageKakaoLogin';
+
+export default function Kakaologin() {
+  const [accessToken, setAccessToken] = useState('');
+
+  const { code, error, errorMessage } = useManageKakaoLogin();
+
+  const { data: kakaoUserData, isError, error: userDataError } = useGetKakaoUserData(accessToken);
+
+  const postKakaoTokenMutate = usePostKakaoToken();
+
+  useEffect(() => {
+    if (code) {
+      postKakaoTokenMutate.mutate(code, {
+        onSuccess: (response) => {
+          const { access_token: accessTokens } = response;
+          setAccessToken(accessTokens);
+          console.log('토큰 성공');
+        },
+        onError: (err) => {
+          console.log(err);
+        }
+      });
+    }
+  }, [code]);
+
+  useEffect(() => {
+    if (kakaoUserData) {
+      console.log('userdata');
+      const {
+        profile_nickname: profileNickname,
+        profile_image: profileImage,
+        account_email: accountEmail
+      } = kakaoUserData;
+      // 백엔드로 세개의 데이터 전달
+      console.log(profileImage, profileNickname, accountEmail);
+    }
+
+    if (isError) {
+      console.log('Error fetching user data:', error);
+    }
+  }, [kakaoUserData, isError, userDataError]);
+
+  return (
+    <div>
+      <p>kakaoLogin</p>
+      {error && <p>오류 : {errorMessage}</p>}
+    </div>
+  );
+}

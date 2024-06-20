@@ -14,19 +14,14 @@ const options: {
 const fetchKakaoUser = returnFetch(options.kakaoUserData);
 
 const serviceKakaoUserData = {
-  getKakaoUserData: async (data: {
-    access_token: string;
-    expires_in: string;
-    refresh_token: string | null;
-    refresh_token_expires_in: string | null;
-  }) => {
+  getKakaoUserData: async (token: string) => {
     const response = await fetchKakaoUser('/v2/user/me', {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${data.access_token}`
+        Authorization: `Bearer ${token}`
       }
     });
-    return response;
+    return response.json();
   }
 };
 

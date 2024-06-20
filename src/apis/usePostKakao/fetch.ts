@@ -1,4 +1,4 @@
-import { URLSearchParams } from 'url';
+// import { URLSearchParams } from 'url';
 
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
@@ -8,7 +8,8 @@ const options: {
   kakaoToken: {
     baseUrl: 'https://kauth.kakao.com',
     headers: {
-      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      'Access-Control-Allow-Origin': '*'
     }
   }
 };
@@ -20,8 +21,8 @@ const serviceKakaoLogin = {
       method: 'POST',
       body: new URLSearchParams({
         grant_type: 'authorization_code',
-        client_id: 'e0e807673bcc1a1361126a62f6cf8c3a',
-        redirect_uri: 'https://trablock-git-develop-codeit6.vercel.app',
+        client_id: '822dc8b88e2d46919a2062d853fa5108',
+        redirect_uri: 'http://localhost:3000/kakaoLogin',
         code
       }).toString()
     });

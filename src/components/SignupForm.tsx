@@ -13,7 +13,8 @@ import Checkbox from '@/components/common/input/Checkbox';
 import SignInput from '@/components/common/input/SignInput';
 import PlanInputTitle from '@/components/PlanInputTitle';
 import { validate } from '@/libs/constants/validation';
-
+// import passWordList from '@/libs/constants/passWordQuestion';
+// 드롭다운 추가
 export default function SignupForm() {
   const {
     register,
