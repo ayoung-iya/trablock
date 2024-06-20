@@ -73,6 +73,8 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
     }
   });
 
+  const isEditPage = !!articlePageId;
+
   const date = getValues('date');
   const title = register('title', { required: true });
   register('location', { validate: { moreThanOne: (placeList) => placeList.length > 0 } });
@@ -96,8 +98,16 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
     setSearchString('');
   };
 
+  const handleCalendarInputClick = () => {
+    if (isEditPage) {
+      return;
+    }
+
+    handleCalendarOpen();
+  };
+
   const onSubmit = async (formData: ArticleFormData) => {
-    if (articlePageId) {
+    if (isEditPage) {
       try {
         await ArticleService.putArticle(articlePageId, formData);
 
@@ -198,17 +208,24 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
 
       <div>
         <InputWithTitle title="여행 날짜">
-          <div className="flex-row-center h-12 w-full gap-1 rounded-[5px] border border-gray-02 px-4">
+          <div
+            // eslint-disable-next-line max-len
+            className={`flex-row-center h-12 w-full gap-1 rounded-[5px] border border-gray-02 px-4 ${isEditPage ? 'bg-gray-03' : ''}`}
+          >
             <Input
               type="text"
               id="place"
-              className="w-full cursor-pointer"
+              className={`w-full cursor-pointer ${isEditPage ? 'bg-gray-03 hover:cursor-not-allowed' : ''}`}
               placeholder="여행 날짜를 선택하세요"
-              onClick={handleCalendarOpen}
+              onClick={handleCalendarInputClick}
               readOnly
               value={date?.from && date?.to && `${dateDotFormat(date.from)} ~ ${dateDotFormat(date.to)}`}
             />
-            <button type="button" onClick={handleCalendarOpen}>
+            <button
+              type="button"
+              onClick={handleCalendarInputClick}
+              className={`${isEditPage ? 'hover:cursor-not-allowed' : ''}`}
+            >
               <ImageBox src={calendarIcon} alt="달력" className="h-[18px] w-[18px]" width={18} height={18} />
             </button>
           </div>
@@ -296,7 +313,7 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
       </div>
 
       <Button type="submit" className={`${isValid ? 'btn-solid' : 'btn-gray'} btn-lg sm:h-14`} disabled={!isValid}>
-        {articlePageId ? '일정 수정하기' : '일정 짜러 가기'}
+        {isEditPage ? '일정 수정하기' : '일정 짜러 가기'}
       </Button>
     </form>
   );
