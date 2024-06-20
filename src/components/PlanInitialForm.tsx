@@ -29,7 +29,14 @@ import { dateDotFormat } from '@/libs/utils/dateFormatter';
 export default function PlanInitialForm({ articlePageId }: { articlePageId?: string }) {
   const router = useRouter();
 
-  const { control, register, getValues, handleSubmit, watch, reset } = useForm<ArticleFormData>({
+  const {
+    control,
+    register,
+    getValues,
+    handleSubmit,
+    reset,
+    formState: { isValid }
+  } = useForm<ArticleFormData>({
     defaultValues: { title: '', location: [], date: {}, travelCompanion: '혼자서', travelStyle: [] }
   });
   const { data: articleData, isError, error } = useGetArticle(articlePageId);
@@ -71,13 +78,6 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
   register('location', { validate: { moreThanOne: (placeList) => placeList.length > 0 } });
   register('date', { validate: { dateRange: (dateRange) => !!dateRange?.from && !!dateRange?.to } });
   register('travelCompanion', { required: true });
-
-  const isFormFilled = () => {
-    // eslint-disable-next-line no-shadow
-    const { title, location, date, travelCompanion } = watch();
-
-    return title && !!location.length && date?.from && date?.to && travelCompanion;
-  };
 
   const handleSearchStringChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearchString(e.target.value);
@@ -295,11 +295,7 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
         </div>
       </div>
 
-      <Button
-        type="submit"
-        className={`${isFormFilled() ? 'btn-solid' : 'btn-gray'} btn-lg sm:h-14`}
-        disabled={!isFormFilled()}
-      >
+      <Button type="submit" className={`${isValid ? 'btn-solid' : 'btn-gray'} btn-lg sm:h-14`} disabled={!isValid}>
         {articlePageId ? '일정 수정하기' : '일정 짜러 가기'}
       </Button>
     </form>
