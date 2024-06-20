@@ -1,9 +1,7 @@
 import { cookies, headers } from 'next/headers';
 
-import mockLogo from '@/icons/googleLogo.png';
-import mockSearchIcon from '@/icons/mockSearchLogo.png';
-
-import ImageBox from './ImageBox';
+import LogoSvg from '@/icons/logo.svg';
+import SearchSvg from '@/icons/search.svg';
 
 export default function GNB() {
   const cookieStore = cookies();
@@ -15,10 +13,10 @@ export default function GNB() {
   // path 가 메인일 때는 검색 아이콘 나타나지 않음
 
   return (
-    <nav className="flex h-20 w-full items-center justify-between bg-slate-400 p-3.5">
-      <ImageBox src={mockLogo} alt="logo" width={40} height={20} />
+    <nav className="flex-row-center h-[3.75rem] w-full justify-between bg-gray-01 p-3.5 md:h-[4.5rem]">
+      <LogoSvg width={123} height={32} />
       <ul className="flex gap-3.5">
-        <li>{!skipIcons && <ImageBox src={mockSearchIcon} alt="searchIcon" width={10} height={10} />}</li>
+        <li>{!skipIcons && <SearchSvg width={24} height={24} />}</li>
         <li>
           <button type="button">계획 생성하기</button>
         </li>
