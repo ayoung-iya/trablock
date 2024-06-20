@@ -84,13 +84,12 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
   const handleSearchStringChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearchString(e.target.value);
 
-    if (e.target.value === '') {
+    if (!e.target.value && !searchString) {
       handleSearchListClose();
+      return;
     }
 
-    if (e.target.value !== '') {
-      handleSearchListOpen();
-    }
+    handleSearchListOpen();
   };
 
   const handleCitySearchListClose = () => {
