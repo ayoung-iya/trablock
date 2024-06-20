@@ -12,16 +12,6 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyAO16UyCI02Xuu3IWtjzz8NEB6Q7o2b27s',
-//   authDomain: 'trablock-review-image.firebaseapp.com',
-//   projectId: 'trablock-review-image',
-//   storageBucket: 'trablock-review-image.appspot.com',
-//   messagingSenderId: '990895624322',
-//   appId: '1:990895624322:web:a51fb2544c8e3b00e1a49b',
-//   measurementId: 'G-Z577F5FKEB'
-// };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
