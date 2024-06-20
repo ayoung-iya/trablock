@@ -59,6 +59,7 @@ export default function PlanList({ data, isPlanTab }: PlanListProps) {
     };
 
     loadNextPage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isIntersecting]);
 
   useEffect(() => {
@@ -69,12 +70,12 @@ export default function PlanList({ data, isPlanTab }: PlanListProps) {
   }, [observerRef]);
 
   if (cardList.length === 0) {
-    return <div>여행 계획이 없습니다.</div>;
+    return <div className="flex h-screen items-center justify-center">여행 계획이 없습니다.</div>;
   }
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4">
+      <div className="mt-5 grid grid-cols-1 gap-4">
         {cardList.map((item) => (
           <TravelCard
             key={item.id}
