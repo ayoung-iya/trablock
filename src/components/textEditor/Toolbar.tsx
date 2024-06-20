@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 import { useSlate } from 'slate-react';
 
-import { ToolbarGroup, ToolbarElement, MarkFormat, BlockFormat } from './types';
+import { ToolbarGroup, ToolbarElement, MarkFormat, BlockFormat, EmbedFormat } from './types';
 import BlockButton from './utilButtons/BlockButton';
 import Dropdown from './utilButtons/Dropdown';
+import Embed2 from './utilButtons/Embed2';
 import MarkButton from './utilButtons/MarkButton';
 import defaultToolbarGroups from './utils/toolbarGroups';
 import useTable from './utils/useTable';
@@ -21,7 +22,7 @@ const Toolbar: React.FC = function Toolbar() {
       filteredGroups = filteredGroups.filter((elem) => elem.length);
     }
     setToolbarGroups(filteredGroups);
-  }, [isTable, toolbarGroups]);
+  }, [isTable]);
 
   return (
     <div className="bg-white my-5 flex flex-wrap items-center justify-center border-b-2 pb-5">
@@ -50,6 +51,8 @@ const Toolbar: React.FC = function Toolbar() {
                 return <BlockButton key={element.id} format={element.format as BlockFormat} />;
               case 'mark':
                 return <MarkButton key={element.id} format={element.format as MarkFormat} />;
+              case 'embed':
+                return <Embed2 key={element.id} editor={editor} format={element.format as EmbedFormat} />;
 
               default:
                 return (

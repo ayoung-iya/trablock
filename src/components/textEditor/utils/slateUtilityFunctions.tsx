@@ -15,7 +15,7 @@ type MarkFormat =
   | 'fontSize'
   | 'fontFamily';
 
-type BlockFormat = 'alignLeft' | 'alignCenter' | 'alignRight' | 'orderedList' | 'unorderedList';
+type BlockFormat = 'alignLeft' | 'alignCenter' | 'alignRight' | 'orderedList' | 'unorderedList' | 'image' | 'video';
 
 // type EmbedFormat = 'image';
 

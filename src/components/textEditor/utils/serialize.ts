@@ -70,6 +70,8 @@ const serializeNode = (node: any): string => {
       return `<tr>${children}</tr>`;
     case 'table-cell':
       return `<td>${children}</td>`;
+    case 'image':
+      return `<img src="${node.url}" alt="${node.alt || ''}" width="${node.width}" height="${node.height}" />`;
     default:
       return `<div>${children}</div>`;
   }
