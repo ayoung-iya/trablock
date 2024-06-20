@@ -2,35 +2,44 @@ import React, { useEffect, useState, forwardRef } from 'react';
 
 import { CityInfo } from '@/apis/useArticle/article.type';
 
-import Button from './common/button/Button';
-
 interface CitySearchListProps {
   searchString: string;
   selectedCityList?: { placeId: string; address: string; city: string }[];
-  onChangeCityList: (value: CityInfo[]) => void;
-  onClickConfirmButton: React.MouseEventHandler;
+  onClickCity: (value: CityInfo[]) => void;
 }
 
+const extractCountryFromAddress = (address: string, city: string) => {
+  const onlyEnglish = /^[A-Za-z]+$/;
+  const splitAddress = address.split(' ');
+
+  if (onlyEnglish.test(city)) {
+    return splitAddress[splitAddress.length - 1];
+  }
+
+  return splitAddress[0];
+};
+
+const isSelectedCity = (selectedCityIdList: string[], cityId: string) => {
+  return selectedCityIdList.includes(cityId);
+};
+
 const CitySearchList = forwardRef(function CitySearchList(
-  { searchString, selectedCityList, onChangeCityList, onClickConfirmButton }: CitySearchListProps,
-  ref: React.ForwardedRef<HTMLDivElement>
+  { searchString, selectedCityList, onClickCity }: CitySearchListProps,
+  ref: React.ForwardedRef<HTMLUListElement>
 ) {
   const [searchList, setSearchList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const SelectedCityPlaceIdList = selectedCityList?.map(({ placeId }) => placeId) || [];
+  const selectedCityIdList = selectedCityList?.map(({ placeId }) => placeId) || [];
 
-  const handleSelectedCityRemove: (cityInfo: CityInfo) => React.MouseEventHandler = (cityInfo) => (e) => {
-    e.stopPropagation();
-    if (!selectedCityList) return;
+  const handleCityClick: (city: CityInfo) => React.MouseEventHandler<HTMLButtonElement> = (city: CityInfo) => () => {
+    const cityList = selectedCityList || [];
 
-    onChangeCityList(selectedCityList.filter(({ placeId }) => placeId !== cityInfo.placeId));
-  };
+    if (isSelectedCity(selectedCityIdList, city.placeId)) {
+      onClickCity(cityList.filter(({ placeId }) => placeId !== city.placeId));
+      return;
+    }
 
-  const handleSelectedCityAdd: (cityInfo: CityInfo) => React.MouseEventHandler = (cityInfo) => (e) => {
-    e.stopPropagation();
-    if (!selectedCityList) return;
-
-    onChangeCityList([...selectedCityList, cityInfo]);
+    onClickCity([...cityList, city]);
   };
 
   useEffect(() => {
@@ -68,58 +77,52 @@ const CitySearchList = forwardRef(function CitySearchList(
 
   if (isLoading) {
     return (
-      <div className="absolute top-0 rounded-[10px] bg-white-01 p-5 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]" ref={ref}>
-        <p className="text-caption-1 h-10 text-center">로딩중..</p>
-        <Button className="btn-solid btn-lg" onClick={onClickConfirmButton}>
-          확인
-        </Button>
-      </div>
+      <ul
+        className="absolute top-1 h-16 w-full rounded-[10px] bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]"
+        ref={ref}
+      >
+        <p className="flex size-full items-center justify-center text-center text-base font-medium leading-5">
+          로딩중..
+        </p>
+      </ul>
     );
   }
 
   if (!searchList.length) {
     return (
-      <div className="absolute top-0 rounded-[10px] bg-white-01 p-5 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]" ref={ref}>
-        <p className="text-caption-1 h-10 text-center">일치하는 결과가 없습니다</p>
-        <Button className="btn-solid btn-lg" onClick={onClickConfirmButton}>
-          확인
-        </Button>
-      </div>
+      <ul
+        className="absolute top-1 h-16 w-full rounded-[10px] bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]"
+        ref={ref}
+      >
+        <p className="flex size-full items-center justify-center text-center text-base font-medium leading-5">
+          일치하는 결과가 없습니다
+        </p>
+      </ul>
     );
   }
 
   return (
-    <div className="absolute top-0 rounded-[10px] bg-white-01 p-5 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]" ref={ref}>
-      <ul className="mb-5 max-h-40 min-w-52 overflow-y-auto">
-        {searchList?.map(({ placeId, address, city }) => (
-          <li key={placeId} className="flex-row-center mb-2 justify-between">
-            <div className="flex-row-center gap-1">
-              <span className="text-caption-1">{address}</span>
-            </div>
-            {SelectedCityPlaceIdList.includes(placeId) ? (
-              <Button
-                type="button"
-                className="btn-outline btn-sm"
-                onClick={handleSelectedCityRemove({ placeId, address, city })}
-              >
-                취소
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                className="btn-ghost btn-sm"
-                onClick={handleSelectedCityAdd({ placeId, address, city })}
-              >
-                선택
-              </Button>
-            )}
-          </li>
-        ))}
-      </ul>
-      <Button className="btn-solid btn-lg" onClick={onClickConfirmButton}>
-        확인
-      </Button>
-    </div>
+    <ul
+      // eslint-disable-next-line max-len
+      className="absolute top-1 max-h-[252px] w-full overflow-y-auto rounded-[10px] bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.1)] md:max-h-[189px]"
+      ref={ref}
+    >
+      {searchList?.map(({ placeId, address, city }) => (
+        <li
+          key={placeId}
+          className={`${isSelectedCity(selectedCityIdList, placeId) ? 'bg-gray-03' : ''} hover:bg-gray-03`}
+        >
+          <button
+            type="button"
+            className="flex size-full flex-col gap-1 px-4 py-3"
+            onClick={handleCityClick({ placeId, address, city })}
+          >
+            <span className="font-gray-01 text-xs leading-[125%]">{extractCountryFromAddress(address, city)}</span>
+            <span className="text-base font-medium leading-5">{city}</span>
+          </button>
+        </li>
+      ))}
+    </ul>
   );
 });
 
