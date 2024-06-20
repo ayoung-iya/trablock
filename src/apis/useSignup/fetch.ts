@@ -6,23 +6,21 @@ import { signupProps } from '@/apis/constants/auth.type';
 
 const options: { [key: string]: ReturnFetchDefaultOptions } = {
   signup: {
-    //baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
-    baseUrl: 'https://be.travel-laboratory.site',
+    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     headers: {
       'Content-Type': 'application/json'
     }
   },
   checkUsername: {
-    baseUrl: 'https://be.travel-laboratory.site',
+    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     headers: {
       'Content-Type': 'application/json'
     }
   },
   checkNickname: {
-    baseUrl: 'https://be.travel-laboratory.site',
+    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     headers: {
       'Content-Type': 'application/json'
-      //'Access-Control-Allow-Origin': 'localhost://3000'
     }
   }
 };

@@ -4,7 +4,7 @@ import { signinProps } from '@/apis/constants/auth.type';
 
 const options: { [key: string]: ReturnFetchDefaultOptions } = {
   signin: {
-    baseUrl: 'https://be.travel-laboratory.site',
+    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     headers: { 'Content-Type': 'application/json' }
   }
 };
