@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 
 import { DateRange, DayPicker, SelectRangeEventHandler } from 'react-day-picker';
 
@@ -7,7 +7,10 @@ interface DatePickerProps {
   onDateRangeChange: (range: DateRange | undefined) => void;
 }
 
-export default function DatePicker({ initialRange, onDateRangeChange }: DatePickerProps) {
+const DatePicker = forwardRef(function DatePicker(
+  { initialRange, onDateRangeChange }: DatePickerProps,
+  ref: React.ForwardedRef<HTMLDivElement>
+) {
   const [range, setRange] = useState<DateRange | undefined>(initialRange);
 
   const handleRange: SelectRangeEventHandler = (selectedRange, selectedDay) => {
@@ -30,7 +33,7 @@ export default function DatePicker({ initialRange, onDateRangeChange }: DatePick
   };
 
   return (
-    <div className="absolute z-10 bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]">
+    <div className="absolute z-10 bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]" ref={ref}>
       <DayPicker mode="range" selected={range} onSelect={handleRange} />
       <button
         type="button"
@@ -41,4 +44,6 @@ export default function DatePicker({ initialRange, onDateRangeChange }: DatePick
       </button>
     </div>
   );
-}
+});
+
+export default DatePicker;
