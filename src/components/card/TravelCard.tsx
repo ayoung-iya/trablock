@@ -1,12 +1,7 @@
 /* eslint-disable max-len */
-
-'use client';
-
 import React, { useState, useEffect } from 'react';
 
 import ImageBox from '@/components/common/ImageBox';
-import useMediaQuery from '@/libs/hooks/useMediaQuery';
-import useResizeHeight from '@/libs/hooks/useResizeHeight';
 
 export interface TravelCardProps {
   id: string;
@@ -43,11 +38,7 @@ export default function TravelCard({
   isPlanTab = false,
   onClick
 }: TravelCardProps) {
-  const { divRef, divHeight } = useResizeHeight();
-  const isMd = useMediaQuery('(min-width: 768px)');
   const [menuVisible, setMenuVisible] = useState(false);
-
-  const buttonStyle = isMd ? { maxHeight: `${divHeight}px` } : undefined;
 
   const combinedTags = [travelCompanion, ...travelStyle];
 
@@ -72,20 +63,18 @@ export default function TravelCard({
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menuVisible]);
 
   return (
     <div
-      className="md:flex-row-center relative flex size-full overflow-hidden rounded-lg bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] max-md:flex-col"
-      style={buttonStyle}
+      className="relative flex w-full max-w-[320px] flex-col overflow-hidden rounded-lg bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] sm:max-w-[320px] md:max-w-[640px] md:flex-row lg:max-w-[730px] xl:max-w-[730px] 2xl:max-w-[730px]"
       role="button"
       tabIndex={0}
       onClick={onClick}
       onKeyPress={onClick}
     >
       {/* 책갈피 아이콘 */}
-      <div className="absolute left-4 top-4 h-9 w-9 flex-shrink-0 rounded-[5px] bg-white-01 p-2 backdrop-blur-[10px]">
+      <div className="absolute left-4 top-4 z-10 h-9 w-9 flex-shrink-0 rounded-[5px] bg-white-01 p-2 backdrop-blur-[10px]">
         {isBookmarked ? (
           <ImageBox
             className="h-full w-full"
@@ -117,18 +106,20 @@ export default function TravelCard({
         </div>
       )}
       {/* 대표 이미지 */}
-      <ImageBox
-        className="w-full max-md:max-h-52 md:w-auto md:max-w-64"
-        src={thumbnailImageUrl}
-        alt={thumbnailImageUrl}
-        width={80}
-        height={80}
-      />
+      <div className="relative h-[180px] w-full flex-shrink-0 md:h-[195px] md:w-[280px]">
+        <ImageBox
+          className="h-full w-full object-cover"
+          src={thumbnailImageUrl}
+          alt={thumbnailImageUrl}
+          width={280}
+          height={195}
+        />
+      </div>
       {/* 콘텐츠 */}
-      <div className="flex-grow max-md:w-full" ref={divRef}>
+      <div className="flex flex-grow flex-col">
         {/* 상단 각종 데이터 */}
         <div className="flex flex-col gap-2 border-b border-gray-03 p-4">
-          <p className="font-subtitle-1">{title}</p>
+          <p className="font-subtitle-1 w-full truncate md:w-auto md:pr-20">{title}</p>
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-[6px]">
               <ImageBox src="/icons/map-pin.svg" alt="location" className="h-4 w-4" width={16} height={16} />
