@@ -70,7 +70,11 @@ export default function PlanList({ data, isPlanTab }: PlanListProps) {
   }, [observerRef]);
 
   if (cardList.length === 0) {
-    return <div className="flex h-screen items-center justify-center">여행 계획이 없습니다.</div>;
+    return (
+      <div className="mt-32 flex items-center justify-center">
+        <span className="font-caption-1 text-black-02">여행 계획이 없습니다.</span>
+      </div>
+    );
   }
 
   return (
