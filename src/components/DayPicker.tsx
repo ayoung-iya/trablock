@@ -49,7 +49,7 @@ const DatePicker = forwardRef(function DatePicker(
   return (
     <div
       // eslint-disable-next-line max-len
-      className="absolute top-1 z-10 flex w-full flex-col gap-2 rounded-[10px] bg-white-01 p-4 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]"
+      className="absolute top-1 z-10 flex w-full flex-col gap-2 rounded-[0.625rem] bg-white-01 p-4 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]"
       ref={ref}
     >
       <div className="relative">

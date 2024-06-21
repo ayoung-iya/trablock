@@ -78,7 +78,7 @@ const CitySearchList = forwardRef(function CitySearchList(
   if (isLoading) {
     return (
       <ul
-        className="absolute top-1 h-16 w-full rounded-[10px] bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]"
+        className="absolute top-1 h-16 w-full rounded-[0.625rem] bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]"
         ref={ref}
       >
         <p className="flex size-full items-center justify-center text-center text-base font-medium leading-5">
@@ -91,7 +91,7 @@ const CitySearchList = forwardRef(function CitySearchList(
   if (!searchList.length) {
     return (
       <ul
-        className="absolute top-1 h-16 w-full rounded-[10px] bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]"
+        className="absolute top-1 h-16 w-full rounded-[0.625rem] bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]"
         ref={ref}
       >
         <p className="flex size-full items-center justify-center text-center text-base font-medium leading-5">
@@ -104,7 +104,7 @@ const CitySearchList = forwardRef(function CitySearchList(
   return (
     <ul
       // eslint-disable-next-line max-len
-      className="absolute top-1 max-h-[252px] w-full overflow-y-auto rounded-[10px] bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.1)] md:max-h-[189px]"
+      className="absolute top-1 max-h-[15.75rem] w-full overflow-y-auto rounded-[0.625rem] bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.1)] md:max-h-[11.8125rem]"
       ref={ref}
     >
       {searchList?.map(({ placeId, address, city }) => (

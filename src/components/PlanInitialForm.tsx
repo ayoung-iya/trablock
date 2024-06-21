@@ -143,12 +143,12 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
   }
 
   return (
-    <form className="flex w-full min-w-80 flex-col gap-10 pt-10 md:pt-[60px]" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex w-full min-w-80 flex-col gap-10 pt-10 md:pt-[3.75rem]" onSubmit={handleSubmit(onSubmit)}>
       <InputWithTitle title="여행 타이틀">
         <Input
           type="text"
           id="title"
-          className="h-12 w-full rounded-[5px] border border-gray-02 px-4"
+          className="h-12 w-full rounded-[0.3125rem] border border-gray-02 px-4"
           placeholder="멋진 여행 타이틀을 지어보세요!"
           {...title}
         />
@@ -156,7 +156,7 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
 
       <div>
         <InputWithTitle title="여행 장소">
-          <div className="flex-row-center h-12 w-full gap-1 rounded-[5px] border border-gray-02 px-4">
+          <div className="flex-row-center h-12 w-full gap-1 rounded-[0.3125rem] border border-gray-02 px-4">
             <Input
               type="text"
               id="place"
@@ -167,7 +167,7 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
               autoComplete="off"
               ref={searchInputRef}
             />
-            <ImageBox src={SearchIcon} alt="돋보기" className="h-[18px] w-[18px]" width={18} height={18} />
+            <ImageBox src={SearchIcon} alt="돋보기" className="size-[1.125rem]" width={18} height={18} />
           </div>
         </InputWithTitle>
         <Controller
@@ -209,7 +209,7 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
         <InputWithTitle title="여행 날짜">
           <div
             // eslint-disable-next-line max-len
-            className={`flex-row-center h-12 w-full gap-1 rounded-[5px] border border-gray-02 px-4 ${isEditPage ? 'bg-gray-03' : ''}`}
+            className={`flex-row-center h-12 w-full gap-1 rounded-[0.3125rem] border border-gray-02 px-4 ${isEditPage ? 'bg-gray-03' : ''}`}
           >
             <Input
               type="text"
@@ -225,7 +225,7 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
               onClick={handleCalendarInputClick}
               className={`${isEditPage ? 'hover:cursor-not-allowed' : ''}`}
             >
-              <ImageBox src={calendarIcon} alt="달력" className="h-[18px] w-[18px]" width={18} height={18} />
+              <ImageBox src={calendarIcon} alt="달력" className="size-[1.125rem]" width={18} height={18} />
             </button>
           </div>
         </InputWithTitle>
@@ -250,7 +250,7 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
       </div>
 
       <InputWithTitle title="여행 경비">
-        <div className="flex-row-center h-12 w-full justify-between rounded-[5px] border border-gray-02 px-4">
+        <div className="flex-row-center h-12 w-full justify-between rounded-[0.3125rem] border border-gray-02 px-4">
           <Controller
             control={control}
             name="expense"
