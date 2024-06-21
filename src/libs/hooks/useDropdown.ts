@@ -1,23 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface useDropdownParams {
-  onClickInside?: () => void;
+  onClickInside?: (e?: MouseEvent) => void;
+  onClickOutside?: (e?: MouseEvent) => void;
 }
 
-const useDropdown = ({ onClickInside }: useDropdownParams) => {
+const useDropdown = <T extends HTMLElement>({ onClickInside, onClickOutside }: useDropdownParams) => {
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
-  const ref = useRef<HTMLUListElement>(null);
+  const ref = useRef<T>(null);
 
-  const handleDropdownOpen = () => {
+  const handleDropdownOpen = (e?: React.MouseEvent<HTMLElement>) => {
+    e?.stopPropagation();
     setIsDropdownOpened(true);
   };
 
-  const handleDropdownClose = () => {
+  const handleDropdownClose = (e?: MouseEvent) => {
+    e?.stopPropagation();
     setIsDropdownOpened(false);
   };
 
-  const handleDropdownToggle = () => {
-    setIsDropdownOpened((prev) => !prev);
+  const handleDropdownToggle = (e?: MouseEvent) => {
+    e?.stopPropagation();
+    setIsDropdownOpened((prev) => {
+      return !prev;
+    });
   };
 
   useEffect(() => {
@@ -26,9 +32,10 @@ const useDropdown = ({ onClickInside }: useDropdownParams) => {
 
       if (ref.current.contains(e.target as Node) && onClickInside) {
         onClickInside();
+        return;
       }
 
-      handleDropdownClose();
+      onClickOutside?.(e);
     };
 
     document.addEventListener('click', handleClick);
@@ -36,7 +43,7 @@ const useDropdown = ({ onClickInside }: useDropdownParams) => {
     return () => {
       document.removeEventListener('click', handleClick);
     };
-  }, [ref, onClickInside]);
+  }, [ref, onClickInside, onClickOutside]);
 
   return { ref, isDropdownOpened, handleDropdownOpen, handleDropdownClose, handleDropdownToggle };
 };

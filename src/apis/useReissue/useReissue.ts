@@ -1,12 +1,12 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import serviceReissueToken from './fetch';
 
 export default function useReissue() {
-  return useMutation({
-    mutationKey: ['useReissue'],
-    mutationFn: () => serviceReissueToken.postReissueToken()
+  return useQuery({
+    queryKey: ['useReissue'],
+    queryFn: () => serviceReissueToken.postReissueToken()
   });
 }

@@ -1,20 +1,21 @@
+/* eslint-disable */
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
-
 import usePostNicknameCheck from '@/apis/useSignup/usePostNicknameCheck';
 import usePostSignup from '@/apis/useSignup/usePostSignup';
 import usePostUsernameCheck from '@/apis/useSignup/usePostUsernamCheck';
 import Button from '@/components/common/button/Button';
-import Checkbox from '@/components/common/input/Checkbox';
 import SignInput from '@/components/common/input/SignInput';
 import PlanInputTitle from '@/components/PlanInputTitle';
 import { validate } from '@/libs/constants/validation';
-// import passWordList from '@/libs/constants/passWordQuestion';
-// 드롭다운 추가
+import passWordList from '@/libs/constants/passWordQuestion';
+import Dropdown from '@/components/common/Dropdown';
+import useDropdown from '@/libs/hooks/useDropdown';
+
 export default function SignupForm() {
   const {
     register,
@@ -35,6 +36,31 @@ export default function SignupForm() {
       is_agreement: false
     }
   });
+
+  const [selectedQuestion, setSelectedQuestion] = useState(passWordList[0]);
+  const questionInputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    ref: questionListRef,
+    isDropdownOpened: isQuestionListOpened,
+    handleDropdownToggle: handleQuestionListToggle,
+    handleDropdownClose: handleQuestionListClose
+  } = useDropdown<HTMLUListElement>({
+    onClickInside: () => {},
+    onClickOutside: (e) => {
+      if (questionInputRef.current && questionInputRef.current.contains(e?.target as Node)) {
+        return;
+      }
+
+      handleQuestionListClose();
+    }
+  });
+
+  const handleSelectQuestion = (question: string) => {
+    setSelectedQuestion(question);
+    handleQuestionListClose();
+  };
+
   const router = useRouter();
   const payload = {
     username: watch('username'),
@@ -140,17 +166,42 @@ export default function SignupForm() {
           type="password"
           id="password_confirm"
           errorMessage={errors.password_confirm?.message as string}
+          {...registerList.password_confirm}
         />
       </section>
       <PlanInputTitle>비밀번호 정보 입력</PlanInputTitle>
-      <section className="mg-0 mb-14 flex w-full flex-col gap-5">
-        <SignInput label="질문" id="pw_question_id" {...registerList.pw_question_id} />
-        <SignInput label="답변" id="pw_answer" {...registerList.pw_answer} />
+      <section className="mg-0 relative mb-14 flex w-full flex-col gap-5">
+        <SignInput
+          label="질문"
+          id="pw_question_id"
+          {...registerList.pw_question_id}
+          value={selectedQuestion}
+          ref={questionInputRef}
+          readOnly
+          onClickInput={handleQuestionListToggle}
+        />
+        <div className="absolute top-20">
+          {isQuestionListOpened && (
+            <Dropdown ref={questionListRef}>
+              {passWordList.map((sentence) => (
+                <li
+                  key={sentence}
+                  className="cursor-pointer pb-3 pt-3 hover:bg-gray-100"
+                  onClick={() => handleSelectQuestion(sentence)}
+                >
+                  {sentence}
+                </li>
+              ))}
+            </Dropdown>
+          )}
+        </div>
+        <SignInput label="답변" id="pw_answer" {...registerList.pw_answer} ref={questionInputRef} />
       </section>
       <PlanInputTitle>약관 동의</PlanInputTitle>
-      <Checkbox id="is_agreement" {...registerList.is_agreement}>
-        개인정보 수집 및 이용 동의
-      </Checkbox>
+      <div className="flex gap-4">
+        <input type="checkbox" id="is_agreement" {...registerList.is_agreement} />
+        <p>개인정보 수집 및 이용 동의</p>
+      </div>
 
       <Button disabled={!isValid} type="submit" className={buttonStyle}>
         회원가입

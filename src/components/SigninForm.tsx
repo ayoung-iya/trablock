@@ -36,14 +36,13 @@ export default function SigninForm() {
       {
         onSuccess: (response) => {
           // 쿠키에 토큰두개 , 끝나는 시간 세팅
+          router.push('/');
           const authorizationToken = response.headers.get('Authorization-Token');
           const expiresAt = response.headers.get('authorization-token-expired-at');
-
+          // refresh 도 세팅
           if (authorizationToken && expiresAt) {
             Cookies.set('authorization-token', authorizationToken, { secure: true });
             Cookies.set('expires-at', expiresAt);
-
-            router.push('/');
           }
         },
         onError: (error) => console.error(error)
@@ -69,10 +68,11 @@ export default function SigninForm() {
           errorMessage={errors.password?.message as string}
           {...registerList.password}
         />
+
+        <Button type="submit" className={buttonStyle} disabled={!isValid}>
+          로그인
+        </Button>
       </section>
-      <Button type="submit" className={buttonStyle} disabled={!isValid}>
-        로그인
-      </Button>
     </form>
   );
 }

@@ -1,14 +1,16 @@
-// 'use client';
+'use client';
 
-// import Cookies from 'js-cookie';
-// import useReissue from '@/apis/useReissue/useReissue';
-// export default function setNewToken() {
-//   const { mutate: reissueMutate } = useReissue();
-//     reissueMutate(??, {
-//     onSuccess: (response) => {
-//       const newAuthToken = response.headers.get('authorization-token');
-//       Cookies.set('Authorization-Token', newAuthToken);
-//     },
-//     onError: (error) => console.error(error)
-//   });
-// }
+import Cookies from 'js-cookie';
+
+import useReissue from '@/apis/useReissue/useReissue';
+
+export default function SetNewToken() {
+  const { data: reissueData, isError, isSuccess } = useReissue();
+  if (isSuccess) {
+    const newAuthToken = reissueData.headers.get('authorization-token');
+    Cookies.set('Authorization-Token', newAuthToken);
+  }
+  if (isError) {
+    console.error('토큰 갱신 실패');
+  }
+}

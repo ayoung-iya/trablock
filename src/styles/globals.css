@@ -244,6 +244,12 @@ button {
     line-height: 208%;
   }
 
+  .font-password-find {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 280%;
+  }
+
   /* Button Variants */
   .btn-solid {
     @apply bg-primary-01 text-white-01;

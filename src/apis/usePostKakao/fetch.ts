@@ -8,21 +8,20 @@ const options: {
   kakaoToken: {
     baseUrl: 'https://kauth.kakao.com',
     headers: {
-      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-      'Access-Control-Allow-Origin': '*'
+      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
     }
   }
 };
 const fetchKakao = returnFetch(options.kakaoToken);
-
+const clientID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
 const serviceKakaoLogin = {
   postKakaoToken: async (code: string) => {
     const response = await fetchKakao(`/oauth/token`, {
       method: 'POST',
       body: new URLSearchParams({
         grant_type: 'authorization_code',
-        client_id: '822dc8b88e2d46919a2062d853fa5108',
-        redirect_uri: 'http://localhost:3000/kakaoLogin',
+        client_id: clientID as string,
+        redirect_uri: process.env.KAKAO_REDIRECT_URI,
         code
       }).toString()
     });

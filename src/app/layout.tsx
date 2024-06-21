@@ -7,6 +7,7 @@ import ReactQueryProvider from '@/apis/components/ReactQueryProvider';
 import KakaoScript from '@/components/social/KaKaoScript';
 import 'react-day-picker/dist/style.css';
 import '@/styles/globals.css';
+import { PasswordFindProvider } from '@/libs/contexts/passwordFindContext';
 
 declare global {
   interface Window {
@@ -32,7 +33,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={pretendard.className}>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <PasswordFindProvider>
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+        </PasswordFindProvider>
         <KakaoScript />
       </body>
     </html>

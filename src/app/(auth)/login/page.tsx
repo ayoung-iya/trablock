@@ -7,7 +7,9 @@ import Logo from '@/icons/logo.svg';
 export default function login() {
   return (
     <div className="flex-col-center pb-32 pt-32">
-      <Logo width={123} height={32} />
+      <Link href="/">
+        <Logo width={123} height={32} />
+      </Link>
       <div className="mt-14">
         <SigninForm />
       </div>
@@ -18,7 +20,7 @@ export default function login() {
         </span>
         |
         <span>
-          <Link href="/find-my-password"> 비밀번호 찾기</Link>
+          <Link href="/find-password-email"> 비밀번호 찾기</Link>
         </span>
       </p>
       <p className="font-caption-1 mt-10 text-gray-01">SNS 계정으로 로그인/회원가입</p>

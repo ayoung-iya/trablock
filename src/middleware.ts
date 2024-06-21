@@ -10,7 +10,15 @@ export function middleware(request: NextRequest) {
     response.headers.set('X-Skip-Icons', 'true');
     return response;
   }
-  if (!accessToken && url !== '/signup' && url !== '/login') {
+  if (
+    !accessToken &&
+    url !== '/signup' &&
+    url !== '/login' &&
+    url !== '/kakaoLogin' &&
+    url !== '/find-password-email' &&
+    url !== '/find-password-question' &&
+    url !== '/find-password-newpassword'
+  ) {
     // 아예 로그인 경력이 없을 때
     return NextResponse.redirect(new URL('/login', request.url));
   }

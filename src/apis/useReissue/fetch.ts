@@ -4,20 +4,16 @@
 import Cookies from 'js-cookie';
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
-const headers: HeadersInit = new Headers();
-
 const authorizationToken = Cookies.get('authorization-token');
-
-if (authorizationToken) {
-  headers.set('Authorization-Token', authorizationToken);
-}
-
+const headers: HeadersInit = {
+  'Content-Type': 'application/json',
+  ...(authorizationToken && { 'Authorization-Token': authorizationToken })
+  //리프레시 토큰도 세팅
+};
 const options: { [key: string]: ReturnFetchDefaultOptions } = {
   reissue: {
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    headers: headers
   }
 };
 
@@ -26,8 +22,7 @@ const fetchReissue = returnFetch(options.reissue);
 const serviceReissueToken = {
   postReissueToken: async () => {
     const response = await fetchReissue('/api/v1/auth/reissue-token', {
-      method: 'POST',
-      headers: headers
+      method: 'GET'
     });
 
     if (!response.ok) {

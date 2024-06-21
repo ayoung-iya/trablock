@@ -11,12 +11,13 @@ export default function Kakaologin() {
 
   const { code, error, errorMessage } = useManageKakaoLogin();
 
-  const { data: kakaoUserData, isError, error: userDataError } = useGetKakaoUserData(accessToken);
-
   const postKakaoTokenMutate = usePostKakaoToken();
+
+  const { data: kakaoUserData, isError, error: userDataError } = useGetKakaoUserData(accessToken);
 
   useEffect(() => {
     if (code) {
+      console.log(code);
       postKakaoTokenMutate.mutate(code, {
         onSuccess: (response) => {
           const { access_token: accessTokens } = response;
@@ -31,7 +32,8 @@ export default function Kakaologin() {
   }, [code]);
 
   useEffect(() => {
-    if (kakaoUserData) {
+    if (kakaoUserData && accessToken) {
+      console.log(accessToken);
       console.log('userdata');
       const {
         profile_nickname: profileNickname,
