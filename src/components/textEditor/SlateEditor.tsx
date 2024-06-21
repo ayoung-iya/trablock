@@ -109,9 +109,10 @@ export interface SlateEditorRef {
 interface SlateEditorProps {
   value: Descendant[];
   onChange: (value: Descendant[]) => void;
+  representativeImage?: string | null;
 }
 
-const SlateEditor = forwardRef<SlateEditorRef, SlateEditorProps>(({ value, onChange }, ref) => {
+const SlateEditor = forwardRef<SlateEditorRef, SlateEditorProps>(({ value, onChange, representativeImage }, ref) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const renderElement = useCallback((props: RenderElementProps) => <Element {...props} />, []);
   const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, []);
@@ -130,7 +131,7 @@ const SlateEditor = forwardRef<SlateEditorRef, SlateEditorProps>(({ value, onCha
     >
       <div>
         <Toolbar />
-        <div className="px-40 pt-[300px]">
+        <div className={`px-40 ${representativeImage ? 'pt-[700px]' : 'pt-[300px]'}`}>
           <Editable
             placeholder="글을 작성해보세요"
             renderElement={renderElement}
