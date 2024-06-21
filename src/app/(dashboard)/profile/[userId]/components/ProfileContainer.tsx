@@ -2,18 +2,26 @@
 
 import React, { useState, useEffect } from 'react';
 
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 
-import { ProfileUserData } from '@/apis/useProfileService/type';
 import useGetProfile from '@/apis/useProfileService/useGetProfile';
 
+// import bookmarkMock from './bookmarkMock.json';
+// import PlanList from '../../../../../components/PlanList';
+// import reviewMock from './reviewMock.json';
+
 interface ProfileContainerProps {
-  initialUserProfile: ProfileUserData;
+  initialUserProfile: {
+    profile_img_url: string;
+    name: string;
+    introduce: string;
+    is_editable: boolean;
+  };
 }
 
 export default function ProfileContainer({ initialUserProfile }: ProfileContainerProps) {
-  const router = useRouter();
-  const { userId } = router.query;
+  const pathname = usePathname();
+  const userId = pathname.split('/').pop(); // URL의 마지막 부분에서 userId 추출
 
   const { data, error, isLoading } = useGetProfile(userId as string);
   const [activeTab, setActiveTab] = useState('여행 계획');
@@ -49,12 +57,12 @@ export default function ProfileContainer({ initialUserProfile }: ProfileContaine
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case '여행 계획':
-        return <div>여행 계획 내용</div>;
+      // case '여행 계획':
+      //   return <PlanList data={reviewMock} />;
       case '여행 후기':
         return <div>여행 후기 내용</div>;
-      case '북마크':
-        return <div>북마크 내용</div>;
+      // case '북마크':
+      //   return <PlanList data={bookmarkMock} />;
       default:
         return null;
     }
