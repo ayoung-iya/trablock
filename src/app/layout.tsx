@@ -4,7 +4,11 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
 import ReactQueryProvider from '@/apis/components/ReactQueryProvider';
+import AsyncBoundary from '@/components/common/AsyncBoundary';
 import KakaoScript from '@/components/social/KaKaoScript';
+import { DropdownProvider } from '@/libs/contexts/DropdownContext';
+import ModalProvider from '@/libs/contexts/ModalProvider';
+
 import 'react-day-picker/dist/style.css';
 import '@/styles/globals.css';
 
@@ -32,7 +36,14 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={pretendard.className}>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <AsyncBoundary>
+          <DropdownProvider>
+            <ReactQueryProvider>
+              <ModalProvider>{children}</ModalProvider>
+              <div id="modal-root" />
+            </ReactQueryProvider>
+          </DropdownProvider>
+        </AsyncBoundary>
         <KakaoScript />
       </body>
     </html>

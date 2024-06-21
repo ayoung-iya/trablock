@@ -102,6 +102,14 @@ button {
     @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
   }
 
+  .fixed-center {
+    @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+  }
+
+  .bg-overlay {
+    @apply bg-[rgba(0,0,0,0.6)];
+  }
+
   .font-title-1 {
     font-size: 32px;
     font-weight: 700;
@@ -290,5 +298,42 @@ button {
 
   .add-lg {
     @apply w-[21.625rem];
+  }
+
+  .modal-h1 {
+    @apply font-title-3;
+  }
+
+  .modal-h2 {
+    @apply font-title-4;
+  }
+
+  .modal-h3 {
+    @apply font-subtitle-2;
+  }
+
+  .modal-dropdown {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 125%;
+  }
+
+  /* Custom scrollbar styles */
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 8px; /* 스크롤바 너비 */
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    @apply bg-gray-03; /* 트랙 배경색 */
+    border-radius: 999px; /* 트랙 경계선 둥글게 */
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    @apply bg-gray-02; /* 스크롤바 색상 */
+    border-radius: 999px; /* 스크롤바 경계선 둥글게 */
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-01; /* 스크롤바 호버 색상 */
   }
 }

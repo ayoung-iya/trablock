@@ -2,12 +2,20 @@ import React, { useState } from 'react';
 
 import Input from './Input';
 
-interface SearchInputParams {
+interface SearchInputParams extends React.InputHTMLAttributes<HTMLInputElement> {
+  className?: string;
   searchString?: string;
+  onClickRemoveIcon?: () => void;
   onClickSearchIcon?: (searchString: string) => void;
 }
 
-export default function SearchInput({ searchString: initialSearchString = '', onClickSearchIcon }: SearchInputParams) {
+export default function SearchInput({
+  className,
+  searchString: initialSearchString = '',
+  onClickRemoveIcon,
+  onClickSearchIcon,
+  ...inputProps
+}: SearchInputParams) {
   const [searchString, setSearchString] = useState(initialSearchString);
 
   const handleSearchStringChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -16,6 +24,7 @@ export default function SearchInput({ searchString: initialSearchString = '', on
 
   const handleSearchStringReset = () => {
     setSearchString('');
+    if (onClickRemoveIcon) onClickRemoveIcon();
   };
 
   const handleSearchIconClick = () => {
@@ -25,8 +34,14 @@ export default function SearchInput({ searchString: initialSearchString = '', on
   };
 
   return (
-    <div className="flex h-10 rounded-[5px] bg-gray-03 px-3 pb-2 pt-[10px]">
-      <Input id="search" value={searchString} className="w-full bg-inherit" onChange={handleSearchStringChange} />
+    <div className={`flex rounded-[0.375rem] bg-gray-03 px-3 py-[0.625rem] ${className}`}>
+      <Input
+        id="search"
+        value={searchString}
+        className="w-full bg-inherit"
+        onChange={handleSearchStringChange}
+        {...inputProps}
+      />
       {searchString && (
         <button type="button" onClick={handleSearchStringReset}>
           X
