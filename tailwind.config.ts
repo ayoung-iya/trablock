@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -11,6 +12,9 @@ const config: Config = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
+      },
+      boxShadow: {
+        modal: '0 0 0.625rem 0 rgba(0, 0, 0, 0.10)'
       },
       colors: {
         black: {
@@ -60,6 +64,6 @@ const config: Config = {
       }
     }
   },
-  plugins: []
+  plugins: [require('tailwind-scrollbar-hide')]
 };
 export default config;

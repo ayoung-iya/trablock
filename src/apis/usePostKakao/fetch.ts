@@ -1,5 +1,3 @@
-// import { URLSearchParams } from 'url';
-
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
 const options: {
@@ -12,6 +10,7 @@ const options: {
     }
   }
 };
+
 const fetchKakao = returnFetch(options.kakaoToken);
 const clientID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
 const serviceKakaoLogin = {
@@ -21,11 +20,11 @@ const serviceKakaoLogin = {
       body: new URLSearchParams({
         grant_type: 'authorization_code',
         client_id: clientID as string,
-        redirect_uri: process.env.KAKAO_REDIRECT_URI,
+        redirect_uri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI as string,
         code
-      }).toString()
+      })
     });
-    const result = response.json();
+    const result = await response.json();
     return result;
   }
 };
