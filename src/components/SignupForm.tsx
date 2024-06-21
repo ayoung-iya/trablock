@@ -38,6 +38,7 @@ export default function SignupForm() {
   });
 
   const [selectedQuestion, setSelectedQuestion] = useState(passWordList[0]);
+  const [selectedQuestionId, setSelectedQuestionId] = useState(1);
   const questionInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -56,8 +57,9 @@ export default function SignupForm() {
     }
   });
 
-  const handleSelectQuestion = (question: string) => {
+  const handleSelectQuestion = (question: string, id: number) => {
     setSelectedQuestion(question);
+    setSelectedQuestionId(id + 1);
     handleQuestionListClose();
   };
 
@@ -66,7 +68,6 @@ export default function SignupForm() {
     username: watch('username'),
     password: watch('password'),
     nickname: watch('nickname'),
-    pw_question_id: watch('pw_question_id'),
     pw_answer: watch('pw_answer'),
     is_agreement: watch('is_agreement')
   };
@@ -123,10 +124,11 @@ export default function SignupForm() {
       username: payload.username,
       password: payload.password,
       nickname: payload.nickname,
-      pw_question_id: payload.pw_question_id,
+      pw_question_id: selectedQuestionId,
       pw_answer: payload.pw_answer,
       is_agreement: payload.is_agreement
     };
+    console.log(payloadValue);
     postSignupMutate(payloadValue, {
       onSuccess: (data) => {
         console.log(data); // login 로직으로 전환
@@ -183,11 +185,11 @@ export default function SignupForm() {
         <div className="absolute top-20">
           {isQuestionListOpened && (
             <Dropdown ref={questionListRef}>
-              {passWordList.map((sentence) => (
+              {passWordList.map((sentence, index) => (
                 <li
                   key={sentence}
                   className="cursor-pointer pb-3 pt-3 hover:bg-gray-100"
-                  onClick={() => handleSelectQuestion(sentence)}
+                  onClick={() => handleSelectQuestion(sentence, index)}
                 >
                   {sentence}
                 </li>
