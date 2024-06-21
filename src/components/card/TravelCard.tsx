@@ -7,7 +7,7 @@ import React from 'react';
 import { DefaultCardProps } from '@/components/card/type';
 import ImageBox from '@/components/common/ImageBox';
 import useMediaQuery from '@/libs/hooks/useMediaQuery';
-import useResizeHeight from '@/libs/hooks/useResizeHeight';
+import useResizeSize from '@/libs/hooks/useResizeSize';
 
 interface TravelCardProps extends DefaultCardProps {
   route: string[];
@@ -29,7 +29,7 @@ export default function TravelCard({
   comment,
   onClick
 }: TravelCardProps) {
-  const { divRef, divHeight } = useResizeHeight();
+  const { divRef, divHeight } = useResizeSize();
   const isMd = useMediaQuery('(min-width: 768px)');
 
   const buttonStyle = isMd ? { maxHeight: `${divHeight}px` } : undefined;

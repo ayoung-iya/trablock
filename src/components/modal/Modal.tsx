@@ -43,7 +43,7 @@ export default function Modal({ children, onClose, onAfterOpen, onAfterClose, cl
       appElement={modalRoot}
     >
       <CloseSvg className="absolute right-5 top-5 size-5 cursor-pointer md:size-5" onClick={onClose} />
-      <div className="scrollbar-custom size-full max-h-[100vh] overflow-auto p-[1.25rem] max-md:scrollbar-hide md:overflow-auto md:p-[2.5rem]">
+      <div className="scrollbar-custom size-full max-h-[100vh] overflow-auto p-[1.25rem] max-md:scrollbar-hide md:p-[2.5rem]">
         {children}
       </div>
     </ReactModal>

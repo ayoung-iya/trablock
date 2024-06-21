@@ -35,17 +35,23 @@ type Variant = 'day' | 'default';
 type State = 'selected' | 'unselected';
 
 interface ChipProps {
+  className?: string;
   children: React.ReactNode;
   variant?: Variant;
   selected: boolean;
   onClick: () => void;
 }
 
-export default function Chip({ children, variant = 'default', selected, onClick }: ChipProps) {
+export default function Chip({ className, children, variant = 'default', selected, onClick }: ChipProps) {
   const variantKey: Variant = variant || 'default';
   const stateKey: State = selected ? 'selected' : 'unselected';
 
-  const chipClass = classNames(chipStyles.base, chipStyles[stateKey][variantKey], chipStyles.height[variantKey]);
+  const chipClass = classNames(
+    chipStyles.base,
+    chipStyles[stateKey][variantKey],
+    chipStyles.height[variantKey],
+    className
+  );
 
   return (
     <button type="button" className={chipClass} onClick={onClick}>

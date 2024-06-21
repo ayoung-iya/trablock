@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Checkbox from './common/input/Checkbox';
+import Checkbox from '@/components/common/input/Checkbox';
 
 interface TagCheckBoxListProps {
   tagList: { [key: string]: string };

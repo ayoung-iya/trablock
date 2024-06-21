@@ -1,5 +1,3 @@
-'use client';
-
 /* eslint-disable consistent-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-param-reassign */
@@ -9,48 +7,30 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-new */
 
+'use client';
+
 import React, { useState, useCallback, useEffect } from 'react';
 
 import { GoogleMap, GoogleMapProps } from '@react-google-maps/api';
 
 import { Coordinate } from '@/components/map/type';
 import { Category } from '@/components/modal/modalList/type';
-import { GOOGLE_MAPS, MAX_ZOOM } from '@/libs/constants/googleMaps';
-
-const MARKER_COLOR: { [key in Category]: { bg: string; text: string } } = {
-  숙소: {
-    bg: '#FB2F85',
-    text: '#FFEFF4'
-  },
-  식당: {
-    bg: '#F35802',
-    text: '#FFF0EA'
-  },
-  관광지: {
-    bg: '#9C27B0',
-    text: '#F4ECFF'
-  },
-  액티비티: {
-    bg: '#55B135',
-    text: '#F1FBED'
-  },
-  교통: {
-    bg: '#4F80FF',
-    text: '#DEEBFF'
-  },
-  기타: {
-    bg: '#F5BA07',
-    text: '#FFF6DC'
-  }
-};
+import { DEFAULT_COORDINATE_LIST, GOOGLE_MAPS, MAX_ZOOM } from '@/libs/constants/googleMaps';
+import { MARKER_COLOR } from '@/libs/constants/mapStyle';
 
 interface MapProps extends GoogleMapProps {
   mapContainerStyle: React.CSSProperties;
-  coordinateList: Coordinate[];
+  coordinateList?: Coordinate[];
   category?: Category;
+  alwaysRender?: boolean;
 }
 
-export default function Map({ mapContainerStyle, coordinateList, category = '교통' }: MapProps) {
+export default function Map({
+  mapContainerStyle,
+  coordinateList = DEFAULT_COORDINATE_LIST,
+  category = '교통',
+  alwaysRender = false
+}: MapProps) {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [markers, setMarkers] = useState<google.maps.marker.AdvancedMarkerElement[]>([]);
   const [polyline, setPolyline] = useState<google.maps.Polyline | null>(null);
@@ -149,8 +129,8 @@ export default function Map({ mapContainerStyle, coordinateList, category = '교
     }
   }, [map, coordinateList, category]);
 
-  if (!coordinateList) return null;
-  if (coordinateList.length === 0) return null;
+  if (!coordinateList && !alwaysRender) return null;
+  if (coordinateList.length === 0 && !alwaysRender) return null;
 
   return (
     <GoogleMap

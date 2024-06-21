@@ -9,23 +9,13 @@ import CoreBlock, { CoreBlockProps } from '@/components/travelBlock/CoreBlock';
  * @param memo string; (optional) 메모
  * @param imageUrl string; (optional) 이미지 주소
  */
-export default function TransportBlock({
-  index,
-  name,
-  category,
-  memo,
-  imageUrl,
-  startAt,
-  duration,
-  onClick
-}: CoreBlockProps) {
+export default function EtcBlock({ index, name, category, memo, startAt, duration, onClick }: CoreBlockProps) {
   return (
     <CoreBlock
       index={index}
       name={name}
       category={category}
       memo={memo}
-      imageUrl={imageUrl}
       startAt={startAt}
       duration={duration}
       onClick={onClick}
