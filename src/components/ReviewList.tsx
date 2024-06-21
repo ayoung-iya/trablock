@@ -77,8 +77,8 @@ export default function ReviewList({ data }: ReviewListProps) {
 
   return (
     <>
-      <div className="mt-5 flex w-full justify-start">
-        <div className="grid grid-cols-2 justify-start gap-2 sm:grid-cols-3 sm:gap-3">
+      <div className="mt-5 flex w-full justify-center">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
           {cardList.map((item) => (
             <ReviewCard
               key={item.title}

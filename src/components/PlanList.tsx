@@ -67,7 +67,7 @@ export default function PlanList({ initialData, isPlanTab }: PlanListProps) {
 
   return (
     <>
-      <div className="mt-5 flex flex-col gap-4">
+      <div className="mx-auto mt-5 flex flex-col items-center gap-4 md:mx-0">
         {data.map((item) => (
           <TravelCard
             key={item.id}

@@ -34,7 +34,7 @@ export default function ProfileCard({
   canEdit
 }: ProfileCardProps) {
   const isDesktop = useMediaQuery('(min-width: 1024px)');
-  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
+  const isTablet = useMediaQuery('(min-width: 640px) and (max-width: 1024px)');
   const isMobile = !isTablet && !isDesktop;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -157,7 +157,7 @@ export default function ProfileCard({
                 id="name"
                 value={name}
                 onChange={(e) => onNameChange(e.target.value)}
-                className="mb-2 w-full rounded border px-2 py-1"
+                className={`mb-2 w-full rounded border px-2 py-1 ${isDesktop ? '' : 'w-[calc(100%-6rem)]'}`}
                 placeholder="닉네임을 입력하세요"
               />
               <Textarea

@@ -33,12 +33,12 @@ export default function ReviewCard({
     if (type === 'main') {
       return 'w-[285px] h-[220px] sm:w-[320px] sm:h-[240px] md:w-[345px] md:h-[254px]';
     }
-    return 'w-[156px] h-[156px] sm:w-[228px] sm:h-[228px] md:w-[236px] md:h-[236px]';
+    return 'w-[156px] h-[156px] sm:w-[210px] sm:h-[210px] md:w-[236px] md:h-[236px]';
   };
 
   return (
     <button
-      className={`relative overflow-hidden rounded-lg bg-gray-200 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] ${getClassNames()} h-full w-full`}
+      className={`relative overflow-hidden rounded-lg bg-gray-200 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] ${getClassNames()} `}
       type="button"
       onClick={onClick}
     >
