@@ -9,5 +9,7 @@ export default function PlanDetailPage() {
     endAt: '2024.06.04'
   };
 
+  // refetch 함수를 prop으로 넘겨줄까?
+
   return <PlanDetailContent initData={initData} />;
 }

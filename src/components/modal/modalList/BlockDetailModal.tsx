@@ -34,7 +34,7 @@ function getAmPmFromStartAt(startAt: string): DropdownAmPm {
 }
 
 // startAt으로부터 24H -> 12H로 변환하는 함수
-function getHourAtFromStartAt(startAt: string): DropdownHour {
+function getHourFromStartAt(startAt: string): DropdownHour {
   const hour = Number(startAt.slice(0, 2)) % 12;
   if (hour === 0) return '12';
   if (hour >= 1 && hour <= 9) return `0${hour.toString()}` as DropdownHour;
@@ -42,7 +42,7 @@ function getHourAtFromStartAt(startAt: string): DropdownHour {
 }
 
 // 오전/오후를 반영하여 12H -> 24H로 변환하는 함수
-function getHourAtByAmPm(amPm: DropdownAmPm, hour: DropdownHour) {
+function getHourByAmPm(amPm: DropdownAmPm, hour: DropdownHour) {
   if (amPm === '오전' && hour === '12') return '00';
   if (amPm === '오후') {
     const newHour = Number(hour) + 12;
@@ -68,7 +68,7 @@ export default function BlockDetailModal({
 }: BlockDetailModalProps) {
   const [amPm, setAmPm] = useState<DropdownAmPm>(getAmPmFromStartAt(blockData.startAt));
   const [startAt, setStartAt] = useState<{ hour: DropdownHour; minute: DropdownMinute }>({
-    hour: getHourAtFromStartAt(blockData.startAt.slice(0, 2)) as DropdownHour,
+    hour: getHourFromStartAt(blockData.startAt.slice(0, 2)) as DropdownHour,
     minute: blockData.startAt.slice(2, 4) as DropdownMinute
   });
   const [duration, setDuration] = useState<{ hour: DropdownHour; minute: DropdownMinute }>({
@@ -107,7 +107,7 @@ export default function BlockDetailModal({
 
   // 편집 완료 버튼 클릭
   const handleSubmitButtonClick = () => {
-    const newHour = getHourAtByAmPm(amPm, startAt.hour);
+    const newHour = getHourByAmPm(amPm, startAt.hour);
     const newStartAt = newHour + startAt.minute;
     const newDuration = duration.hour + duration.minute;
     const newBlockData = { ...blockData, startAt: newStartAt, duration: newDuration, memo };
@@ -160,7 +160,7 @@ export default function BlockDetailModal({
             </div>
           ) : (
             <p>
-              {startAt.hour}시 {startAt.minute}분
+              {amPm} {Number(startAt.hour)}시 {Number(startAt.minute)}분
             </p>
           )}
         </div>
@@ -168,7 +168,7 @@ export default function BlockDetailModal({
         <div className="font-body-2">
           <p className="modal-h2 mb-4">소요 시간</p>
           {isEdit ? (
-            <div className="flex-row-center z-10">
+            <div className="flex-row-center">
               <DropdownInput
                 id="durationHour"
                 containerClassName="w-20 mr-2"
@@ -192,7 +192,7 @@ export default function BlockDetailModal({
             </div>
           ) : (
             <p>
-              {duration.hour}시간 {duration.minute}분
+              {Number(duration.hour)}시간 {Number(duration.minute)}분
             </p>
           )}
         </div>
