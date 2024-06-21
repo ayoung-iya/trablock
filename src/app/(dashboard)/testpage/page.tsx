@@ -2,17 +2,18 @@
 
 import React, { useState, ChangeEvent } from 'react';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import Button from '@/components/common/button/Button';
 import PlanList from '@/components/PlanList';
+import ReviewList from '@/components/ReviewList';
 import TabBar from '@/components/TabBar';
 
-import blankmockData from './bookmarkMock.json';
-import mockData from './reviewMock.json';
+import bookmarkData from './bookmarkMock.json';
+import planData from './planMock.json';
+import reviewData from './reviewMock.json';
 
-/**
- * 목데이터 테스트 페이지
- * 데이터 패치 이후 삭제 예정
- */
+const queryClient = new QueryClient();
 
 export default function TestPage() {
   const tempUserProfile = {
@@ -45,11 +46,11 @@ export default function TestPage() {
   const renderTabContent = () => {
     switch (activeTab) {
       case '여행 계획':
-        return <PlanList key="여행 계획" data={mockData} isPlanTab />;
+        return <PlanList key="여행 계획" initialData={planData} isPlanTab />;
       case '여행 후기':
-        return <div key="여행 후기">여행 후기 내용</div>;
+        return <ReviewList data={reviewData} />;
       case '북마크':
-        return <PlanList key="북마크" data={blankmockData} isPlanTab={false} />;
+        return <PlanList key="북마크" initialData={bookmarkData} isPlanTab={false} />;
       default:
         return null;
     }
@@ -60,53 +61,55 @@ export default function TestPage() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex">
-        <aside className="w-1/4 rounded-lg bg-gray-100 p-4">
-          <div className="flex flex-col items-center">
-            {isEditing ? (
-              <>
-                <input type="file" accept="image/*" onChange={handleImageChange} className="mb-4" />
-                {profileImage && (
-                  <img src={profileImage} alt="Profile" className="mb-4 h-24 w-24 rounded-full object-cover" />
-                )}
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="mb-2 w-full rounded border px-2 py-1"
-                />
-                <input
-                  type="text"
-                  value={introduce}
-                  onChange={(e) => setIntroduce(e.target.value)}
-                  className="mb-4 w-full rounded border px-2 py-1"
-                />
-                <Button type="button" className="btn-primary btn-sm" onClick={handleSaveClick}>
-                  확인
-                </Button>
-              </>
-            ) : (
-              <>
-                <img
-                  src={profileImage || '/icons/profile-default.svg'}
-                  alt="Profile"
-                  className="mb-4 h-24 w-24 rounded-full object-cover"
-                />
-                <h2 className="text-xl font-semibold">{name}</h2>
-                <p className="text-gray-500">{introduce}</p>
-                <button type="button" className="btn-solid btn-sm mt-4" onClick={handleEditClick}>
-                  편집하기
-                </button>
-              </>
-            )}
-          </div>
-        </aside>
-        <main className="w-full p-4">
-          <TabBar tabBarList={['여행 계획', '여행 후기', '북마크']} handleTabBarClick={handleTabBarClick} size="S" />
-          <div className="w-full">{renderTabContent()}</div>
-        </main>
+    <QueryClientProvider client={queryClient}>
+      <div className="container mx-auto p-4">
+        <div className="flex">
+          <aside className="w-1/4 rounded-lg bg-gray-100 p-4">
+            <div className="flex flex-col items-center">
+              {isEditing ? (
+                <>
+                  <input type="file" accept="image/*" onChange={handleImageChange} className="mb-4" />
+                  {profileImage && (
+                    <img src={profileImage} alt="Profile" className="mb-4 h-24 w-24 rounded-full object-cover" />
+                  )}
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="mb-2 w-full rounded border px-2 py-1"
+                  />
+                  <input
+                    type="text"
+                    value={introduce}
+                    onChange={(e) => setIntroduce(e.target.value)}
+                    className="mb-4 w-full rounded border px-2 py-1"
+                  />
+                  <Button type="button" className="btn-primary btn-sm" onClick={handleSaveClick}>
+                    확인
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <img
+                    src={profileImage || '/icons/profile-default.svg'}
+                    alt="Profile"
+                    className="mb-4 h-24 w-24 rounded-full object-cover"
+                  />
+                  <h2 className="text-xl font-semibold">{name}</h2>
+                  <p className="text-gray-500">{introduce}</p>
+                  <button type="button" className="btn-solid btn-sm mt-4" onClick={handleEditClick}>
+                    편집하기
+                  </button>
+                </>
+              )}
+            </div>
+          </aside>
+          <main className="w-full p-4">
+            <TabBar tabBarList={['여행 계획', '여행 후기', '북마크']} handleTabBarClick={handleTabBarClick} size="S" />
+            <div className="w-full">{renderTabContent()}</div>
+          </main>
+        </div>
       </div>
-    </div>
+    </QueryClientProvider>
   );
 }

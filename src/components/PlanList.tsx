@@ -1,16 +1,14 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import TravelCard, { TravelCardProps } from '@/components/card/TravelCard';
-import useIntersectingState from '@/libs/hooks/useIntersectingState';
 
 interface PlanListProps {
-  data: {
-    total_pages: number;
+  initialData: {
+    totalPages: number;
     size: number;
     content: Omit<TravelCardProps, 'onClick'>[];
-    number: number;
   };
   isPlanTab: boolean;
 }
@@ -19,57 +17,47 @@ const handleClick = (title: string) => {
   alert(`Clicked on ${title}`);
 };
 
-export default function PlanList({ data, isPlanTab }: PlanListProps) {
-  const [isIntersecting, observerRef] = useIntersectingState<HTMLDivElement>();
-  const [cardList, setCardList] = useState<TravelCardProps[]>([]);
-  const [currentPage, setCurrentPage] = useState(data.number);
-  const hasMounted = useRef(false);
+export default function PlanList({ initialData, isPlanTab }: PlanListProps) {
+  const [data, setData] = useState(initialData.content.slice(0, initialData.size));
+  const [currentPage, setCurrentPage] = useState(0);
+  const [hasMore, setHasMore] = useState(currentPage < initialData.totalPages - 1);
+  const observerRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (hasMounted.current) return; // 초기 로드만 처리하도록 함
-    hasMounted.current = true;
+  const fetchMoreData = () => {
+    if (!hasMore) return;
 
-    console.log('Initial data loading');
-    const initialData = data.content.slice(0, data.size).map((item) => ({
-      ...item,
-      onClick: () => handleClick(item.title)
-    }));
-    setCardList(initialData);
-    console.log('Initial data set:', initialData);
-  }, [data]);
+    const newPage = currentPage + 1;
+    const start = newPage * initialData.size;
+    const end = start + initialData.size;
+    const newData = initialData.content.slice(start, end);
 
-  useEffect(() => {
-    const loadNextPage = () => {
-      if (!isIntersecting || currentPage >= data.total_pages - 1) {
-        console.log('Observer is not intersecting or no more pages');
-        return;
-      }
+    setData((prevData) => [...prevData, ...newData]);
+    setCurrentPage(newPage);
 
-      console.log('Loading next page:', currentPage + 1);
-      const nextPage = currentPage + 1;
-      const start = nextPage * data.size;
-      const end = start + data.size;
-      const nextItems = data.content.slice(start, end).map((item) => ({
-        ...item,
-        onClick: () => handleClick(item.title)
-      }));
-
-      setCardList((prev) => [...prev, ...nextItems]);
-      setCurrentPage(nextPage);
-    };
-
-    loadNextPage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isIntersecting]);
-
-  useEffect(() => {
-    if (observerRef.current) {
-      observerRef.current.setAttribute('data-observe', 'true');
-      console.log('Observer Ref set:', observerRef.current);
+    if (newPage >= initialData.totalPages - 1) {
+      setHasMore(false);
     }
-  }, [observerRef]);
+  };
 
-  if (cardList.length === 0) {
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasMore) {
+        fetchMoreData();
+      }
+    });
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [hasMore, currentPage]);
+
+  if (data.length === 0) {
     return (
       <div className="mt-32 flex items-center justify-center">
         <span className="font-caption-1 text-black-02">여행 계획이 없습니다.</span>
@@ -80,7 +68,7 @@ export default function PlanList({ data, isPlanTab }: PlanListProps) {
   return (
     <>
       <div className="mt-5 flex flex-col gap-4">
-        {cardList.map((item) => (
+        {data.map((item) => (
           <TravelCard
             key={item.id}
             id={item.id}
@@ -102,7 +90,7 @@ export default function PlanList({ data, isPlanTab }: PlanListProps) {
           />
         ))}
       </div>
-      <div ref={observerRef} style={{ height: '50px' }} />
+      {hasMore && <div ref={observerRef} style={{ height: '50px' }} />}
     </>
   );
 }
