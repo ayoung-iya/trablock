@@ -67,7 +67,7 @@ export default function TravelCard({
 
   return (
     <div
-      className="relative flex w-full max-w-[320px] flex-col overflow-hidden rounded-lg bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] sm:max-w-[320px] md:max-w-[640px] md:flex-row lg:max-w-[730px] xl:max-w-[730px] 2xl:max-w-[730px]"
+      className="relative flex w-full max-w-[320px] flex-col overflow-hidden rounded-lg bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] sm:max-w-[320px] sm:max-w-[730px] sm:flex-row"
       role="button"
       tabIndex={0}
       onClick={onClick}
@@ -106,7 +106,7 @@ export default function TravelCard({
         </div>
       )}
       {/* 대표 이미지 */}
-      <div className="relative h-[180px] w-full flex-shrink-0 md:h-[195px] md:w-[280px]">
+      <div className="relative h-[180px] w-full flex-shrink-0 sm:h-[195px] sm:w-[280px]">
         <ImageBox
           className="h-full w-full object-cover"
           src={thumbnailImageUrl}
@@ -119,7 +119,7 @@ export default function TravelCard({
       <div className="flex flex-grow flex-col">
         {/* 상단 각종 데이터 */}
         <div className="flex flex-col gap-2 border-b border-gray-03 p-4">
-          <p className="font-subtitle-1 w-full truncate md:w-auto md:pr-20">{title}</p>
+          <p className="font-subtitle-1 w-full truncate sm:w-auto sm:pr-20">{title}</p>
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-[6px]">
               <ImageBox src="/icons/map-pin.svg" alt="location" className="h-4 w-4" width={16} height={16} />
