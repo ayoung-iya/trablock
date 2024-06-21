@@ -31,9 +31,9 @@ export default function ReviewCard({
 
   const getClassNames = () => {
     if (type === 'main') {
-      return 'w-[285px] h-[220px] sm:w-[320px] sm:h-[240px] md:w-[345px] md:h-[254px] flex-shrink-0';
+      return 'w-[285px] h-[220px] sm:w-[320px] sm:h-[240px] md:w-[345px] md:h-[254px]';
     }
-    return 'w-[156px] h-[156px] sm:w-[228px] sm:h-[228px] md:w-[236px] md:h-[236px] flex-shrink-0';
+    return 'w-[156px] h-[156px] sm:w-[236px] sm:h-[236px]';
   };
 
   return (
@@ -43,12 +43,12 @@ export default function ReviewCard({
       onClick={onClick}
     >
       <ImageBox className="h-full w-full" src={imageUrl} alt={imageUrl} width={80} height={80} />
-      <div className=" absolute bottom-4 left-4">
-        <p className="font-subtitle-1 text-white-01">{title}</p>
+      <div className="absolute bottom-4 left-4">
+        <p className="font-subtitle-1 mb-1 text-white-01">{title}</p>
         {type === 'default' && (
           <>
-            <p className="font-subtitle-3 hidden text-gray-02 sm:block md:block">{cityString}</p>
-            <p className="font-subtitle-3 hidden text-gray-02 sm:block md:block">
+            <p className="font-subtitle-3 hidden text-gray-02 sm:block">{cityString}</p>
+            <p className="font-subtitle-3 hidden text-gray-02 sm:block">
               {startAt} ~ {endAt}
             </p>
           </>
@@ -56,7 +56,7 @@ export default function ReviewCard({
         {type === 'main' && (
           <>
             <p className="font-subtitle-3 text-gray-02">{cityString}</p>
-            <div className=" mt-3 flex flex-col gap-2">
+            <div className="mt-3 flex flex-col gap-2">
               <div className="flex items-center gap-2">
                 <div className="relative h-8 w-8 overflow-hidden rounded-full">
                   <ImageBox
