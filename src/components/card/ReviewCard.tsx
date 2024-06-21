@@ -33,7 +33,7 @@ export default function ReviewCard({
     if (type === 'main') {
       return 'w-[285px] h-[220px] sm:w-[320px] sm:h-[240px] md:w-[345px] md:h-[254px]';
     }
-    return 'w-[156px] h-[156px] sm:w-[236px] sm:h-[236px]';
+    return 'w-[156px] h-[156px] sm:w-[228px] sm:h-[228px] md:w-[236px] md:h-[236px]';
   };
 
   return (

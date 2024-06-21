@@ -3,7 +3,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import ReviewCard, { ReviewCardProps } from '@/components/card/ReviewCard';
-import useMediaQuery from '@/libs/hooks/useMediaQuery';
 
 interface ReviewListProps {
   data: {
@@ -29,8 +28,6 @@ export default function ReviewList({ data }: ReviewListProps) {
   const [currentPage, setCurrentPage] = useState(0);
   const [hasMore, setHasMore] = useState(currentPage < data.total_pages - 1);
   const observerRef = useRef<HTMLDivElement | null>(null);
-
-  const isSm = useMediaQuery('(max-width: 640px)');
 
   const fetchMoreData = () => {
     if (!hasMore) return;
@@ -81,7 +78,7 @@ export default function ReviewList({ data }: ReviewListProps) {
   return (
     <>
       <div className="mt-5 flex w-full justify-start">
-        <div className={`grid ${isSm ? 'grid-cols-2 gap-2' : 'grid-cols-3 gap-3'} justify-start`}>
+        <div className="grid grid-cols-2 justify-start gap-2 sm:grid-cols-3 sm:gap-3">
           {cardList.map((item) => (
             <ReviewCard
               key={item.title}
