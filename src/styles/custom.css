@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .tab-bar-ul {
   @apply flex justify-start gap-10;
 }
@@ -35,4 +39,16 @@
 
 .tab-bar-hr {
   @apply opacity-0;
+}
+
+.embla {
+  @apply h-96 w-full overflow-hidden;
+}
+
+.embla__container {
+  @apply flex h-96;
+}
+
+.embla__slide {
+  @apply relative h-96 w-full flex-none;
 }
