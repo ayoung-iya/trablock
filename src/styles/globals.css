@@ -258,6 +258,11 @@ button {
     line-height: 280%;
   }
 
+  .font-header {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 224%;
+  }
   /* Button Variants */
   .btn-solid {
     @apply bg-primary-01 text-white-01;

@@ -39,7 +39,8 @@ export default function SigninForm() {
           router.push('/');
           const authorizationToken = response.headers.get('Authorization-Token');
           const expiresAt = response.headers.get('authorization-token-expired-at');
-          // refresh 도 세팅
+          // refresh 도 세팅해야함
+
           if (authorizationToken && expiresAt) {
             Cookies.set('authorization-token', authorizationToken, { secure: true });
             Cookies.set('expires-at', expiresAt);
