@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 
 import { InfiniteQueryObserverResult, FetchNextPageOptions, InfiniteData } from '@tanstack/react-query';
 
-import { ArticlesResponse } from '@/apis/useArticlesService/type';
+import { ArticlesResponse } from '@/apis/useContentService/type';
 import TravelCard from '@/components/card/TravelCard';
 
 interface PlanListProps {
