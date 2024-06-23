@@ -213,13 +213,7 @@ export default function SignupForm() {
       </form>
       <PlanInputTitle>약관 동의</PlanInputTitle>
       <div className="flex gap-4">
-        <input
-          type="checkbox"
-          id="is_agreement"
-          //{...registerList.is_agreement}
-          onClick={handleCheckboxClick}
-          checked={isAgree}
-        />
+        <input type="checkbox" id="is_agreement" onClick={handleCheckboxClick} checked={isAgree} />
         <p>개인정보 수집 및 이용 동의</p>
       </div>
       {!isAgree && <p className="text-red-01">약관에 동의해 주세요</p>}
