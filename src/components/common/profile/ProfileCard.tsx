@@ -119,7 +119,7 @@ export default function ProfileCard({
         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
         <div
           className={`relative flex items-center justify-center ${
-            isDesktop ? 'h-[185px] w-[185px]' : isTablet ? 'w/[120px] h-[120px]' : 'w/[80px] h-[80px]'
+            isDesktop ? 'h-[185px] w-[185px]' : isTablet ? 'h-[120px] w-[120px]' : 'h-[80px] w-[80px]'
           }`}
           onClick={handleImageClick}
           role="button"
@@ -159,7 +159,7 @@ export default function ProfileCard({
                 id="name"
                 value={name}
                 onChange={(e) => onNameChange(e.target.value)}
-                className={`mb-2 w-full rounded border px-2 py-1 ${isDesktop ? '' : 'w-[calc(100%-6rem)]'}`}
+                className="mb-2 w-[calc(100%-6rem)] rounded border px-2 py-1 lg:w-full"
                 placeholder="닉네임을 입력하세요"
               />
               <Textarea
