@@ -122,13 +122,7 @@ const SlateEditor = forwardRef<SlateEditorRef, SlateEditorProps>(({ value, onCha
   }));
 
   return (
-    <Slate
-      editor={editor}
-      value={value}
-      onChange={(newValue) => {
-        onChange(newValue);
-      }}
-    >
+    <Slate editor={editor} initialValue={value} onChange={onChange}>
       <div>
         <Toolbar />
         <div className={`px-40 ${representativeImage ? 'pt-[700px]' : 'pt-[300px]'}`}>
@@ -143,5 +137,7 @@ const SlateEditor = forwardRef<SlateEditorRef, SlateEditorProps>(({ value, onCha
     </Slate>
   );
 });
+
+SlateEditor.displayName = 'SlateEditor';
 
 export default SlateEditor;
