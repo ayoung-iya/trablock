@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import React, { ReactNode, createContext, useContext, useReducer } from 'react';
 
 interface State {
   [key: string]: boolean;
@@ -21,7 +21,6 @@ const dropdownReducer = (state: State, action: Action): State => {
         }
       });
       newState[action.id] = !state[action.id];
-      // console.log('TOGGLE', newState);
       return newState;
     }
     case 'CLOSE_ALL': {
@@ -29,7 +28,6 @@ const dropdownReducer = (state: State, action: Action): State => {
       Object.keys(newState).forEach((key) => {
         newState[key] = false;
       });
-      // console.log('CLOSE_ALL', newState);
       return newState;
     }
     default: {

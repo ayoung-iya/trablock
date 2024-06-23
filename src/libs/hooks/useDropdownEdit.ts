@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-import { useDropdownState, useDropdownDispatch } from '@/contexts/DropdownContext';
+import { useDropdownDispatch, useDropdownState } from '@/contexts/DropdownContext';
 
 const useDropdownEdit = (id: string) => {
   const ref = useRef<HTMLUListElement>(null);
@@ -40,10 +40,6 @@ const useDropdownEdit = (id: string) => {
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   console.log('isDropdownOpened', isDropdownOpened);
-  // }, [isDropdownOpened]);
 
   return { ref, isDropdownOpened, handleDropdownOpen, handleDropdownClose, handleDropdownToggle };
 };

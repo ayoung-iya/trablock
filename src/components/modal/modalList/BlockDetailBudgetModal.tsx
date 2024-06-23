@@ -41,7 +41,6 @@ export default function BlockDetailBudgetModal({
   // 편집 완료 버튼 클릭
   const handleSubmitButtonClick = () => {
     const budget = `${money} ${budgetSymbol}`;
-    console.log('expense', budget);
     onSubmit({ budget });
   };
 

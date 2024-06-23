@@ -94,8 +94,6 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
   const [coverImage, setCoverImage] = useState(planDetail.cover_image || DefaultCoverImage);
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
 
-  console.log('planDetail.cover_image_url', planDetail);
-
   const router = useRouter();
   const params = useParams();
   const articleId = Number(params.id);
@@ -120,8 +118,6 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
   const handleChangeCoverImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]; // File
     if (!file) return;
-
-    console.log('file', file);
 
     setCoverImageFile(file);
   };

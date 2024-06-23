@@ -33,10 +33,6 @@ export default function BlockDetailModalContentTransport({
     setCoordinateList(newCoordinateList);
   }, [lat, lng, secondPlaceLat, secondPlaceLng]);
 
-  // useEffect(() => {
-  //   console.log('Detail coordinateList', coordinateList);
-  // }, [coordinateList]);
-
   if (!isLoaded) return <div className={`bg-gray-02 ${MODAL_MAP_STYLE}`} />;
   return (
     <>
