@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 
 import { addNumberCommas, removeNumberCommas } from '@/libs/utils/moneyFormatter';
 
@@ -6,6 +6,7 @@ import Input from './Input';
 
 interface ExpenseInputProps {
   id: string;
+  initialValue: number;
   digit?: number;
   placeholder?: string;
   onlyInteger?: boolean;
@@ -13,10 +14,16 @@ interface ExpenseInputProps {
 }
 
 const ExpenseInput = forwardRef(function ExpenseInput(
-  { id, digit = 12, placeholder, onlyInteger, onChangeExpense }: ExpenseInputProps,
+  { id, digit = 12, initialValue, placeholder, onlyInteger, onChangeExpense }: ExpenseInputProps,
   ref: React.ForwardedRef<HTMLInputElement>
 ) {
   const [expense, setExpense] = useState('');
+
+  useEffect(() => {
+    if (initialValue) {
+      setExpense(addNumberCommas(`${initialValue}`));
+    }
+  }, [initialValue]);
 
   const handleFocus: React.FocusEventHandler<HTMLInputElement> = (e) => {
     if (!expense) {

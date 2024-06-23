@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 'use client';
+
 import Image from 'next/image';
 import kakaoButton from '@/icons/kakaoLogin.png';
 
