@@ -1,4 +1,4 @@
-import { PlanDetail, ScheduleList } from '@/components/dragAndDrop/type';
+import { PlanDetail, ScheduleList } from '@/libs/types/dragAndDropType';
 
 // 여행 계획 정보 mock 데이터
 export const mockPlanDetail: PlanDetail = {
@@ -8,28 +8,37 @@ export const mockPlanDetail: PlanDetail = {
       place_id: '1',
       address: '제주특별자치도 제주시 애월읍',
       city: '제주'
+    },
+    {
+      place_id: '2',
+      address: '서울특별시 강남구',
+      city: '서울'
     }
   ],
   start_at: '2024-05-25',
   end_at: '2024-05-29',
+  expense: '0',
   travel_companion: '친구',
   travel_style: ['자연', '맛집'],
   name: '여행 계획 1',
   bookmark_count: 10,
-  is_bookmarked: true
+  is_bookmarked: true,
+  is_private: false
 };
 
 // 일정 블록 리스트 mock 데이터
 export const mockScheduleList: ScheduleList = {
+  review_id: 111,
+  is_editable: false,
   schedules: [
     {
-      id: 1,
+      schedule_id: 1,
       visited_date: '2024-05-25',
       visited_time: '09:00',
       duration_time: '02:00',
       expense: '15,000 KRW',
       memo: '에메랄드빛 바다',
-      sort_order: 1,
+      sort_order: 2,
       category: '관광지',
       dtype: 'GENERAL',
       schedule_general: {
@@ -45,20 +54,20 @@ export const mockScheduleList: ScheduleList = {
       schedule_etc: null
     },
     {
-      id: 2,
-      visited_date: '2024-05-26',
+      schedule_id: 2,
+      visited_date: '2024-05-25',
       visited_time: '13:00',
       duration_time: '01:30',
       expense: '7,000 KRW',
       memo: '맛집',
-      sort_order: 1,
+      sort_order: 3,
       category: '식당',
       dtype: 'GENERAL',
       schedule_general: {
         place_name: '돔베돈',
-        google_map_place_id: 'ChIJN1t_tDeuEmsRUsoyG83frY5',
-        google_map_latitude: 33.499621,
-        google_map_longitude: 126.531188,
+        google_map_place_id: 'ChIJlyYmIFfjDDURGbscwa5LbXE',
+        google_map_latitude: 33.5155556,
+        google_map_longitude: 126.5266667,
         google_map_address: '제주특별자치도 제주시 연동',
         google_map_phone_number: '064-765-4321',
         google_map_home_page_url: 'http://www.dombedon.co.kr'
@@ -67,8 +76,8 @@ export const mockScheduleList: ScheduleList = {
       schedule_etc: null
     },
     {
-      id: 3,
-      visited_date: '2024-05-27',
+      schedule_id: 3,
+      visited_date: '2024-05-25',
       visited_time: '10:00',
       duration_time: '00:45',
       expense: '1,500 KRW',
@@ -91,7 +100,7 @@ export const mockScheduleList: ScheduleList = {
       schedule_etc: null
     },
     {
-      id: 4,
+      schedule_id: 4,
       visited_date: '2024-05-28',
       visited_time: '14:00',
       duration_time: '00:30',

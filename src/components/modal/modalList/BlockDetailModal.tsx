@@ -11,12 +11,6 @@ import Input from '@/components/common/input/Input';
 import Modal, { ModalProps } from '@/components/modal/Modal';
 import BlockDetailModalContent from '@/components/modal/modalList/BlockDetailModalContent';
 import {
-  EtcBlockDetailData,
-  OnBlockDetailEdit,
-  PlaceBlockDetailData,
-  TransportBlockDetailData
-} from '@/components/modal/modalList/type';
-import {
   DROPDOWN_AMPM,
   DROPDOWN_HOUR,
   DROPDOWN_MINUTE,
@@ -25,17 +19,23 @@ import {
   DropdownMinute
 } from '@/libs/constants/modal';
 import { GoogleMapsApiReturn } from '@/libs/hooks/useGoogleMapsApi';
+import {
+  EtcBlockDetailData,
+  OnBlockDetailEdit,
+  PlaceBlockDetailData,
+  TransportBlockDetailData
+} from '@/libs/types/modalType';
 
 // startAt으로부터 오전/오후를 반환하는 함수
 function getAmPmFromStartAt(startAt: string): DropdownAmPm {
-  const hour = Number(startAt.slice(0, 2));
+  const hour = Number(startAt.split(':')[0]);
   if (hour < 12) return '오전';
   return '오후';
 }
 
 // startAt으로부터 24H -> 12H로 변환하는 함수
 function getHourFromStartAt(startAt: string): DropdownHour {
-  const hour = Number(startAt.slice(0, 2)) % 12;
+  const hour = Number(startAt.split(':')[0]) % 12;
   if (hour === 0) return '12';
   if (hour >= 1 && hour <= 9) return `0${hour.toString()}` as DropdownHour;
   return hour.toString() as DropdownHour;
@@ -68,12 +68,12 @@ export default function BlockDetailModal({
 }: BlockDetailModalProps) {
   const [amPm, setAmPm] = useState<DropdownAmPm>(getAmPmFromStartAt(blockData.startAt));
   const [startAt, setStartAt] = useState<{ hour: DropdownHour; minute: DropdownMinute }>({
-    hour: getHourFromStartAt(blockData.startAt.slice(0, 2)) as DropdownHour,
-    minute: blockData.startAt.slice(2, 4) as DropdownMinute
+    hour: getHourFromStartAt(blockData.startAt.split(':')[0]) as DropdownHour,
+    minute: blockData.startAt.split(':')[1] as DropdownMinute
   });
   const [duration, setDuration] = useState<{ hour: DropdownHour; minute: DropdownMinute }>({
-    hour: blockData.duration.slice(0, 2) as DropdownHour,
-    minute: blockData.duration.slice(2, 4) as DropdownMinute
+    hour: blockData.duration.split(':')[0] as DropdownHour,
+    minute: blockData.duration.split(':')[1] as DropdownMinute
   });
   const [memo, setMemo] = useState(blockData.memo);
 
@@ -108,8 +108,8 @@ export default function BlockDetailModal({
   // 편집 완료 버튼 클릭
   const handleSubmitButtonClick = () => {
     const newHour = getHourByAmPm(amPm, startAt.hour);
-    const newStartAt = newHour + startAt.minute;
-    const newDuration = duration.hour + duration.minute;
+    const newStartAt = `${newHour}:${startAt.minute}`;
+    const newDuration = `${duration.hour}:${duration.minute}`;
     const newBlockData = { ...blockData, startAt: newStartAt, duration: newDuration, memo };
     onSubmit(newBlockData);
   };

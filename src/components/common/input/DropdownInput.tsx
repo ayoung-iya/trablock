@@ -1,11 +1,10 @@
 import React from 'react';
 
+import Button from '@/components/common/button/Button';
 import DropdownButton from '@/components/common/button/DropdownButton';
 import Dropdown from '@/components/common/Dropdown';
 import useDropdownEdit from '@/libs/hooks/useDropdownEdit';
 import useResizeSize from '@/libs/hooks/useResizeSize';
-
-import Button from '../button/Button';
 
 interface DropdownInputProps {
   id: string;

@@ -6,7 +6,7 @@ interface State {
   [key: string]: boolean;
 }
 
-type Action = { type: 'TOGGLE'; id: string } | { type: 'CLOSE_ALL'; excludeId: string };
+type Action = { type: 'TOGGLE'; id: string } | { type: 'CLOSE_ALL'; excludeId?: string };
 
 export const DropdownStateContext = createContext<State | undefined>(undefined);
 export const DropdownDispatchContext = createContext<React.Dispatch<Action> | undefined>(undefined);
@@ -14,15 +14,22 @@ export const DropdownDispatchContext = createContext<React.Dispatch<Action> | un
 const dropdownReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'TOGGLE': {
-      return { ...state, [action.id]: !state[action.id] };
+      const newState = { ...state };
+      Object.keys(newState).forEach((key) => {
+        if (key !== action.id) {
+          newState[key] = false;
+        }
+      });
+      newState[action.id] = !state[action.id];
+      // console.log('TOGGLE', newState);
+      return newState;
     }
     case 'CLOSE_ALL': {
       const newState = { ...state };
       Object.keys(newState).forEach((key) => {
-        if (key !== action.excludeId) {
-          newState[key] = false;
-        }
+        newState[key] = false;
       });
+      // console.log('CLOSE_ALL', newState);
       return newState;
     }
     default: {

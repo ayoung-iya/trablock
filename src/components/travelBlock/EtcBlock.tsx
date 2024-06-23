@@ -9,7 +9,16 @@ import CoreBlock, { CoreBlockProps } from '@/components/travelBlock/CoreBlock';
  * @param memo string; (optional) 메모
  * @param imageUrl string; (optional) 이미지 주소
  */
-export default function EtcBlock({ index, name, category, memo, startAt, duration, onClick }: CoreBlockProps) {
+export default function EtcBlock({
+  index,
+  name,
+  category,
+  memo,
+  startAt,
+  duration,
+  onClick,
+  ...props
+}: CoreBlockProps) {
   return (
     <CoreBlock
       index={index}
@@ -19,6 +28,7 @@ export default function EtcBlock({ index, name, category, memo, startAt, duratio
       startAt={startAt}
       duration={duration}
       onClick={onClick}
+      {...props}
     />
   );
 }

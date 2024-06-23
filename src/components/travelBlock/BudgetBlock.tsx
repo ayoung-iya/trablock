@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Badge from '@/components/common/Badge';
-import { Category } from '@/components/modal/modalList/type';
+import { Category } from '@/libs/types/commonPlanType';
 
 export interface BudgetBlockProps extends React.HTMLAttributes<HTMLButtonElement> {
   name: string;
@@ -10,14 +10,14 @@ export interface BudgetBlockProps extends React.HTMLAttributes<HTMLButtonElement
   money: string;
 }
 
-export default function BudgetBlock({ name, category, symbol, money, onClick }: BudgetBlockProps) {
+export default function BudgetBlock({ name, category, symbol, money, onClick, ...props }: BudgetBlockProps) {
   const currSymbol: { [key: string]: string } = {
     KRW: '원',
     USD: '달러'
   };
 
   return (
-    <button className="w-full rounded-[0.3125rem] p-4 shadow-modal" type="button" onClick={onClick}>
+    <button className="w-full rounded-[0.3125rem] p-4 shadow-modal" type="button" onClick={onClick} {...props}>
       <div className="flex w-full gap-2">
         {/* 각종 정보, 이미지 */}
         <div className="flex-row-center w-full justify-between gap-2">

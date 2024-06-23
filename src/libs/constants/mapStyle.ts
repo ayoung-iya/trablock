@@ -1,4 +1,4 @@
-import { Category } from '@/components/modal/modalList/type';
+import { Category } from '@/libs/types/commonPlanType';
 
 // 지도 스타일
 export const MODAL_MAP_STYLE = {

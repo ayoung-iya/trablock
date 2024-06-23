@@ -1,4 +1,6 @@
-import { Category, Transport } from '@/components/modal/modalList/type';
+import React from 'react';
+
+import { Category, Transport } from '@/libs/types/commonPlanType.js';
 
 export type Location = {
   place_id: string;
@@ -12,16 +14,19 @@ export type PlanDetail = {
   location: Location[];
   start_at: string; // yyyy-MM-dd
   end_at: string; // yyyy-MM-dd
+  expense: string;
   travel_companion: string;
   travel_style: string[];
   name: string;
   bookmark_count: number;
   is_bookmarked: boolean;
+  cover_image?: string;
+  is_private: boolean;
 };
 
 export type ScheduleGeneral = {
   place_name: string;
-  google_map_place_id: string; // 수정
+  google_map_place_id: string;
   google_map_latitude: number;
   google_map_longitude: number;
   google_map_address: string;
@@ -49,12 +54,12 @@ export type Dtype = 'GENERAL' | 'TRANSPORT' | 'ETC';
 
 // 일정 블록 상세
 export type Schedule = {
-  id?: number;
+  schedule_id?: number;
   visited_date: string; // yyyy-MM-dd
   visited_time: string; // hh:mm
-  duration_time: string; // hh:mm / 수정
-  expense: string; // 12,000 KRW / 수정
-  memo?: string; // 수정
+  duration_time: string; // hh:mm
+  expense: string; // 12,000 KRW
+  memo?: string;
   sort_order: number;
   category: Category;
   dtype: Dtype;
@@ -65,5 +70,16 @@ export type Schedule = {
 
 // 일정 블록 리스트
 export type ScheduleList = {
+  review_id?: number;
+  is_editable: boolean;
   schedules: Schedule[];
 };
+
+// mapping할 때 사용할 데이터 타입
+export type ScheduleWithKey = Schedule & {
+  key: string;
+};
+
+export interface TabContentProps extends React.HTMLAttributes<HTMLButtonElement> {
+  schedule: ScheduleWithKey;
+}

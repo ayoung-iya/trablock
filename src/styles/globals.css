@@ -250,6 +250,10 @@ button {
     @apply border border-solid border-gray-02 text-black-02;
   }
 
+  .btn-kakao {
+    @apply border-kakao bg-kakao border border-solid text-black-02;
+  }
+
   .btn-gray {
     @apply pointer-events-none cursor-not-allowed bg-gray-02 text-white-01;
   }

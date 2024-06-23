@@ -9,16 +9,7 @@ import CoreBlock, { CoreBlockProps } from '@/components/travelBlock/CoreBlock';
  * @param memo string; (optional) 메모
  * @param imageUrl string; (optional) 이미지 주소
  */
-export default function PlanBlock({
-  index,
-  name,
-  category,
-  memo,
-  imageUrl,
-  startAt,
-  duration,
-  onClick
-}: CoreBlockProps) {
+function PlanBlock({ index, name, category, memo, imageUrl, startAt, duration, onClick, ...props }: CoreBlockProps) {
   return (
     <CoreBlock
       index={index}
@@ -29,6 +20,9 @@ export default function PlanBlock({
       startAt={startAt}
       duration={duration}
       onClick={onClick}
+      {...props}
     />
   );
 }
+
+export default PlanBlock;
