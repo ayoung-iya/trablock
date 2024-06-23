@@ -108,14 +108,14 @@ export default function OrderFilterSection() {
           }}
           ref={orderButtonRef}
         >
-          {ORDER_STRING[order || 'latest']}
+          {ORDER_STRING[order || 'createAt']}
         </OrderFilterButton>
         {isOrderListOpened && (
-          <ul ref={orderListRef} className="shadow-box absolute top-9 w-full overflow-hidden">
-            <li data-order="latest" className="w-full cursor-pointer px-3 py-2 text-center hover:bg-gray-03">
+          <ul ref={orderListRef} className="shadow-box absolute top-9 z-10 w-full overflow-hidden">
+            <li data-order="createAt" className="w-full cursor-pointer px-3 py-2 text-center hover:bg-gray-03">
               최신순
             </li>
-            <li data-order="popular" className="w-full cursor-pointer px-3 py-2 text-center hover:bg-gray-03">
+            <li data-order="popularity" className="w-full cursor-pointer px-3 py-2 text-center hover:bg-gray-03">
               인기순
             </li>
           </ul>
@@ -136,7 +136,7 @@ export default function OrderFilterSection() {
         {isFilterListOpened && (
           <div
             ref={filterListRef}
-            className="shadow-box absolute right-0 top-9 w-[90vw] max-w-[590px] p-10 pb-[76px] filter"
+            className="shadow-box absolute right-0 top-9 z-10 w-[90vw] max-w-[590px] p-10 pb-[76px] filter"
           >
             <h3 className="font-title-4 mb-5">해시태그</h3>
             <h4 className="font-subtitle-2 mb-3">누구와</h4>
