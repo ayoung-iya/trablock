@@ -65,10 +65,7 @@ const ArticleService = {
       throw new Error(data.local_message);
     }
 
-    // console.log(data);
-
     const formattedData: ArticleFormData = formatArticleInitialDataFromResponse(data);
-    // console.log(formattedData);
 
     return formattedData;
   },
