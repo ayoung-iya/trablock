@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
+    "@types/js-cookie": "^3.0.6",
     "@types/loadable__component": "^5.13.9",
     "@types/node": "^20",
     "@types/react": "^18.3.3",

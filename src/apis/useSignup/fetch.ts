@@ -31,9 +31,10 @@ const fetchCheckNickname = returnFetch(options.checkNickname);
 
 const serviceSignup = {
   postSignup: async (data: signupProps) => {
+    const isAgreedData = { ...data, is_agreement: true };
     const response = await fetchSignup('/api/v1/auth/join', {
       method: 'POST',
-      body: JSON.stringify(data)
+      body: JSON.stringify(isAgreedData)
     });
     const result = response.json();
     return result;

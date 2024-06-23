@@ -23,7 +23,7 @@ export default function SignupForm() {
     setError,
     clearErrors,
     watch,
-    formState: { errors, isValid }
+    formState: { errors }
   } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -33,7 +33,6 @@ export default function SignupForm() {
       nickname: '',
       pw_question_id: 1,
       pw_answer: ''
-      //is_agreement: false
     }
   });
 
@@ -61,7 +60,6 @@ export default function SignupForm() {
   const handleSelectQuestion = (question: string, id: number) => {
     setSelectedQuestion(question);
     setSelectedQuestionId(id + 1);
-    console.log(selectedQuestionId);
     handleQuestionListClose();
   };
 
@@ -71,7 +69,6 @@ export default function SignupForm() {
     password: watch('password'),
     nickname: watch('nickname'),
     pw_answer: watch('pw_answer')
-    //is_agreement: watch('is_agreement')
   };
 
   const passwordCheckWatch = watch('password_confirm');
@@ -111,7 +108,6 @@ export default function SignupForm() {
   const handleCheckboxClick = () => {
     setIsAgree((prev) => !prev);
     console.log(isAgree);
-    console.log(isValid);
   };
   const registerList = {
     username: register('username', { ...validate.username, onBlur: () => validateUsername() }),
@@ -120,10 +116,7 @@ export default function SignupForm() {
     nickname: register('nickname', { ...validate.nickname, onBlur: () => validateNickname() }),
     pw_answer: register('pw_answer', validate.pw_answer),
     pw_question_id: register('pw_question_id')
-    // is_agreement: register('is_agreement', { required: '약관에 동의해야합니다.' })
   };
-
-  useEffect(() => {}, [isValid]);
 
   const onSubmit: SubmitHandler<FieldValues> = () => {
     const payloadValue = {
@@ -131,8 +124,7 @@ export default function SignupForm() {
       password: payload.password,
       nickname: payload.nickname,
       pw_question_id: selectedQuestionId,
-      pw_answer: payload.pw_answer,
-      is_agreement: true
+      pw_answer: payload.pw_answer
     };
     console.log(payloadValue);
     postSignupMutate(payloadValue, {
@@ -207,7 +199,7 @@ export default function SignupForm() {
           <SignInput label="답변" id="pw_answer" {...registerList.pw_answer} ref={questionInputRef} />
         </section>
 
-        <Button disabled={!isValid} type="submit" className={buttonStyle}>
+        <Button disabled={!isAgree} type="submit" className={buttonStyle}>
           회원가입
         </Button>
       </form>
@@ -218,7 +210,6 @@ export default function SignupForm() {
           id="is_agreement"
           //{...registerList.is_agreement}
           onClick={handleCheckboxClick}
-          checked={isAgree}
         />
         <p>개인정보 수집 및 이용 동의</p>
       </div>
