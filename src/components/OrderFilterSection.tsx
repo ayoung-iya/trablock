@@ -129,6 +129,7 @@ export default function OrderFilterSection() {
             handleFilterListOpen();
           }}
           ref={filterButtonRef}
+          isFiltering={!!companion || !!travelStyle}
         >
           필터
         </OrderFilterButton>
