@@ -8,9 +8,9 @@ import AsyncBoundary from '@/components/common/AsyncBoundary';
 import KakaoScript from '@/components/social/KaKaoScript';
 import { DropdownProvider } from '@/libs/contexts/DropdownContext';
 import ModalProvider from '@/libs/contexts/ModalProvider';
-
 import 'react-day-picker/dist/style.css';
 import '@/styles/globals.css';
+import { PasswordFindProvider } from '@/libs/contexts/passwordFindContext';
 
 declare global {
   interface Window {
@@ -36,14 +36,16 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={pretendard.className}>
-        <AsyncBoundary>
-          <DropdownProvider>
-            <ReactQueryProvider>
-              <ModalProvider>{children}</ModalProvider>
-              <div id="modal-root" />
-            </ReactQueryProvider>
-          </DropdownProvider>
-        </AsyncBoundary>
+        <PasswordFindProvider>
+          <AsyncBoundary>
+            <DropdownProvider>
+              <ReactQueryProvider>
+                <ModalProvider>{children}</ModalProvider>
+                <div id="modal-root" />
+              </ReactQueryProvider>
+            </DropdownProvider>
+          </AsyncBoundary>
+        </PasswordFindProvider>
         <KakaoScript />
       </body>
     </html>
