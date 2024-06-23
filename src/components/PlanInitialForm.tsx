@@ -255,8 +255,14 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
             control={control}
             name="expense"
             rules={{ required: false, pattern: /^-?\d+$/ }}
-            render={({ field: { onChange } }) => (
-              <ExpenseInput id="expense" placeholder="여행 경비를 입력하세요" onChangeExpense={onChange} onlyInteger />
+            render={({ field: { value, onChange } }) => (
+              <ExpenseInput
+                id="expense"
+                placeholder="여행 경비를 입력하세요"
+                initialValue={value || 0}
+                onChangeExpense={onChange}
+                onlyInteger
+              />
             )}
           />
           <span>원</span>
