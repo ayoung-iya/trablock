@@ -93,6 +93,9 @@ button {
   .flex-col-center {
     @apply flex flex-col items-center;
   }
+  .flex-col-start {
+    @apply flex flex-col items-start;
+  }
 
   .image-cover {
     @apply h-full w-full object-cover;
@@ -233,7 +236,33 @@ button {
     font-weight: 700;
     line-height: 130%;
   }
+  .font-signin-1 {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 224%;
+  }
+  .font-signin-2 {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 168%;
+  }
+  .font-signin-button {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 208%;
+  }
 
+  .font-password-find {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 280%;
+  }
+
+  .font-header {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 224%;
+  }
   /* Button Variants */
   .btn-solid {
     @apply bg-primary-01 text-white-01;
