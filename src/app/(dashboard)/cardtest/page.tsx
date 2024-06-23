@@ -1,6 +1,6 @@
 import CircleCard from '@/components/card/CircleCard';
 import ReviewCard from '@/components/card/ReviewCard';
-import TravelCard from '@/components/card/TravelCard';
+// import TravelCard from '@/components/card/TravelCard';
 import LogoSvg from '@/icons/logo.svg';
 
 export default function Home() {
@@ -43,7 +43,7 @@ export default function Home() {
         <CircleCard {...cardList.circle} />
       </div>
       <ReviewCard {...cardList.review} />
-      <TravelCard {...cardList.travel} />
+      {/* <TravelCard {...cardList.travel} /> */}
     </div>
   );
 }
