@@ -11,9 +11,10 @@ interface Profile {
 interface ProfileContainerProps {
   profile: Profile;
   onSave: (newName: string, newIntroduce: string, newImage: File | string | null) => void;
+  canEdit: boolean;
 }
 
-export default function ProfileContainer({ profile, onSave }: ProfileContainerProps) {
+export default function ProfileContainer({ profile, onSave, canEdit }: ProfileContainerProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [tempProfile, setTempProfile] = useState<Profile>({
     name: '',
@@ -86,7 +87,7 @@ export default function ProfileContainer({ profile, onSave }: ProfileContainerPr
       onImageChange={handleImageChange}
       onNameChange={(newName) => handleTempChange('name', newName)}
       onBioChange={(newIntroduce) => handleTempChange('introduce', newIntroduce)}
-      canEdit
+      canEdit={canEdit}
     />
   );
 }

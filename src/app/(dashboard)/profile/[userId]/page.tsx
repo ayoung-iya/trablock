@@ -24,7 +24,8 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
   const [profile, setProfile] = useState({
     name: '',
     introduce: '',
-    imageUrl: ''
+    imageUrl: '',
+    isEditable: false
   });
 
   useEffect(() => {
@@ -34,7 +35,8 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
         setProfile({
           name: profileData.name,
           introduce: profileData.introduce ?? '',
-          imageUrl: profileData.profile_img_url ?? '/icons/profile-default.svg'
+          imageUrl: profileData.profile_img_url ?? '/icons/profile-default.svg',
+          isEditable: profileData.is_editable ?? false
         });
       } catch (error) {
         console.error('Failed to fetch profile:', error);
@@ -65,7 +67,8 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
       setProfile({
         name: response.nickname ?? newName,
         introduce: response.introduce ?? '',
-        imageUrl: response.profile_img_url ?? '/icons/profile-default.svg'
+        imageUrl: response.profile_img_url ?? '/icons/profile-default.svg',
+        isEditable: profile.isEditable
       });
     } catch (error) {
       console.error('Failed to update profile:', error);
@@ -94,7 +97,7 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
       <div className="mx-auto max-w-screen-xl p-4">
         <div className="flex flex-col gap-4 lg:flex-row">
           <aside className="mb-4 w-full rounded-lg p-4 lg:mb-0 lg:w-[500px]">
-            <ProfileContainer profile={profile} onSave={handleProfileSave} />
+            <ProfileContainer profile={profile} onSave={handleProfileSave} canEdit={profile.isEditable} />
           </aside>
           <main className="flex w-full flex-grow justify-center">
             <div className="w-full max-w-3xl">
