@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 
+import useToggleBookmark from '@/apis/useContentService/useToggleBookmark';
 import ImageBox from '@/components/common/ImageBox';
 
 export interface TravelCardProps {
@@ -23,6 +24,7 @@ export interface TravelCardProps {
 }
 
 export default function TravelCard({
+  id,
   title,
   city,
   startAt,
@@ -39,6 +41,8 @@ export default function TravelCard({
   onClick
 }: TravelCardProps) {
   const [menuVisible, setMenuVisible] = useState(false);
+  const [bookmarked, setBookmarked] = useState(isBookmarked);
+  const { mutate: toggleBookmark } = useToggleBookmark();
 
   const combinedTags = [travelCompanion, ...travelStyle];
   const imageSrc = thumbnailImageUrl ?? '/icons/article-default.png';
@@ -53,6 +57,15 @@ export default function TravelCard({
     if (menuVisible) {
       setMenuVisible(false);
     }
+  };
+
+  const handleBookmarkClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleBookmark(Number(id), {
+      onSuccess: () => {
+        setBookmarked((prev) => !prev);
+      }
+    });
   };
 
   useEffect(() => {
@@ -76,8 +89,12 @@ export default function TravelCard({
       onKeyPress={onClick}
     >
       {/* 책갈피 아이콘 */}
-      <div className="absolute left-4 top-4 z-10 h-9 w-9 flex-shrink-0 rounded-[5px] bg-white-01 p-2 backdrop-blur-[10px]">
-        {isBookmarked ? (
+      <button
+        type="button"
+        className="absolute left-4 top-4 z-10 h-9 w-9 flex-shrink-0 rounded-[5px] bg-white-01 p-2 backdrop-blur-[10px]"
+        onClick={handleBookmarkClick}
+      >
+        {bookmarked ? (
           <ImageBox
             className="h-full w-full"
             src="/icons/bookmark-filled.svg"
@@ -88,7 +105,7 @@ export default function TravelCard({
         ) : (
           <ImageBox className="h-full w-full" src="/icons/bookmark.svg" alt="not bookmarked" width={18} height={18} />
         )}
-      </div>
+      </button>
       {/* 케밥 메뉴 */}
       {isEditable && isPlanTab && (
         <div className="absolute right-4 top-4">
