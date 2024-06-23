@@ -16,7 +16,8 @@ const DatePicker = forwardRef(function DatePicker(
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
   const [range, setRange] = useState<DateRange | undefined>(initialRange);
-  const [month, setMonth] = useState(new Date());
+  const currentMonth = initialRange.from ? initialRange.from : new Date();
+  const [month, setMonth] = useState(currentMonth);
 
   const handleMonthChange = (direction: 'prev' | 'next') => {
     if (direction === 'prev') {
