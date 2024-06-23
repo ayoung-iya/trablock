@@ -55,7 +55,7 @@ export default function FindPasswordQuestion() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex-col-start m-0 w-80 gap-6 pt-10">
         <section className="mg-0 mb-14 flex w-full flex-col gap-5">
-          <SignInput label="질문" id="pw_question" value={passWordList[questionId + 1]} disabled />
+          <SignInput label="질문" id="pw_question" value={passWordList[questionId - 1]} disabled />
           <SignInput
             label="답변"
             id="pw_answer"

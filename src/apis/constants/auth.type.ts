@@ -4,7 +4,7 @@ export interface signupProps {
   nickname: string;
   pw_question_id: number;
   pw_answer: string;
-  // is_agreement: boolean;
+  is_agreement: boolean;
 }
 export interface signinProps {
   username: string;

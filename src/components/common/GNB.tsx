@@ -12,7 +12,7 @@ export default function GNB() {
 
   const headerList = headers();
   const skipIcons = headerList.get('X-Skip-Icons') === 'true';
-  // imageurl 받아야함.
+  // imageurl 받아야함. (profile 받을 때 받는걸루 )
   const displayImageUrl = '';
 
   return (

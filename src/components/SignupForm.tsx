@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
-import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
+import { useForm, SubmitHandler, FieldValues, Controller } from 'react-hook-form';
 import usePostNicknameCheck from '@/apis/useSignup/usePostNicknameCheck';
 import usePostSignup from '@/apis/useSignup/usePostSignup';
 import usePostUsernameCheck from '@/apis/useSignup/usePostUsernamCheck';
@@ -23,6 +23,7 @@ export default function SignupForm() {
     setError,
     clearErrors,
     watch,
+    control,
     formState: { errors }
   } = useForm({
     mode: 'onChange',
@@ -32,13 +33,14 @@ export default function SignupForm() {
       password_confirm: '',
       nickname: '',
       pw_question_id: 1,
-      pw_answer: ''
+      pw_answer: '',
+      is_agreement: true
     }
   });
 
   const [selectedQuestion, setSelectedQuestion] = useState(passWordList[0]);
   const [selectedQuestionId, setSelectedQuestionId] = useState(1);
-  const [isAgree, setIsAgree] = useState(true);
+  const [isAgree, setIsAgree] = useState(false);
   const questionInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -105,17 +107,17 @@ export default function SignupForm() {
       }
     });
   };
+
   const handleCheckboxClick = () => {
     setIsAgree((prev) => !prev);
-    console.log(isAgree);
   };
+
   const registerList = {
     username: register('username', { ...validate.username, onBlur: () => validateUsername() }),
     password: register('password', validate.password),
     password_confirm: register('password_confirm', { onChange: () => validatePasswordCheck() }),
     nickname: register('nickname', { ...validate.nickname, onBlur: () => validateNickname() }),
-    pw_answer: register('pw_answer', validate.pw_answer),
-    pw_question_id: register('pw_question_id')
+    pw_answer: register('pw_answer', validate.pw_answer)
   };
 
   const onSubmit: SubmitHandler<FieldValues> = () => {
@@ -124,23 +126,25 @@ export default function SignupForm() {
       password: payload.password,
       nickname: payload.nickname,
       pw_question_id: selectedQuestionId,
-      pw_answer: payload.pw_answer
+      pw_answer: payload.pw_answer,
+      is_agreement: true
     };
     console.log(payloadValue);
     postSignupMutate(payloadValue, {
-      onSuccess: (data) => {
-        console.log(data); // login 로직으로 전환
-        router.push('/');
-        // 로그인fetch 하고 토큰 받아서 저장.
+      onSuccess: () => {
+        router.push('/login');
       },
       onError: (error) => console.log(error)
     });
   };
+
+  useEffect(() => {}, [isAgree]);
+
   const buttonStyle = 'bg-primary-01 text-white-01 w-full rounded font-signin-button h-12 ';
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex-col-start m-0 w-80 gap-6 pt-10">
+      <form className="flex-col-start m-0 mb-5 w-80 gap-6 pt-10">
         <PlanInputTitle>기본 정보 입력</PlanInputTitle>
         <section className="mg-0 mb-14 flex w-full flex-col gap-5">
           <SignInput
@@ -172,48 +176,53 @@ export default function SignupForm() {
         </section>
         <PlanInputTitle>비밀번호 정보 입력</PlanInputTitle>
         <section className="mg-0 relative mb-14 flex w-full flex-col gap-5">
-          <SignInput
-            label="질문"
-            id="pw_question_id"
-            {...registerList.pw_question_id}
-            value={selectedQuestion}
-            ref={questionInputRef}
-            readOnly
-            onClickInput={handleQuestionListToggle}
-          />
-          <div className="absolute top-20">
-            {isQuestionListOpened && (
-              <Dropdown ref={questionListRef}>
-                {passWordList.map((sentence, index) => (
-                  <li
-                    key={sentence}
-                    className="cursor-pointer pb-3 pt-3 hover:bg-gray-100"
-                    onClick={() => handleSelectQuestion(sentence, index)}
-                  >
-                    {sentence}
-                  </li>
-                ))}
-              </Dropdown>
+          <Controller
+            control={control}
+            name="pw_question_id"
+            render={({ field: { value, onChange } }) => (
+              <div className={`relative ${value ? 'pt-2' : ''}`}>
+                <SignInput
+                  label="질문"
+                  id="pw_question_id"
+                  value={selectedQuestion}
+                  readOnly
+                  onClickInput={handleQuestionListToggle}
+                />
+                <div className="absolute top-20">
+                  {isQuestionListOpened && (
+                    <Dropdown ref={questionListRef}>
+                      {passWordList.map((sentence, index) => (
+                        <li
+                          key={sentence}
+                          className="cursor-pointer pb-3 pt-3 hover:bg-gray-100"
+                          onClick={() => {
+                            handleSelectQuestion(sentence, index);
+                            onChange(index + 1);
+                          }}
+                        >
+                          {sentence}
+                        </li>
+                      ))}
+                    </Dropdown>
+                  )}
+                </div>
+              </div>
             )}
-          </div>
-          <SignInput label="답변" id="pw_answer" {...registerList.pw_answer} ref={questionInputRef} />
+          />
+          <SignInput label="답변" id="pw_answer" {...registerList.pw_answer} />
         </section>
 
-        <Button disabled={!isAgree} type="submit" className={buttonStyle}>
+        <Button disabled={!isAgree} onClick={onSubmit} type="submit" className={buttonStyle}>
           회원가입
         </Button>
       </form>
+
       <PlanInputTitle>약관 동의</PlanInputTitle>
-      <div className="flex gap-4">
-        <input
-          type="checkbox"
-          id="is_agreement"
-          //{...registerList.is_agreement}
-          onClick={handleCheckboxClick}
-        />
+      <div className="mt-5 flex gap-4">
+        <input type="checkbox" id="is_agreement" onClick={handleCheckboxClick} />
         <p>개인정보 수집 및 이용 동의</p>
       </div>
-      {!isAgree && <p className="text-red-01">약관에 동의해 주세요</p>}
+      {!isAgree && <p className="mt-3 text-red-01">약관에 동의해 주세요</p>}
     </div>
   );
 }
