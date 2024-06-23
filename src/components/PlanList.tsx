@@ -1,15 +1,22 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-import TravelCard, { TravelCardProps } from '@/components/card/TravelCard';
+import { InfiniteQueryObserverResult, FetchNextPageOptions, InfiniteData } from '@tanstack/react-query';
+
+import { ArticlesResponse } from '@/apis/useArticlesService/type';
+import TravelCard from '@/components/card/TravelCard';
 
 interface PlanListProps {
-  initialData: {
-    totalPages: number;
-    size: number;
-    content: Omit<TravelCardProps, 'onClick'>[];
-  };
+  data: InfiniteData<ArticlesResponse> | undefined;
+  error: Error | null;
+  fetchNextPage: (
+    options?: FetchNextPageOptions
+  ) => Promise<InfiniteQueryObserverResult<InfiniteData<ArticlesResponse>, Error>>;
+  hasNextPage: boolean | undefined;
+  isFetching: boolean;
+  isFetchingNextPage: boolean;
+  status: string;
   isPlanTab: boolean;
 }
 
@@ -17,31 +24,27 @@ const handleClick = (title: string) => {
   alert(`Clicked on ${title}`);
 };
 
-export default function PlanList({ initialData, isPlanTab }: PlanListProps) {
-  const [data, setData] = useState(initialData.content.slice(0, initialData.size));
-  const [currentPage, setCurrentPage] = useState(0);
-  const [hasMore, setHasMore] = useState(currentPage < initialData.totalPages - 1);
+export default function PlanList({
+  data,
+  error,
+  fetchNextPage,
+  hasNextPage,
+  isFetching,
+  isFetchingNextPage,
+  status,
+  isPlanTab
+}: PlanListProps) {
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   const fetchMoreData = () => {
-    if (!hasMore) return;
-
-    const newPage = currentPage + 1;
-    const start = newPage * initialData.size;
-    const end = start + initialData.size;
-    const newData = initialData.content.slice(start, end);
-
-    setData((prevData) => [...prevData, ...newData]);
-    setCurrentPage(newPage);
-
-    if (newPage >= initialData.totalPages - 1) {
-      setHasMore(false);
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
   };
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasMore) {
+      if (entries[0].isIntersecting) {
         fetchMoreData();
       }
     });
@@ -55,9 +58,25 @@ export default function PlanList({ initialData, isPlanTab }: PlanListProps) {
         observer.unobserve(observerRef.current);
       }
     };
-  }, [hasMore, currentPage]);
+  }, [hasNextPage, isFetchingNextPage]);
 
-  if (data.length === 0) {
+  if (status === 'error') {
+    return (
+      <div className="mt-32 flex items-center justify-center">
+        <span className="font-caption-1 text-black-02">오류 발생: {error?.message}</span>
+      </div>
+    );
+  }
+
+  if (status === 'loading') {
+    return (
+      <div className="mt-32 flex items-center justify-center">
+        <span className="font-caption-1 text-black-02">로딩 중...</span>
+      </div>
+    );
+  }
+
+  if (!data || data.pages.length === 0 || data.pages.every((page) => page.content.length === 0)) {
     return (
       <div className="mt-32 flex items-center justify-center">
         <span className="font-caption-1 text-black-02">여행 계획이 없습니다.</span>
@@ -68,29 +87,39 @@ export default function PlanList({ initialData, isPlanTab }: PlanListProps) {
   return (
     <>
       <div className="mx-auto mt-5 flex flex-col items-center gap-4 md:mx-0">
-        {data.map((item) => (
-          <TravelCard
-            key={item.id}
-            id={item.id}
-            title={item.title}
-            city={item.city}
-            startAt={item.startAt}
-            endAt={item.endAt}
-            travelCompanion={item.travelCompanion}
-            travelStyle={item.travelStyle}
-            name={item.name}
-            profileImageUrl={item.profileImageUrl}
-            thumbnailImageUrl={item.thumbnailImageUrl}
-            price={item.price}
-            bookmarkCount={item.bookmarkCount}
-            isBookmarked={item.isBookmarked}
-            isEditable={item.isEditable}
-            isPlanTab={isPlanTab}
-            onClick={() => handleClick(item.title)}
-          />
+        {data.pages.map((page, pageIndex) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <React.Fragment key={pageIndex}>
+            {page.content.map((item) => (
+              <TravelCard
+                key={item.article_id}
+                id={item.article_id.toString()}
+                title={item.title}
+                city={item.location.map((loc) => loc.city)}
+                startAt={item.start_at}
+                endAt={item.end_at}
+                travelCompanion={item.travel_companion}
+                travelStyle={item.travel_styles}
+                name={item.name}
+                profileImageUrl={item.profile_image_url}
+                thumbnailImageUrl={item.cover_image_url}
+                price={item.expense ? Number(item.expense) : 0}
+                bookmarkCount={item.bookmark_count}
+                isBookmarked={item.is_bookmarked}
+                isEditable={item.is_editable}
+                isPlanTab={isPlanTab}
+                onClick={() => handleClick(item.title)}
+              />
+            ))}
+          </React.Fragment>
         ))}
       </div>
-      {hasMore && <div ref={observerRef} style={{ height: '50px' }} />}
+      {hasNextPage && <div ref={observerRef} style={{ height: '50px' }} />}
+      {isFetching && !isFetchingNextPage && (
+        <div className="mt-5 flex items-center justify-center">
+          <span className="font-caption-1 text-black-02">로딩 중...</span>
+        </div>
+      )}
     </>
   );
 }

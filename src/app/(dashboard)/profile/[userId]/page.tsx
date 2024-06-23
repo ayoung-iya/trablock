@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+import useGetArticles from '@/apis/useArticlesService/useGetArticles';
 import getProfileService from '@/apis/useProfileService/fetchGetProfile';
 import updateProfileService from '@/apis/useProfileService/fetchUpdateProfile';
 import ProfileContainer from '@/components/common/profile/ProfileContainer';
@@ -11,8 +12,6 @@ import PlanList from '@/components/PlanList';
 import ReviewList from '@/components/ReviewList';
 import TabBar from '@/components/TabBar';
 
-import bookmarkData from './bookmarkMock.json';
-import planData from './planMock.json';
 import reviewData from './reviewMock.json';
 
 const queryClient = new QueryClient();
@@ -27,6 +26,16 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
     imageUrl: '',
     isEditable: false
   });
+
+  const {
+    data,
+    error: articlesError,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status
+  } = useGetArticles(userId);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -49,10 +58,8 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
   const handleProfileSave = async (newName: string, newIntroduce: string, newImage: File | string | null) => {
     let file;
     if (typeof newImage === 'string' && newImage.startsWith('http')) {
-      // URL인 경우 처리
       file = undefined;
     } else if (typeof newImage === 'object' && newImage !== null) {
-      // 파일인 경우 처리
       file = newImage;
     }
 
@@ -78,11 +85,23 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
   const renderTabContent = () => {
     switch (activeTab) {
       case '여행 계획':
-        return <PlanList key="여행 계획" initialData={planData} isPlanTab />;
+        return (
+          <PlanList
+            key="여행 계획"
+            data={data}
+            error={articlesError}
+            fetchNextPage={fetchNextPage}
+            hasNextPage={hasNextPage}
+            isFetching={isFetching}
+            isFetchingNextPage={isFetchingNextPage}
+            status={status}
+            isPlanTab
+          />
+        );
       case '여행 후기':
         return <ReviewList data={reviewData} />;
       case '북마크':
-        return <PlanList key="북마크" initialData={bookmarkData} isPlanTab={false} />;
+        return <div>데이터</div>;
       default:
         return null;
     }

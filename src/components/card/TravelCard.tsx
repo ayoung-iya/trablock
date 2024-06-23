@@ -12,8 +12,8 @@ export interface TravelCardProps {
   travelCompanion: string;
   travelStyle: string[];
   name: string;
-  profileImageUrl: string;
-  thumbnailImageUrl: string;
+  profileImageUrl: string | null;
+  thumbnailImageUrl: string | null;
   price: number;
   bookmarkCount: number;
   isBookmarked: boolean;
@@ -41,6 +41,8 @@ export default function TravelCard({
   const [menuVisible, setMenuVisible] = useState(false);
 
   const combinedTags = [travelCompanion, ...travelStyle];
+  const imageSrc = thumbnailImageUrl ?? '/icons/article-default.png';
+  const profileSrc = profileImageUrl ?? '/icons/profile-default.svg';
 
   const handleMenuClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -106,11 +108,11 @@ export default function TravelCard({
         </div>
       )}
       {/* 대표 이미지 */}
-      <div className="relative h-[180px] w-full flex-shrink-0 sm:h-[195px] sm:w-[280px]">
+      <div className="relative h-[180px] w-full flex-shrink-0 sm:h-[201px] sm:w-[280px]">
         <ImageBox
           className="h-full w-full object-cover"
-          src={thumbnailImageUrl}
-          alt={thumbnailImageUrl}
+          src={imageSrc}
+          alt="thumbnailImageUrl"
           width={280}
           height={195}
         />
@@ -145,8 +147,8 @@ export default function TravelCard({
           <div className="flex-row-center gap-2">
             <ImageBox
               className="size-full max-h-8 max-w-8 rounded-full"
-              src={profileImageUrl}
-              alt={profileImageUrl}
+              src={profileSrc}
+              alt="profileImageUrl"
               width={8}
               height={8}
             />
