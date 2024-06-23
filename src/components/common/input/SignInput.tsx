@@ -15,10 +15,11 @@ interface SignInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
   label?: string;
   errorMessage?: string;
+  onClickInput?: () => void;
 }
 
 const SignInput = forwardRef(function SignInput(
-  { label, id, errorMessage, ...rest }: SignInputProps,
+  { label, id, errorMessage, onClickInput, ...rest }: SignInputProps,
   ref: React.ForwardedRef<HTMLInputElement>
 ) {
   const isError = !!errorMessage;
@@ -29,6 +30,7 @@ const SignInput = forwardRef(function SignInput(
         className={`${INPUT_STYLE.default} ${INPUT_STYLE.text} ${INPUT_STYLE.focus} ${isError && INPUT_STYLE.error}`}
         id={id}
         ref={ref}
+        onClick={onClickInput}
         {...rest}
       />
       <div className="flex-row-center gap-2 text-gray-01 peer-focus-within:text-primary-01">

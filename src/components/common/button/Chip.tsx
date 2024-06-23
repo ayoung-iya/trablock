@@ -39,7 +39,7 @@ interface ChipProps {
   children: React.ReactNode;
   variant?: Variant;
   selected: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export default function Chip({ className, children, variant = 'default', selected, onClick }: ChipProps) {

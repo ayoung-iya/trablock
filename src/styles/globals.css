@@ -83,6 +83,40 @@ button {
 
 .rdp {
   --rdp-accent-color: #4f80ff;
+  --rdp-cell-size: 32px;
+  margin: 0;
+}
+
+.rdp-day {
+  width: 100%;
+  max-width: none;
+  border-radius: 1.2rem;
+}
+
+.rdp-day_range_middle {
+  border-radius: 0;
+}
+
+.rdp-day_range_end.rdp-day_range_start {
+  border-radius: 1.2rem;
+}
+
+@media (max-width: 510px) {
+  .rdp-table {
+    max-width: 400px;
+  }
+
+  .rdp-cell {
+    width: calc(var(--rdp-cell-size) * 2.1);
+  }
+
+  .rdp-month {
+    margin: 0;
+  }
+
+  .rdp-month:last-child {
+    display: none;
+  }
 }
 
 @layer utilities {
@@ -92,6 +126,9 @@ button {
 
   .flex-col-center {
     @apply flex flex-col items-center;
+  }
+  .flex-col-start {
+    @apply flex flex-col items-start;
   }
 
   .image-cover {
@@ -232,7 +269,33 @@ button {
     font-weight: 700;
     line-height: 130%;
   }
+  .font-signin-1 {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 224%;
+  }
+  .font-signin-2 {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 168%;
+  }
+  .font-signin-button {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 208%;
+  }
 
+  .font-password-find {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 280%;
+  }
+
+  .font-header {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 224%;
+  }
   /* Button Variants */
   .btn-solid {
     @apply bg-primary-01 text-white-01;
