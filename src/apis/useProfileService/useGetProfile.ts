@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 
-import profileService from './fetch';
+import profileService from './fetchGetProfile';
 import { ProfileUserData } from './type';
 
 // 클라이언트 사이드 react-query 훅

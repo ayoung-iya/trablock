@@ -8,17 +8,17 @@ const options: ReturnFetchDefaultOptions = {
   headers: {
     'Content-Type': 'application/json',
     'authorization-token':
-      'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjUsImV4cCI6MTcxODc3NTU4Mn0.T0kJpyrnKv7UysPIEra6bqqq14jF9cgxAj-Vtq5eth4'
+      'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjcsImV4cCI6MTcxOTIwMjg0M30.9a5oghN7lIay1SyhXWe_02aEjavWp9dZePrRPMGTbNE'
   },
   interceptors: {
     request: async (args: any) => {
-      console.log('********* before sending request *********');
+      console.log('********* 요청 전 *********');
       console.log('url:', args[0].toString());
       console.log('requestInit:', args[1], '\n\n');
       return args;
     },
     response: async (response: any, requestArgs: any) => {
-      console.log('********* after receiving response *********');
+      console.log('********* 응답 후 *********');
       console.log('url:', requestArgs[0].toString());
       console.log('requestInit:', requestArgs[1], '\n\n');
       return response;
@@ -28,30 +28,12 @@ const options: ReturnFetchDefaultOptions = {
 
 const fetchService = returnFetch({ fetch: interceptor.logging(options) });
 
-const profileService = {
+const getProfileService = {
   getProfile: async (id: string) => {
     const response = await fetchService(`/api/v1/profile/${id}`, { method: 'GET' });
-    const result = await response.json();
-    return returnData(result);
-  },
-  updateProfile: async (profileData: { username: string; nickname: string; introduce: string; file?: File }) => {
-    const formData = new FormData();
-    formData.append('file', profileData.file as Blob);
-    formData.append(
-      'profile',
-      JSON.stringify({
-        nickname: profileData.nickname,
-        introduce: profileData.introduce
-      })
-    );
-
-    const response = await fetchService(`/api/v1/users/profile`, {
-      method: 'PUT',
-      body: formData
-    });
     const result = await response.json();
     return returnData(result);
   }
 };
 
-export default profileService;
+export default getProfileService;

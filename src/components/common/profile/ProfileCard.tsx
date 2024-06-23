@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useRef } from 'react';
 
 import Button from '@/components/common/button/Button';
@@ -14,7 +15,7 @@ interface ProfileCardProps {
   onEdit: () => void;
   onCancel: () => void;
   onSave: () => void;
-  onImageChange: (newImageUrl: string) => void;
+  onImageChange: (newImage: string | File) => void;
   onNameChange: (newName: string) => void;
   onBioChange: (newBio: string) => void;
   canEdit: boolean;
@@ -105,13 +106,20 @@ export default function ProfileCard({
     );
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      onImageChange(file);
+    }
+  };
+
   return (
     <div className={`relative rounded-lg bg-white-01 p-6 shadow-md ${isDesktop ? 'w-[22rem] pt-10' : 'w-full'}`}>
       <div className={`flex ${isDesktop ? 'flex-col items-center' : 'items-center space-x-4'}`}>
         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
         <div
           className={`relative flex items-center justify-center ${
-            isDesktop ? 'h-[185px] w-[185px]' : isTablet ? 'h-[120px] w-[120px]' : 'h-[80px] w-[80px]'
+            isDesktop ? 'h-[185px] w-[185px]' : isTablet ? 'w/[120px] h-[120px]' : 'w/[80px] h-[80px]'
           }`}
           onClick={handleImageClick}
           role="button"
@@ -129,19 +137,13 @@ export default function ProfileCard({
               <button
                 type="button"
                 onClick={handleButtonClick}
-                // eslint-disable-next-line max-len
                 className={`absolute bottom-0 right-0 flex h-[3.375rem] w-[3.375rem] items-center justify-center rounded-full border-solid border-gray-02 bg-white-01 ${isDesktop ? 'block' : 'hidden'}`}
               >
                 <div className="relative h-8 w-8">
                   <ImageBox src="/icons/camera.svg" alt="Camera Icon" width={8} height={8} className="rounded-full" />
                 </div>
               </button>
-              <input
-                type="file"
-                ref={fileInputRef}
-                className="hidden"
-                onChange={(e) => e.target.files && onImageChange(URL.createObjectURL(e.target.files[0]))}
-              />
+              <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileChange} />
             </>
           )}
         </div>
