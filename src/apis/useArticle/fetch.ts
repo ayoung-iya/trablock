@@ -38,7 +38,7 @@ const ArticleService = {
   postRegisterArticle: async (data: ArticleFormData) => {
     try {
       const formatData: ArticleRequestFormData = formatArticleInitialDataForRequest(data);
-      const response = await fetchService('api/v1/register/article', {
+      const response = await fetchService('api/v1/article', {
         method: 'POST',
         body: JSON.stringify(formatData)
       });
@@ -58,21 +58,24 @@ const ArticleService = {
       throw new Error('no article id');
     }
 
-    const response = await fetchService(`api/v1/find/article/${articleId}`, { method: 'GET' });
+    const response = await fetchService(`api/v1/article/${articleId}`, { method: 'GET' });
     const data = await response.json();
 
     if (!response.ok) {
       throw new Error(data.local_message);
     }
 
+    // console.log(data);
+
     const formattedData: ArticleFormData = formatArticleInitialDataFromResponse(data);
+    // console.log(formattedData);
 
     return formattedData;
   },
   putArticle: async (articleId: string, data: ArticleFormData) => {
     try {
       const formatData: ArticleRequestFormData = formatArticleInitialDataForRequest(data);
-      const response = await fetchService(`/api/v1/update/article/${articleId}`, {
+      const response = await fetchService(`/api/v1/article/${articleId}`, {
         method: 'PUT',
         body: JSON.stringify(formatData)
       });
