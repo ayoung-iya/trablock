@@ -16,7 +16,7 @@ export interface Article {
   name: string;
   bookmark_count: number;
   is_bookmarked: boolean;
-  is_editable: boolean;
+  is_editable?: boolean;
 }
 
 export interface ArticlesResponse {

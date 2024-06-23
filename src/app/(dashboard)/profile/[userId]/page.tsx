@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import useGetArticles from '@/apis/useArticlesService/useGetArticles';
+import { useGetArticles, useGetBookmarks } from '@/apis/useContentService/useGetContent';
 import getProfileService from '@/apis/useProfileService/fetchGetProfile';
 import updateProfileService from '@/apis/useProfileService/fetchUpdateProfile';
 import ProfileContainer from '@/components/common/profile/ProfileContainer';
@@ -28,14 +28,24 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
   });
 
   const {
-    data,
+    data: articlesData,
     error: articlesError,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage,
-    status
+    fetchNextPage: fetchNextArticlesPage,
+    hasNextPage: hasNextArticlesPage,
+    isFetching: isFetchingArticles,
+    isFetchingNextPage: isFetchingNextArticlesPage,
+    status: articlesStatus
   } = useGetArticles(userId);
+
+  const {
+    data: bookmarksData,
+    error: bookmarksError,
+    fetchNextPage: fetchNextBookmarksPage,
+    hasNextPage: hasNextBookmarksPage,
+    isFetching: isFetchingBookmarks,
+    isFetchingNextPage: isFetchingNextBookmarksPage,
+    status: bookmarksStatus
+  } = useGetBookmarks(userId);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -88,20 +98,32 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
         return (
           <PlanList
             key="여행 계획"
-            data={data}
+            data={articlesData}
             error={articlesError}
-            fetchNextPage={fetchNextPage}
-            hasNextPage={hasNextPage}
-            isFetching={isFetching}
-            isFetchingNextPage={isFetchingNextPage}
-            status={status}
+            fetchNextPage={fetchNextArticlesPage}
+            hasNextPage={hasNextArticlesPage}
+            isFetching={isFetchingArticles}
+            isFetchingNextPage={isFetchingNextArticlesPage}
+            status={articlesStatus}
             isPlanTab
           />
         );
       case '여행 후기':
         return <ReviewList data={reviewData} />;
       case '북마크':
-        return <div>데이터</div>;
+        return (
+          <PlanList
+            key="북마크"
+            data={bookmarksData}
+            error={bookmarksError}
+            fetchNextPage={fetchNextBookmarksPage}
+            hasNextPage={hasNextBookmarksPage}
+            isFetching={isFetchingBookmarks}
+            isFetchingNextPage={isFetchingNextBookmarksPage}
+            status={bookmarksStatus}
+            isPlanTab={false}
+          />
+        );
       default:
         return null;
     }

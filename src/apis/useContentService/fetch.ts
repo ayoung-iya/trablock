@@ -28,12 +28,24 @@ const options: ReturnFetchDefaultOptions = {
 
 const fetchService = returnFetch({ fetch: interceptor.logging(options) });
 
+const fetchData = async (url: string) => {
+  const response = await fetchService(url, { method: 'GET' });
+  const result = await response.json();
+  return returnData(result);
+};
+
 const articleService = {
   getArticles: async (userId: string, page: number) => {
-    const response = await fetchService(`/api/v1/articles/${userId}?page=${page}`, { method: 'GET' });
-    const result = await response.json();
-    return returnData(result);
+    const url = `/api/v1/articles/${userId}?page=${page}`;
+    return fetchData(url);
   }
 };
 
-export default articleService;
+const bookmarkService = {
+  getBookmarks: async (userId: string, page: number) => {
+    const url = `/api/v1/bookmarks/${userId}?page=${page}`;
+    return fetchData(url);
+  }
+};
+
+export { articleService, bookmarkService };

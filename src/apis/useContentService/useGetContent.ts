@@ -1,6 +1,6 @@
 import { useInfiniteQuery, QueryFunctionContext } from '@tanstack/react-query';
 
-import articleService from './fetch';
+import { articleService, bookmarkService } from './fetch';
 import { ArticlesResponse } from './type';
 
 const useGetArticles = (userId: string) => {
@@ -17,4 +17,18 @@ const useGetArticles = (userId: string) => {
   });
 };
 
-export default useGetArticles;
+const useGetBookmarks = (userId: string) => {
+  return useInfiniteQuery<ArticlesResponse, Error>({
+    queryKey: ['bookmarks', userId],
+    queryFn: async ({ pageParam = 0 }: QueryFunctionContext) => {
+      return bookmarkService.getBookmarks(userId, pageParam as number);
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage.last) return undefined;
+      return lastPage.pageable.page_number + 1;
+    },
+    initialPageParam: 0
+  });
+};
+
+export { useGetArticles, useGetBookmarks };
