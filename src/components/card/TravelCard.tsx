@@ -1,7 +1,7 @@
-'use client';
-
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
+
+import useToggleBookmark from '@/apis/useContentService/useToggleBookmark';
 
 import ImageBox from '@/components/common/ImageBox';
 
@@ -14,8 +14,8 @@ export interface TravelCardProps {
   travelCompanion: string;
   travelStyle: string[];
   name: string;
-  profileImageUrl: string;
-  thumbnailImageUrl: string;
+  profileImageUrl: string | null;
+  thumbnailImageUrl: string | null;
   price: number;
   bookmarkCount: number;
   isBookmarked: boolean;
@@ -25,6 +25,7 @@ export interface TravelCardProps {
 }
 
 export default function TravelCard({
+  id,
   title,
   city,
   startAt,
@@ -41,8 +42,12 @@ export default function TravelCard({
   onClick
 }: TravelCardProps) {
   const [menuVisible, setMenuVisible] = useState(false);
+  const [bookmarked, setBookmarked] = useState(isBookmarked);
+  const { mutate: toggleBookmark } = useToggleBookmark();
 
   const combinedTags = [travelCompanion, ...travelStyle];
+  const imageSrc = thumbnailImageUrl ?? '/icons/article-default.png';
+  const profileSrc = profileImageUrl ?? '/icons/profile-default.svg';
 
   const handleMenuClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -53,6 +58,15 @@ export default function TravelCard({
     if (menuVisible) {
       setMenuVisible(false);
     }
+  };
+
+  const handleBookmarkClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleBookmark(Number(id), {
+      onSuccess: () => {
+        setBookmarked((prev) => !prev);
+      }
+    });
   };
 
   useEffect(() => {
@@ -76,8 +90,12 @@ export default function TravelCard({
       onKeyPress={onClick}
     >
       {/* 책갈피 아이콘 */}
-      <div className="absolute left-4 top-4 z-10 h-9 w-9 flex-shrink-0 rounded-[5px] bg-white-01 p-2 backdrop-blur-[10px]">
-        {isBookmarked ? (
+      <button
+        type="button"
+        className="absolute left-4 top-4 z-10 h-9 w-9 flex-shrink-0 rounded-[5px] bg-white-01 p-2 backdrop-blur-[10px]"
+        onClick={handleBookmarkClick}
+      >
+        {bookmarked ? (
           <ImageBox
             className="h-full w-full"
             src="/icons/bookmark-filled.svg"
@@ -88,7 +106,7 @@ export default function TravelCard({
         ) : (
           <ImageBox className="h-full w-full" src="/icons/bookmark.svg" alt="not bookmarked" width={18} height={18} />
         )}
-      </div>
+      </button>
       {/* 케밥 메뉴 */}
       {isEditable && isPlanTab && (
         <div className="absolute right-4 top-4">
@@ -108,11 +126,11 @@ export default function TravelCard({
         </div>
       )}
       {/* 대표 이미지 */}
-      <div className="relative h-[180px] w-full flex-shrink-0 sm:h-[195px] sm:w-[280px]">
+      <div className="relative h-[180px] w-full flex-shrink-0 sm:h-[201px] sm:w-[280px]">
         <ImageBox
           className="h-full w-full object-cover"
-          src={thumbnailImageUrl}
-          alt={thumbnailImageUrl}
+          src={imageSrc}
+          alt="thumbnailImageUrl"
           width={280}
           height={195}
         />
@@ -147,8 +165,8 @@ export default function TravelCard({
           <div className="flex-row-center gap-2">
             <ImageBox
               className="size-full max-h-8 max-w-8 rounded-full"
-              src={profileImageUrl}
-              alt={profileImageUrl}
+              src={profileSrc}
+              alt="profileImageUrl"
               width={8}
               height={8}
             />
