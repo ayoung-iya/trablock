@@ -30,7 +30,6 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
 
   const {
     data: articlesData,
-    error: articlesError,
     fetchNextPage: fetchNextArticlesPage,
     hasNextPage: hasNextArticlesPage,
     isFetching: isFetchingArticles,
@@ -41,7 +40,6 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
 
   const {
     data: bookmarksData,
-    error: bookmarksError,
     fetchNextPage: fetchNextBookmarksPage,
     hasNextPage: hasNextBookmarksPage,
     isFetching: isFetchingBookmarks,
@@ -52,7 +50,6 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
 
   const {
     data: reviewsData,
-    error: reviewsError,
     fetchNextPage: fetchNextReviewsPage,
     hasNextPage: hasNextReviewsPage,
     isFetching: isFetchingReviews,
@@ -122,7 +119,6 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
           <PlanList
             key="여행 계획"
             data={articlesData}
-            error={articlesError}
             fetchNextPage={fetchNextArticlesPage}
             hasNextPage={hasNextArticlesPage}
             isFetching={isFetchingArticles}
@@ -136,7 +132,6 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
           <ReviewList
             key="여행 후기"
             data={reviewsData}
-            error={reviewsError}
             fetchNextPage={fetchNextReviewsPage}
             hasNextPage={hasNextReviewsPage}
             isFetching={isFetchingReviews}
@@ -149,7 +144,6 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
           <PlanList
             key="북마크"
             data={bookmarksData}
-            error={bookmarksError}
             fetchNextPage={fetchNextBookmarksPage}
             hasNextPage={hasNextBookmarksPage}
             isFetching={isFetchingBookmarks}

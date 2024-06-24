@@ -11,7 +11,6 @@ import ReviewCard from '@/components/card/ReviewCard';
 
 interface ReviewListProps {
   data: InfiniteData<ReviewsResponse> | undefined;
-  error: Error | null;
   fetchNextPage: (
     options?: FetchNextPageOptions
   ) => Promise<InfiniteQueryObserverResult<InfiniteData<ReviewsResponse>, Error>>;
@@ -27,7 +26,6 @@ const handleClick = (title: string) => {
 
 export default function ReviewList({
   data,
-  error,
   fetchNextPage,
   hasNextPage,
   isFetching,
@@ -59,14 +57,6 @@ export default function ReviewList({
       }
     };
   }, [hasNextPage, isFetchingNextPage]);
-
-  if (status === 'error') {
-    return (
-      <div className="mt-32 flex items-center justify-center">
-        <span className="font-caption-1 text-black-02">오류 발생: {error?.message}</span>
-      </div>
-    );
-  }
 
   if (status === 'loading') {
     return (
