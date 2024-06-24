@@ -17,10 +17,14 @@ const serviceSignin = {
       method: 'POST',
       body: JSON.stringify(data)
     });
+    const responseBody = await response.json();
+
     if (!response.ok) {
-      throw new Error('network errror');
+      const errorMessage = responseBody.local_message || 'An unknown error occurred';
+      throw new Error(errorMessage);
     }
-    return response;
+
+    return { response, responseBody };
   }
 };
 
