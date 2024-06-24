@@ -109,7 +109,7 @@ export default function Page() {
       <>
         {Object.keys(parsedDescription).map((key, index) => (
           <div>
-            <div className="flex w-full flex-col gap-[12px] rounded-xl bg-gray-200 px-[32px] py-[24px] text-[16px]">
+            <div className="flex w-full flex-col gap-[12px] rounded-xl bg-gray-100 px-[32px] py-[24px] text-[16px]">
               <h3 className="text-[20px] font-bold">{key}</h3>
               <p className="text-gray-400">{parsedDescription[key].schedule}</p>
             </div>
@@ -160,6 +160,12 @@ export default function Page() {
             댓글 <span className="text-blue-500">{totalComments}</span>
           </div>
           <div className="flex w-full flex-row gap-2">
+            <img
+              src={data?.profile_img_url || defaultProfile.src}
+              alt="Profile"
+              className="h-12 w-12 rounded-full object-cover"
+            />
+
             <input
               type="text"
               value={commentText}
