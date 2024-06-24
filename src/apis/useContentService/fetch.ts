@@ -1,26 +1,30 @@
+import { redirect } from 'next/navigation';
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
-import interceptor from '@/apis/interceptors/interceptor';
+import API_URL from '@/apis/constants/url';
 import getAuthToken from '@/apis/utils/getAuthToken';
 import { returnData } from '@/apis/utils/utils';
 
-const options: ReturnFetchDefaultOptions = {
-  baseUrl: 'https://be.travel-laboratory.site',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  interceptors: {
-    response: async (response) => {
-      const result = await response.json();
-      if (!response.ok) {
-        console.log('▷▶▷▶ response error', result);
+const options: { [key: string]: ReturnFetchDefaultOptions } = {
+  default: {
+    baseUrl: API_URL.API_BASE_URL,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    interceptors: {
+      response: async (response) => {
+        const result = await response.json();
+        if (!response.ok) {
+          console.log('▷▶▷▶ response error', result);
+          redirect('/');
+        }
+        return result;
       }
-      return result;
     }
   }
 };
 
-const fetchService = returnFetch({ fetch: interceptor.logging(options) });
+const fetchService = returnFetch(options.default);
 
 const fetchData = async (url: string) => {
   const authToken = getAuthToken();
