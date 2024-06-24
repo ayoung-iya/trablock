@@ -34,8 +34,7 @@ const bannerService = {
       method: 'GET',
       headers: authToken ? { 'authorization-token': authToken } : {}
     });
-    const result = await response.json();
-    return returnData(result);
+    return returnData(response);
   }
 };
 
