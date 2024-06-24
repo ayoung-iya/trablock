@@ -198,6 +198,7 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
 
     if (selectedMenu === '후기 보러가기') {
       // 페이지 이동
+      router.push(`/review/${scheduleList.review_id}`);
       console.log('후기 보러가기 페이지 이동');
     }
 
@@ -293,7 +294,7 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
                 )
                   return;
                 if (item === '편집하기' && isEdit) return;
-                if (item === '후기 작성하기' && scheduleList.review_id) return;
+                if (item === '후기 작성하기' && (scheduleList.review_id || scheduleList.schedules.length === 0)) return;
                 if (item === '후기 보러가기' && !scheduleList.review_id) return;
 
                 return (
