@@ -1,5 +1,7 @@
 'use client';
 
+import { useContext } from 'react';
+
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
@@ -8,6 +10,7 @@ import usePostSignin from '@/apis/useSignin/usePostSignin';
 import Button from '@/components/common/button/Button';
 import SignInput from '@/components/common/input/SignInput';
 import { validate } from '@/libs/constants/validation';
+import { LoginContext } from '@/libs/contexts/LoginContext';
 
 export default function SigninForm() {
   const {
@@ -28,15 +31,15 @@ export default function SigninForm() {
     username: watch('username'),
     password: watch('password')
   };
-
+  const { setUserProfileImage, setUserId } = useContext(LoginContext);
   const router = useRouter();
   const onSubmit: SubmitHandler<FieldValues> = () => {
     postSigninMutate(
       { username: payload.username, password: payload.password },
       {
-        onSuccess: (response) => {
+        onSuccess: async (res) => {
           // 쿠키에 토큰두개 , 끝나는 시간 세팅
-
+          const { response, responseBody } = res;
           const authorizationToken = response.headers.get('authorization-token');
           const expiresAt = response.headers.get('authorization-token-expired-at');
           const refreshToken = response.headers.get('refresh-token');
@@ -45,10 +48,15 @@ export default function SigninForm() {
             Cookies.set('authorization-token', authorizationToken, { secure: true });
             Cookies.set('expires-at', expiresAt);
             Cookies.set('refresh-token', refreshToken, { secure: true });
+
+            console.log(responseBody);
+            const { profile_img_url: profileImage, user_id: userId } = responseBody;
+            setUserProfileImage(profileImage);
+            setUserId(userId);
           }
           router.push('/');
         },
-        onError: () => alert('존재하지 않는 이메일입니다.') // 시간나면 에러메세지 가져오기
+        onError: (err) => alert(err) // 시간나면 에러메세지 가져오기
       }
     );
   };
