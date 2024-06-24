@@ -18,6 +18,7 @@ import EmptyResultMessage from '@/components/map/EmptyResultMessage';
 import PlaceSearchResult from '@/components/map/PlaceSearchResult';
 import { TRANSPORT_LIST } from '@/libs/constants/googleMaps';
 import useGoogleMapsPlaceSearch from '@/libs/hooks/useGoogleMapsPlaceSearch';
+import { Transport } from '@/libs/types/commonPlanType.js';
 
 interface PlaceSearchTransportProps {
   className?: string;
