@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import LogoSvg from '@/icons/logo.svg';
-import ProfileDefault from '@/icons/profile-default.svg';
+import ProfileDefault from '@/icons/profile-default.svg?url';
 import SearchSvg from '@/icons/search.svg';
 
 export default function GNB() {

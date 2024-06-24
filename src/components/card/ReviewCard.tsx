@@ -8,8 +8,8 @@ export interface ReviewCardProps {
   imageUrl: string;
   title: string;
   city: string[];
-  name: string;
-  profileImageUrl: string;
+  name?: string;
+  profileImageUrl?: string;
   startAt?: string;
   endAt?: string;
   type?: 'default' | 'main';
@@ -36,6 +36,8 @@ export default function ReviewCard({
     return 'w-[156px] h-[156px] sm:w-[210px] sm:h-[210px] md:w-[236px] md:h-[236px]';
   };
 
+  const profileImageSrc = profileImageUrl || '/icons/profile-default.svg';
+
   return (
     <button
       className={`relative overflow-hidden rounded-lg bg-gray-200 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] ${getClassNames()} `}
@@ -61,7 +63,7 @@ export default function ReviewCard({
                 <div className="relative h-8 w-8 overflow-hidden rounded-full">
                   <ImageBox
                     className="h-full w-full"
-                    src={profileImageUrl}
+                    src={profileImageSrc}
                     alt="profileImageUrl"
                     width={32}
                     height={32}

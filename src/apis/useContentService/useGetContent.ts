@@ -1,3 +1,4 @@
+// useGetContent.ts
 import { useInfiniteQuery, QueryFunctionContext } from '@tanstack/react-query';
 
 import { articleService, bookmarkService } from './fetch';
@@ -7,7 +8,9 @@ const useGetArticles = (userId: string) => {
   return useInfiniteQuery<ArticlesResponse, Error>({
     queryKey: ['articles', userId],
     queryFn: async ({ pageParam = 0 }: QueryFunctionContext) => {
-      return articleService.getArticles(userId, pageParam as number);
+      const data = await articleService.getArticles(userId, pageParam as number);
+      console.log('Fetched articles data:', data);
+      return data;
     },
     getNextPageParam: (lastPage) => {
       if (lastPage.last) return undefined;
@@ -21,7 +24,9 @@ const useGetBookmarks = (userId: string) => {
   return useInfiniteQuery<ArticlesResponse, Error>({
     queryKey: ['bookmarks', userId],
     queryFn: async ({ pageParam = 0 }: QueryFunctionContext) => {
-      return bookmarkService.getBookmarks(userId, pageParam as number);
+      const data = await bookmarkService.getBookmarks(userId, pageParam as number);
+      console.log('Fetched bookmarks data:', data);
+      return data;
     },
     getNextPageParam: (lastPage) => {
       if (lastPage.last) return undefined;

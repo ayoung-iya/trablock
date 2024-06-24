@@ -1,57 +1,48 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
 
-import ReviewCard, { ReviewCardProps } from '@/components/card/ReviewCard';
+import React, { useEffect, useRef } from 'react';
+
+import { InfiniteQueryObserverResult, FetchNextPageOptions, InfiniteData } from '@tanstack/react-query';
+
+import { ReviewsResponse } from '@/apis/useContentService/type';
+import ReviewCard from '@/components/card/ReviewCard';
 
 interface ReviewListProps {
-  data: {
-    total_pages: number;
-    size: number;
-    content: Omit<ReviewCardProps, 'onClick' | 'type'>[];
-    number: number;
-  };
+  data: InfiniteData<ReviewsResponse> | undefined;
+  fetchNextPage: (
+    options?: FetchNextPageOptions
+  ) => Promise<InfiniteQueryObserverResult<InfiniteData<ReviewsResponse>, Error>>;
+  hasNextPage: boolean | undefined;
+  isFetching: boolean;
+  isFetchingNextPage: boolean;
+  status: string;
 }
 
 const handleClick = (title: string) => {
   alert(`Clicked on ${title}`);
 };
 
-export default function ReviewList({ data }: ReviewListProps) {
-  const [cardList, setCardList] = useState(
-    data.content.slice(0, data.size).map((item) => ({
-      ...item,
-      onClick: () => handleClick(item.title),
-      type: 'default' as const
-    }))
-  );
-  const [currentPage, setCurrentPage] = useState(0);
-  const [hasMore, setHasMore] = useState(currentPage < data.total_pages - 1);
+export default function ReviewList({
+  data,
+  fetchNextPage,
+  hasNextPage,
+  isFetching,
+  isFetchingNextPage,
+  status
+}: ReviewListProps) {
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   const fetchMoreData = () => {
-    if (!hasMore) return;
-
-    const newPage = currentPage + 1;
-    const start = newPage * data.size;
-    const end = start + data.size;
-    const newData = data.content.slice(start, end).map((item) => ({
-      ...item,
-      onClick: () => handleClick(item.title),
-      type: 'default' as const
-    }));
-
-    setCardList((prevData) => [...prevData, ...newData]);
-    setCurrentPage(newPage);
-
-    if (newPage >= data.total_pages - 1) {
-      setHasMore(false);
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
   };
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasMore) {
+      if (entries[0].isIntersecting) {
         fetchMoreData();
       }
     });
@@ -65,9 +56,17 @@ export default function ReviewList({ data }: ReviewListProps) {
         observer.unobserve(observerRef.current);
       }
     };
-  }, [hasMore]);
+  }, [hasNextPage, isFetchingNextPage]);
 
-  if (cardList.length === 0) {
+  if (status === 'loading') {
+    return (
+      <div className="mt-32 flex items-center justify-center">
+        <span className="font-caption-1 text-black-02">로딩 중...</span>
+      </div>
+    );
+  }
+
+  if (!data || data.pages.length === 0 || data.pages.every((page) => page.reviews.length === 0)) {
     return (
       <div className="mt-32 flex items-center justify-center">
         <span className="font-caption-1 text-black-02">리뷰가 없습니다.</span>
@@ -79,23 +78,31 @@ export default function ReviewList({ data }: ReviewListProps) {
     <>
       <div className="mt-5 flex w-full justify-center">
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
-          {cardList.map((item) => (
-            <ReviewCard
-              key={item.title}
-              imageUrl={item.imageUrl}
-              title={item.title}
-              city={item.city}
-              name={item.name}
-              profileImageUrl={item.profileImageUrl}
-              startAt={item.startAt}
-              endAt={item.endAt}
-              type="default"
-              onClick={() => handleClick(item.title)}
-            />
+          {data.pages.map((page, pageIndex) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <React.Fragment key={pageIndex}>
+              {page.reviews.map((item) => (
+                <ReviewCard
+                  key={item.review_id}
+                  imageUrl={item.representative_img_url}
+                  title={item.title}
+                  city={item.location.map((loc) => loc.city)}
+                  startAt={item.start_at}
+                  endAt={item.end_at}
+                  type="default"
+                  onClick={() => handleClick(item.title)}
+                />
+              ))}
+            </React.Fragment>
           ))}
         </div>
       </div>
-      {hasMore && <div ref={observerRef} style={{ height: '50px' }} />}
+      {hasNextPage && <div ref={observerRef} style={{ height: '50px' }} />}
+      {isFetching && !isFetchingNextPage && (
+        <div className="mt-5 flex items-center justify-center">
+          <span className="font-caption-1 text-black-02">로딩 중...</span>
+        </div>
+      )}
     </>
   );
 }
