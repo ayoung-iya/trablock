@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import Cookies from 'js-cookie';
 
@@ -13,7 +13,7 @@ export default function Kakaologin() {
 
   const postKakaoTokenMutate = usePostKakaoToken();
   const postKakaoUserData = usePostKakaoUserData();
-  const [isToken, setIsToken] = useState('');
+  // const [isToken, setIsToken] = useState('');
   useEffect(() => {
     if (code) {
       console.log(code);
@@ -21,7 +21,7 @@ export default function Kakaologin() {
         onSuccess: (response) => {
           const { access_token: accessToken } = response;
           Cookies.set('kakao', accessToken);
-          setIsToken(accessToken);
+          // setIsToken(accessToken);
           console.log('토큰 성공');
           console.log(accessToken);
           postKakaoUserData.mutate(accessToken, {
@@ -39,7 +39,7 @@ export default function Kakaologin() {
         }
       });
     }
-  }, [code, isToken]);
+  }, []);
 
   return (
     <div>

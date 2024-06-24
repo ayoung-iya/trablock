@@ -4,7 +4,7 @@ const options: {
   [key: string]: ReturnFetchDefaultOptions;
 } = {
   kakaoUserData: {
-    baseUrl: 'https://kauth.kakao.com',
+    baseUrl: 'https://kapi.kakao.com',
     headers: {
       'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
     }
