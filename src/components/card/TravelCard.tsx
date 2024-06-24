@@ -22,6 +22,7 @@ export interface TravelCardProps {
   isBookmarked: boolean;
   isEditable?: boolean;
   isPlanTab?: boolean;
+  isSearchPage?: boolean;
 }
 
 export default function TravelCard({
@@ -38,7 +39,8 @@ export default function TravelCard({
   bookmarkCount,
   isBookmarked,
   isEditable = false,
-  isPlanTab = false
+  isPlanTab = false,
+  isSearchPage = false
 }: TravelCardProps) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [bookmarked, setBookmarked] = useState(isBookmarked);
@@ -82,7 +84,7 @@ export default function TravelCard({
   }, [menuVisible]);
 
   return (
-    <Link href={`/plan/detail/${id}`} passHref>
+    <Link href={`/plan/detail/${id}`} passHref className={`${isSearchPage ? 'w-full xl:max-w-[590px]' : ''}`}>
       <div
         className="relative flex w-full flex-col overflow-hidden rounded-lg bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] sm:w-full sm:flex-row"
         role="button"
