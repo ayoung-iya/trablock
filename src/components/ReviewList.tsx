@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import React, { useEffect, useRef } from 'react';
 
 import { InfiniteQueryObserverResult, FetchNextPageOptions, InfiniteData } from '@tanstack/react-query';

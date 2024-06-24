@@ -31,6 +31,16 @@ const fetchService = returnFetch({ fetch: interceptor.logging(options) });
 const getProfileService = {
   getProfile: async (id: string) => {
     const response = await fetchService(`/api/v1/profile/${id}`, { method: 'GET' });
+    if (!response.ok) {
+      if (response.status === 400 || response.status === 404) {
+        window.location.href = '/';
+        return;
+      }
+      const errorData = await response.json();
+      const error = new Error(errorData.local_message || 'Failed to fetch profile');
+      (error as any).code = errorData.code;
+      throw error;
+    }
     const result = await response.json();
     return returnData(result);
   }

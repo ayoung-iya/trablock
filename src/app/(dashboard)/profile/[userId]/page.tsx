@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { useGetArticles, useGetBookmarks } from '@/apis/useContentService/useGetContent';
+import useGetReview from '@/apis/useContentService/useGetReview';
 import getProfileService from '@/apis/useProfileService/fetchGetProfile';
 import updateProfileService from '@/apis/useProfileService/fetchUpdateProfile';
 import ProfileContainer from '@/components/common/profile/ProfileContainer';
@@ -12,13 +13,10 @@ import PlanList from '@/components/PlanList';
 import ReviewList from '@/components/ReviewList';
 import TabBar from '@/components/TabBar';
 
-import reviewData from './reviewMock.json';
-
 const queryClient = new QueryClient();
 
 export default function ProfilePage({ params }: { params: { userId: string } }) {
   const { userId } = params;
-
   const [activeTab, setActiveTab] = useState('여행 계획');
   const [profile, setProfile] = useState({
     name: '',
@@ -26,6 +24,7 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
     imageUrl: '',
     isEditable: false
   });
+  const [profileError, setProfileError] = useState(false);
 
   const {
     data: articlesData,
@@ -34,7 +33,8 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
     hasNextPage: hasNextArticlesPage,
     isFetching: isFetchingArticles,
     isFetchingNextPage: isFetchingNextArticlesPage,
-    status: articlesStatus
+    status: articlesStatus,
+    refetch: refetchArticles
   } = useGetArticles(userId);
 
   const {
@@ -44,8 +44,20 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
     hasNextPage: hasNextBookmarksPage,
     isFetching: isFetchingBookmarks,
     isFetchingNextPage: isFetchingNextBookmarksPage,
-    status: bookmarksStatus
+    status: bookmarksStatus,
+    refetch: refetchBookmarks
   } = useGetBookmarks(userId);
+
+  const {
+    data: reviewsData,
+    error: reviewsError,
+    fetchNextPage: fetchNextReviewsPage,
+    hasNextPage: hasNextReviewsPage,
+    isFetching: isFetchingReviews,
+    isFetchingNextPage: isFetchingNextReviewsPage,
+    status: reviewsStatus,
+    refetch: refetchReviews
+  } = useGetReview(userId);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -59,11 +71,28 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
         });
       } catch (error) {
         console.error('Failed to fetch profile:', error);
+        setProfileError(true);
       }
     };
 
     fetchProfile();
   }, [userId]);
+
+  useEffect(() => {
+    if (profileError) {
+      window.location.href = '/'; // 메인 페이지로 리다이렉트
+    }
+  }, [profileError]);
+
+  useEffect(() => {
+    if (activeTab === '여행 계획') {
+      refetchArticles();
+    } else if (activeTab === '여행 후기') {
+      refetchReviews();
+    } else if (activeTab === '북마크') {
+      refetchBookmarks();
+    }
+  }, [activeTab, refetchArticles, refetchReviews, refetchBookmarks]);
 
   const handleProfileSave = async (newName: string, newIntroduce: string, newImage: File | string | null) => {
     let file;
@@ -109,7 +138,18 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
           />
         );
       case '여행 후기':
-        return <ReviewList data={reviewData} />;
+        return (
+          <ReviewList
+            key="여행 후기"
+            data={reviewsData}
+            error={reviewsError}
+            fetchNextPage={fetchNextReviewsPage}
+            hasNextPage={hasNextReviewsPage}
+            isFetching={isFetchingReviews}
+            isFetchingNextPage={isFetchingNextReviewsPage}
+            status={reviewsStatus}
+          />
+        );
       case '북마크':
         return (
           <PlanList
