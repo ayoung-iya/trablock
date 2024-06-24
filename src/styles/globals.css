@@ -488,7 +488,7 @@ button {
   }
 
   .embla {
-    @apply h-96 overflow-hidden;
+    @apply h-96 w-full overflow-hidden;
   }
 
   .embla__container {
