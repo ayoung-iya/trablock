@@ -9,8 +9,11 @@ import Link from 'next/link';
 
 import useGetProfile from '@/apis/useProfileService/useGetProfile';
 import HeaderSearchInput from '@/components/HeaderSearchInput';
+import calendarAdd from '@/icons/calendar-add.svg?url';
 import LogoSvg from '@/icons/logo.svg';
 import ProfileDefault from '@/icons/profile-default.svg?url';
+
+import ImageBox from './ImageBox';
 // import { LoginContext } from '@/libs/contexts/LoginContext';
 
 export default function GNB() {
@@ -48,11 +51,14 @@ export default function GNB() {
         <LogoSvg width={123} height={32} />
       </Link>
       <HeaderSearchInput>
-        <ul className="flex gap-5">
+        <ul className="flex-row-center gap-5">
           <Link href="/plan/initial">
             <li>
-              <button type="button" className="font-header whitespace-nowrap text-primary-01">
+              <button type="button" className="md:font-header hidden md:block md:whitespace-nowrap md:text-primary-01">
                 계획 생성하기
+              </button>
+              <button type="button" className="block md:hidden">
+                <ImageBox src={calendarAdd} alt="계획 생성하기" className="size-[22px]" width={22} height={22} />
               </button>
             </li>
           </Link>
@@ -66,7 +72,10 @@ export default function GNB() {
           ) : (
             <Link href="/login">
               <li>
-                <Image src={ProfileDefault} width={36} height={36} alt="default profile" />
+                <button type="button" className="btn-solid btn-sm">
+                  로그인
+                </button>
+                {/* <Image src={ProfileDefault} width={36} height={36} alt="default profile" /> */}
               </li>
             </Link>
           )}

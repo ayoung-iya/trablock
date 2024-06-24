@@ -17,7 +17,7 @@ export default function Carousel(props: PropType) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 4000 })]);
 
   return (
-    <div className="embla" ref={emblaRef}>
+    <div className="embla xl:-mx-[calc((100vw-1280px)*0.5)]" ref={emblaRef}>
       <div className="embla__container">
         {slides.map((slide, index) => (
           <div className="embla__slide" key={index}>
