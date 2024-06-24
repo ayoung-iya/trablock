@@ -22,3 +22,14 @@ export interface Article {
 }
 
 export type ArticlesResponse = Article[];
+
+export interface Review {
+  review_id: number;
+  title: string;
+  representative_img_url: string;
+  location: Location[];
+  nickname: string;
+  profile_img_url: string;
+}
+
+export type ReviewsResponse = Review[];
