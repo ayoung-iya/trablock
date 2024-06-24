@@ -2,11 +2,9 @@ import { cookies } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import HeaderSearchInput from '@/components/HeaderSearchInput';
 import LogoSvg from '@/icons/logo.svg';
-import ProfileDefault from '@/icons/profile-default.svg';
-// import SearchSvg from '@/icons/search.svg';
-
-import HeaderSearchInput from '../HeaderSearchInput';
+import ProfileDefault from '@/icons/profile-default.svg?url';
 
 export default function GNB() {
   const cookieStore = cookies();
