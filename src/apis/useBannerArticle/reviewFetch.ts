@@ -38,8 +38,8 @@ const fetchData = async (url: string) => {
 };
 
 const reviewService = {
-  getReviews: async (userId: string, page: number) => {
-    const url = `api/v1/users/${userId}/reviews?page=${page}`;
+  getReviews: async () => {
+    const url = `api/v1/banner/reviews`;
     return fetchData(url);
   }
 };

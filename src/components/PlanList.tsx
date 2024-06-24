@@ -57,7 +57,7 @@ export default function PlanList({
   if (status === 'loading') {
     return (
       <div className="mt-32 flex items-center justify-center">
-        <span className="font-caption-1 text-black-02">로딩 중...</span>
+        <span className="font-caption-1 text-black-02"> </span>
       </div>
     );
   }
@@ -72,7 +72,7 @@ export default function PlanList({
 
   return (
     <>
-      <div className="mx-auto mt-5 flex flex-col gap-4 md:mx-0">
+      <div className="mx-auto mt-5 flex flex-col gap-4 p-4 md:mx-0 md:p-0">
         {data.pages.map((page, pageIndex) => (
           // eslint-disable-next-line react/no-array-index-key
           <React.Fragment key={pageIndex}>
@@ -102,7 +102,7 @@ export default function PlanList({
       {hasNextPage && <div ref={observerRef} style={{ height: '50px' }} />}
       {isFetching && !isFetchingNextPage && (
         <div className="mt-5 flex items-center justify-center">
-          <span className="font-caption-1 text-black-02">로딩 중...</span>
+          <span className="font-caption-1 text-black-02"> </span>
         </div>
       )}
     </>
