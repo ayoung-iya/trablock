@@ -20,10 +20,6 @@ interface ReviewListProps {
   status: string;
 }
 
-const handleClick = (title: string) => {
-  alert(`Clicked on ${title}`);
-};
-
 export default function ReviewList({
   data,
   fetchNextPage,
@@ -84,13 +80,13 @@ export default function ReviewList({
               {page.reviews.map((item) => (
                 <ReviewCard
                   key={item.review_id}
+                  reviewId={item.review_id}
                   imageUrl={item.representative_img_url}
                   title={item.title}
                   city={item.location.map((loc) => loc.city)}
                   startAt={item.start_at}
                   endAt={item.end_at}
                   type="default"
-                  onClick={() => handleClick(item.title)}
                 />
               ))}
             </React.Fragment>

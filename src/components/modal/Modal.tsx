@@ -41,7 +41,7 @@ export default function Modal({
     <ReactModal
       isOpen
       className={`fixed-center relative size-full overflow-hidden rounded-[0.625rem] bg-white-01 shadow-modal ${className}`}
-      overlayClassName="bg-overlay fixed-center size-full"
+      overlayClassName="bg-overlay z-[9999] fixed-center size-full"
       onRequestClose={onClose}
       onAfterOpen={onAfterOpen}
       onAfterClose={onAfterClose}

@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 
 import profileService from './fetchGetProfile';
 import { ProfileUserData } from './type';
-
+// fetch
 export default function useGetProfile(id: string) {
   const router = useRouter();
 

@@ -1,7 +1,12 @@
 /* eslint-disable camelcase */
 import { dateRequestFormat } from '@/libs/utils/dateFormatter';
 
-import { ArticleFormData, ArticleRequestFormData } from '../useArticle/article.type';
+import {
+  ArticleFormData,
+  ArticleRequestFormData,
+  GetArticleFormData,
+  GetArticleRequestFormData
+} from '../useArticle/article.type';
 
 export const formatArticleInitialDataForRequest = ({
   title,
@@ -37,9 +42,10 @@ export const formatArticleInitialDataFromResponse = ({
   end_at,
   travel_companion,
   travel_style,
-  expense
-}: ArticleRequestFormData) => {
-  const formatData: ArticleFormData = {
+  expense,
+  is_editable
+}: GetArticleRequestFormData) => {
+  const formatData: GetArticleFormData = {
     title,
     location: location.map(({ place_id, address, city }) => ({ placeId: place_id, address, city })),
     date: {
@@ -47,7 +53,8 @@ export const formatArticleInitialDataFromResponse = ({
       to: new Date(end_at)
     },
     travelCompanion: travel_companion,
-    travelStyle: travel_style || []
+    travelStyle: travel_style || [],
+    isEditable: is_editable
   };
 
   if (expense) {

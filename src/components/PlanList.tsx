@@ -57,7 +57,7 @@ export default function PlanList({
   if (status === 'loading') {
     return (
       <div className="mt-32 flex items-center justify-center">
-        <span className="font-caption-1 text-black-02">로딩 중...</span>
+        <span className="font-caption-1 text-black-02"> </span>
       </div>
     );
   }
@@ -102,7 +102,7 @@ export default function PlanList({
       {hasNextPage && <div ref={observerRef} style={{ height: '50px' }} />}
       {isFetching && !isFetchingNextPage && (
         <div className="mt-5 flex items-center justify-center">
-          <span className="font-caption-1 text-black-02">로딩 중...</span>
+          <span className="font-caption-1 text-black-02"> </span>
         </div>
       )}
     </>
