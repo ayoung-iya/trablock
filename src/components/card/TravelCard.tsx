@@ -4,7 +4,10 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 import useToggleBookmark from '@/apis/useContentService/useToggleBookmark';
+import serviceSchedule from '@/apis/useScheduleService/fetch';
 import ImageBox from '@/components/common/ImageBox';
+import modalList from '@/components/modal/modalList/modalList';
+import useModal from '@/libs/hooks/useModal';
 
 export interface TravelCardProps {
   id: string;
@@ -54,6 +57,8 @@ export default function TravelCard({
 }: TravelCardProps) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [bookmarked, setBookmarked] = useState(isBookmarked);
+
+  const { openModal, closeModal } = useModal();
   const { mutate: toggleBookmark } = useToggleBookmark();
 
   const combinedTags = [travelCompanion, ...travelStyle];
@@ -62,6 +67,7 @@ export default function TravelCard({
 
   const handleMenuClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setMenuVisible(!menuVisible);
   };
 
@@ -81,6 +87,26 @@ export default function TravelCard({
     });
   };
 
+  const handleDeletePlan = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    openModal(
+      modalList.SubmitModal({
+        className: 'h-auto w-[20rem] md:w-[25rem] z-50',
+        text: '일정을 삭제하시겠습니까?',
+        submitText: '삭제하기',
+        negative: true,
+        sameMdPadding: true,
+        onCancel: () => closeModal(),
+        onSubmit: async () => {
+          await serviceSchedule.deleteSchedules(Number(id));
+          closeModal();
+          window.location.reload();
+        }
+      })
+    );
+  };
+
   useEffect(() => {
     if (menuVisible) {
       document.addEventListener('click', handleClickOutside);
@@ -94,9 +120,9 @@ export default function TravelCard({
   }, [menuVisible]);
 
   return (
-    <Link href={`/plan/detail/${id}`} passHref className={`${isSearchPage ? 'w-full xl:max-w-[590px]' : ''}`}>
+    <Link href={`/plan/detail/${id}`} passHref>
       <div
-        className="relative flex w-full flex-col overflow-hidden rounded-lg bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] sm:w-full sm:flex-row"
+        className={`relative flex w-full flex-col overflow-hidden rounded-lg bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] sm:w-full sm:flex-row ${isSearchPage ? 'w-full xl:max-w-[590px]' : ''}`}
         role="button"
         tabIndex={0}
       >
@@ -126,10 +152,11 @@ export default function TravelCard({
             </button>
             {menuVisible && (
               <div className="absolute right-0 mt-2 flex w-[110px] flex-col gap-4 rounded-md bg-white-01 p-4 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]">
-                <button type="button" className="font-btn-text block w-full text-left text-black-01">
-                  수정하기
-                </button>
-                <button type="button" className="font-btn-text block w-full text-left text-red-01">
+                <button
+                  type="button"
+                  className="font-btn-text block w-full cursor-pointer text-left text-red-01"
+                  onClick={handleDeletePlan}
+                >
                   삭제하기
                 </button>
               </div>
