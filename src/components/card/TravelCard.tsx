@@ -25,6 +25,17 @@ export interface TravelCardProps {
   onClick: () => void;
 }
 
+const isValidUrl = (url: string | null): boolean => {
+  if (!url) return false;
+  try {
+    // eslint-disable-next-line no-new
+    new URL(url);
+    return true;
+  } catch (_) {
+    return false;
+  }
+};
+
 export default function TravelCard({
   id,
   title,
@@ -47,8 +58,8 @@ export default function TravelCard({
   const { mutate: toggleBookmark } = useToggleBookmark();
 
   const combinedTags = [travelCompanion, ...travelStyle];
-  const imageSrc = thumbnailImageUrl ?? '/icons/article-default.png';
-  const profileSrc = profileImageUrl ?? '/icons/profile-default.svg';
+  const imageSrc = isValidUrl(thumbnailImageUrl) ? (thumbnailImageUrl as string) : '/icons/article-default.svg';
+  const profileSrc = isValidUrl(profileImageUrl) ? (profileImageUrl as string) : '/icons/profile-default.svg';
 
   const handleMenuClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -168,8 +179,8 @@ export default function TravelCard({
               className="size-full max-h-8 max-w-8 rounded-full"
               src={profileSrc}
               alt="profileImageUrl"
-              width={8}
-              height={8}
+              width={32}
+              height={32}
             />
             <p className="font-caption-2 text-black-01">{name}</p>
           </div>

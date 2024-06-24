@@ -27,15 +27,9 @@ const options: ReturnFetchDefaultOptions = {
 const fetchService = returnFetch({ fetch: interceptor.logging(options) });
 
 const bannerService = {
-  getBannerArticles: async (token?: string) => {
-    const endpoint = token ? '/api/v1/auth/banner/articles' : '/api/v1/banner/articles';
-    // eslint-disable-next-line no-undef
-    const headers: HeadersInit = token
-      ? {
-          'authorization-token': token
-        }
-      : {};
-    const response = await fetchService(endpoint, { method: 'GET', headers });
+  getBannerArticles: async () => {
+    const endpoint = '/api/v1/banner/articles';
+    const response = await fetchService(endpoint, { method: 'GET' });
     const result = await response.json();
     return returnData(result);
   }
