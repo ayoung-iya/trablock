@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
 import API_URL from '@/apis/constants/url';
-import getAuthToken from '@/apis/useScheduleService/getAuthToken';
+import getAuthToken from '@/apis/utils/getAuthToken';
 import { returnData } from '@/apis/utils/utils';
 import { Schedule } from '@/libs/types/dragAndDropType';
 
