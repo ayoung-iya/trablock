@@ -1,6 +1,4 @@
-/* eslint-disable max-len */
-
-'use client';
+('use client');
 
 import { EmblaOptionsType } from 'embla-carousel';
 

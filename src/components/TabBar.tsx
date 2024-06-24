@@ -1,10 +1,3 @@
-// 추후 버튼 들어오면 버튼 컴포넌트로 교체 예정
-
-// page에서 렌더링할 컴포넌트를 관리할 state를 선언해주세요 ex) const [ renderedComponent, setRenderedComponent ] = useSTate;
-// page에서 handleTabBarClick 함수를 관리해주세요.
-// const handleTabBarClick = (tabName) => {
-// setRenderComponent(tabName);}
-
 'use client';
 
 import { useState } from 'react';
@@ -48,8 +41,8 @@ export default function TabBar({ tabBarList, handleTabBarClick, size }: TabBarPr
       hrClassName: 'tab-bar-hr'
     },
     S: {
-      ulClassName: 'justify-around flex gap-16',
-      liClassName: 'flex flex-col gap-3 w-max',
+      ulClassName: 'justify-start flex gap-16',
+      liClassName: 'flex flex-col gap-2 w-max',
       hrClassName: 'tab-bar-hr'
     },
     vertical_M: {
@@ -67,7 +60,7 @@ export default function TabBar({ tabBarList, handleTabBarClick, size }: TabBarPr
   return (
     <nav>
       <ul className={tabBarCss[size].ulClassName}>
-        {tabBarList.map((item) => {
+        {tabBarList.map((item, index) => {
           const className = classNames('tab-bar-button', {
             'tab-bar-button-active': clickedTab === item
           });
@@ -80,7 +73,8 @@ export default function TabBar({ tabBarList, handleTabBarClick, size }: TabBarPr
           );
 
           return (
-            <li className={tabBarCss[size].liClassName}>
+            // eslint-disable-next-line react/no-array-index-key
+            <li key={index} className={tabBarCss[size].liClassName}>
               <button
                 className={className}
                 type="button"

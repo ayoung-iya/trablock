@@ -1,45 +1,51 @@
-// import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-// interface useDropdownParams {
-//   onClickInside?: (e?: MouseEvent) => void;
-// }
+interface useDropdownParams {
+  onClickInside?: (e?: MouseEvent) => void;
+  onClickOutside?: (e?: MouseEvent) => void;
+}
 
-// const useDropdown = ({ onClickInside }: useDropdownParams) => {
-//   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
-//   const ref = useRef<HTMLUListElement>(null);
+const useDropdown = <T extends HTMLElement>({ onClickInside, onClickOutside }: useDropdownParams) => {
+  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  const ref = useRef<T>(null);
 
-//   const handleDropdownOpen = () => {
-//     setIsDropdownOpened(true);
-//   };
+  const handleDropdownOpen = (e?: React.MouseEvent<HTMLElement>) => {
+    e?.stopPropagation();
+    setIsDropdownOpened(true);
+  };
 
-//   const handleDropdownClose = () => {
-//     setIsDropdownOpened(false);
-//   };
+  const handleDropdownClose = (e?: MouseEvent) => {
+    e?.stopPropagation();
+    setIsDropdownOpened(false);
+  };
 
-//   const handleDropdownToggle = (e: MouseEvent) => {
-//     e.stopPropagation();
-//     setIsDropdownOpened((prev) => {
-//       return !prev;
-//     });
-//   };
+  const handleDropdownToggle = (e?: MouseEvent) => {
+    e?.stopPropagation();
+    setIsDropdownOpened((prev) => {
+      return !prev;
+    });
+  };
 
-//   useEffect(() => {
-//     const handleClick = (e: MouseEvent) => {
-//       if (!ref.current) return;
-//       if (ref.current.contains(e.target as Node) && onClickInside) {
-//         onClickInside(e);
-//       }
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (!ref.current) return;
 
-//       handleDropdownClose();
-//     };
+      if (ref.current.contains(e.target as Node) && onClickInside) {
+        onClickInside(e);
+        return;
+      }
 
-//     document.addEventListener('click', handleClick);
-//     return () => {
-//       document.removeEventListener('click', handleClick);
-//     };
-//   }, [ref, onClickInside]);
+      onClickOutside?.(e);
+    };
 
-//   return { ref, isDropdownOpened, handleDropdownOpen, handleDropdownClose, handleDropdownToggle };
-// };
+    document.addEventListener('click', handleClick);
 
-// export default useDropdown;
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  }, [ref, onClickInside, onClickOutside]);
+
+  return { ref, isDropdownOpened, handleDropdownOpen, handleDropdownClose, handleDropdownToggle };
+};
+
+export default useDropdown;

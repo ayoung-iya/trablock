@@ -1,27 +1,23 @@
 import React from 'react';
 
-import Checkbox from './common/input/Checkbox';
+import Chip from '@/components/common/button/Chip';
+import Checkbox from '@/components/common/input/Checkbox';
 
 interface TagCheckBoxListProps {
   tagList: { [key: string]: string };
-  selectedValueList: string[];
+  name?: string;
+  selectedValueList: string[] | string;
   onChangeCheckbox: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-export default function TagCheckboxList({ tagList, selectedValueList, onChangeCheckbox }: TagCheckBoxListProps) {
+export default function TagCheckboxList({ tagList, name, selectedValueList, onChangeCheckbox }: TagCheckBoxListProps) {
   return (
     <div className="flex flex-wrap gap-2">
       {Object.entries(tagList).map(([key, value]) => {
-        const isChecked = selectedValueList.includes(key);
+        const isChecked = selectedValueList.includes(value);
         return (
-          <Checkbox key={key} value={key} id={key} onChange={onChangeCheckbox}>
-            <button
-              type="button"
-              // eslint-disable-next-line max-len
-              className={`font-caption-1 rounded-full border border-solid px-5 py-[7px]  ${isChecked ? 'border-secondary-01 text-secondary-01' : 'border-gray-02 text-black-02'}`}
-            >
-              {value}
-            </button>
+          <Checkbox key={key} value={value} name={name} id={key} onChange={onChangeCheckbox}>
+            <Chip selected={isChecked}>{value}</Chip>
           </Checkbox>
         );
       })}

@@ -83,6 +83,40 @@ button {
 
 .rdp {
   --rdp-accent-color: #4f80ff;
+  --rdp-cell-size: 32px;
+  margin: 0;
+}
+
+.rdp-day {
+  width: 100%;
+  max-width: none;
+  border-radius: 1.2rem;
+}
+
+.rdp-day_range_middle {
+  border-radius: 0;
+}
+
+.rdp-day_range_end.rdp-day_range_start {
+  border-radius: 1.2rem;
+}
+
+@media (max-width: 510px) {
+  .rdp-table {
+    max-width: 400px;
+  }
+
+  .rdp-cell {
+    width: calc(var(--rdp-cell-size) * 2.1);
+  }
+
+  .rdp-month {
+    margin: 0;
+  }
+
+  .rdp-month:last-child {
+    display: none;
+  }
 }
 
 @layer utilities {
@@ -92,6 +126,9 @@ button {
 
   .flex-col-center {
     @apply flex flex-col items-center;
+  }
+  .flex-col-start {
+    @apply flex flex-col items-start;
   }
 
   .image-cover {
@@ -215,7 +252,6 @@ button {
   .font-tag {
     font-size: 14px;
     font-weight: 600;
-    line-height: 130%;
   }
 
   .font-tab-1 {
@@ -233,6 +269,28 @@ button {
     font-weight: 700;
     line-height: 130%;
   }
+  .font-signin-1 {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 224%;
+  }
+  .font-signin-2 {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 168%;
+  }
+  .font-signin-button {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 208%;
+  }
+
+  .font-password-find {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 280%;
+  }
+
   .font-header {
     font-size: 16px;
     font-weight: 700;
@@ -253,6 +311,10 @@ button {
 
   .btn-outline {
     @apply border border-solid border-gray-02 text-black-02;
+  }
+
+  .btn-kakao {
+    @apply border border-solid border-kakao bg-kakao text-black-02;
   }
 
   .btn-gray {
@@ -325,6 +387,7 @@ button {
   /* Custom scrollbar styles */
   .scrollbar-custom::-webkit-scrollbar {
     width: 8px; /* 스크롤바 너비 */
+    height: 8px;
   }
 
   .scrollbar-custom::-webkit-scrollbar-track {
@@ -339,6 +402,51 @@ button {
 
   .scrollbar-custom::-webkit-scrollbar-thumb:hover {
     @apply bg-gray-01; /* 스크롤바 호버 색상 */
+  }
+
+  .filter {
+    width: calc(100vw - 40px);
+  }
+
+  .shadow-box {
+    border-radius: 0.625rem;
+    background-color: #ffffff;
+    box-shadow: 0 0 0.625rem 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .tab-bar-ul {
+    @apply flex justify-start gap-10;
+  }
+
+  .tab-bar-li {
+    @apply flex w-max flex-col gap-2;
+  }
+
+  .tab-bar-li-vertical-M {
+    @apply font-tab-1 flex w-max flex-col gap-1;
+  }
+
+  .tab-bar-li-vertical-L {
+    @apply font-tab-2 flex w-max flex-col gap-2;
+  }
+
+  .tab-bar-button {
+    @apply font-tab-3 flex text-gray-01;
+  }
+
+  .tab-bar-button-active {
+    @apply text-black-01;
+  }
+
+  .tab-bar-hr {
+    @apply border-[1.4px] border-solid opacity-0;
+  }
+  .tab-bar-hr-vertical {
+    @apply border;
+  }
+
+  .tab-bar-hr-active {
+    @apply border-solid border-black-01 opacity-100;
   }
   .tab-bar-ul {
     @apply flex justify-start gap-10;
