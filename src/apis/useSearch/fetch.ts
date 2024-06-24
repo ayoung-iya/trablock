@@ -9,7 +9,7 @@ const options = {
   baseUrl: API_URL.API_BASE_URL,
   headers: {
     'authorization-token':
-      'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsImV4cCI6MTcxOTE5NzQ4MH0.HzJLzj3fZu5oz9B2l79TlabKN37YjO4IwVYFaFkvNY0'
+      'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsImV4cCI6MTcxOTI5MTAxNX0.j9KqAhwZN4eOrAAbub1AJ-s1DYa_9QNWqPHdKV4i7bI'
   }
 };
 
