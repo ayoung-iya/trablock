@@ -31,7 +31,7 @@ const useDropdown = <T extends HTMLElement>({ onClickInside, onClickOutside }: u
       if (!ref.current) return;
 
       if (ref.current.contains(e.target as Node) && onClickInside) {
-        onClickInside();
+        onClickInside(e);
         return;
       }
 

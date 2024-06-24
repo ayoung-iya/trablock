@@ -47,7 +47,9 @@ const serviceFindPassword = {
       method: 'POST',
       body: JSON.stringify(data)
     });
-
+    if (!response.ok) {
+      throw new Error('올바르지 않은 답변입니다.');
+    }
     return response.json();
   },
   postRenewal: async (data: {

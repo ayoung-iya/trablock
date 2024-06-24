@@ -13,6 +13,8 @@ const options: {
 
 const fetchKakao = returnFetch(options.kakaoToken);
 const clientID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
+const redirectURI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
+
 const serviceKakaoLogin = {
   postKakaoToken: async (code: string) => {
     const response = await fetchKakao(`/oauth/token`, {
@@ -20,7 +22,7 @@ const serviceKakaoLogin = {
       body: new URLSearchParams({
         grant_type: 'authorization_code',
         client_id: clientID as string,
-        redirect_uri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI as string,
+        redirect_uri: redirectURI as string,
         code
       })
     });

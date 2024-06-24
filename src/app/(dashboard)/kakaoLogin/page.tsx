@@ -1,58 +1,49 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import useGetKakaoUserData from '@/apis/useGetKakaoUserData/useGetKakaoUserData';
+import Cookies from 'js-cookie';
+
+import usePostKakaoUserData from '@/apis/useGetKakaoUserData/usePostKakaoUserData';
 import usePostKakaoToken from '@/apis/usePostKakao/usePostKakaoToken';
 import useManageKakaoLogin from '@/libs/hooks/useManageKakaoLogin';
-
+// import { useRouter } from 'next/router';
 export default function Kakaologin() {
-  const [accessToken, setAccessToken] = useState('');
-
-  const { code, error, errorMessage } = useManageKakaoLogin();
+  const { code } = useManageKakaoLogin();
 
   const postKakaoTokenMutate = usePostKakaoToken();
-
-  const { data: kakaoUserData, isError, error: userDataError } = useGetKakaoUserData(accessToken);
-
+  const postKakaoUserData = usePostKakaoUserData();
+  // const [isToken, setIsToken] = useState('');
   useEffect(() => {
     if (code) {
       console.log(code);
       postKakaoTokenMutate.mutate(code, {
         onSuccess: (response) => {
-          const { access_token: accessTokens } = response;
-          setAccessToken(accessTokens);
+          const { access_token: accessToken } = response;
+          Cookies.set('kakao', accessToken);
+          // setIsToken(accessToken);
           console.log('토큰 성공');
+          console.log(accessToken);
+          postKakaoUserData.mutate(accessToken, {
+            onSuccess: (res) => {
+              console.log(res);
+            },
+            onError: (error) => {
+              console.log('enqjsWo ', error);
+            }
+          });
+          // router.push('/');
         },
         onError: (err) => {
           console.log(err);
         }
       });
     }
-  }, [code]);
-
-  useEffect(() => {
-    if (kakaoUserData && accessToken) {
-      console.log(accessToken);
-      console.log('userdata');
-      const {
-        profile_nickname: profileNickname,
-        profile_image: profileImage,
-        account_email: accountEmail
-      } = kakaoUserData;
-      // 백엔드로 세개의 데이터 전달
-      console.log(profileImage, profileNickname, accountEmail);
-    }
-
-    if (isError) {
-      console.log('Error fetching user data:', error);
-    }
-  }, [kakaoUserData, isError, userDataError]);
+  }, []);
 
   return (
     <div>
       <p>kakaoLogin</p>
-      {error && <p>오류 : {errorMessage}</p>}
     </div>
   );
 }

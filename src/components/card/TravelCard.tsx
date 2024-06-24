@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import useToggleBookmark from '@/apis/useContentService/useToggleBookmark';
 import ImageBox from '@/components/common/ImageBox';
