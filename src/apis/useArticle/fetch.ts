@@ -1,6 +1,6 @@
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
-import type { ArticleFormData, ArticleRequestFormData } from '@/apis/useArticle/article.type';
+import type { ArticleFormData, ArticleRequestFormData, GetArticleFormData } from '@/apis/useArticle/article.type';
 import getAuthToken from '@/apis/utils/getAuthToken';
 
 import API_URL from '../constants/url';
@@ -61,7 +61,7 @@ const ArticleService = {
       throw new Error(data.local_message);
     }
 
-    const formattedData: ArticleFormData = formatArticleInitialDataFromResponse(data);
+    const formattedData: GetArticleFormData = formatArticleInitialDataFromResponse(data);
 
     return formattedData;
   },
