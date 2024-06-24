@@ -8,7 +8,6 @@ import { Controller, useForm } from 'react-hook-form';
 
 import type { ArticleFormData, CityInfo } from '@/apis/useArticle/article.type';
 import ArticleService from '@/apis/useArticle/fetch';
-import useGetArticle from '@/apis/useArticle/useGetArticle';
 import BadgeWithDelete from '@/components/badge/badgeWithDelete';
 import CitySearchList from '@/components/CitySearchList';
 import Button from '@/components/common/button/Button';
@@ -26,20 +25,31 @@ import useDebounce from '@/libs/hooks/useDebounce';
 import useDropdown from '@/libs/hooks/useDropdown';
 import { dateDotFormat } from '@/libs/utils/dateFormatter';
 
-export default function PlanInitialForm({ articlePageId }: { articlePageId?: string }) {
+export default function PlanInitialForm({
+  articlePageId,
+  articleData
+}: {
+  articlePageId?: string;
+  articleData: ArticleFormData;
+}) {
   const router = useRouter();
+  const [isEditFinished, setIsEditFinished] = useState(false);
 
   const {
     control,
     register,
     getValues,
     handleSubmit,
-    reset,
     formState: { isValid }
   } = useForm<ArticleFormData>({
-    defaultValues: { title: '', location: [], date: {}, travelCompanion: '혼자서', travelStyle: [] }
+    defaultValues: {
+      title: articleData?.title || '',
+      location: articleData?.location || [],
+      date: articleData?.date || {},
+      travelCompanion: articleData?.travelCompanion || '혼자서',
+      travelStyle: articleData?.travelStyle || []
+    }
   });
-  const { data: articleData, isError, error } = useGetArticle(articlePageId);
 
   const [searchString, setSearchString] = useState('');
   const debounceSearchString = useDebounce(searchString, 300);
@@ -109,12 +119,11 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
     if (isEditPage) {
       try {
         await ArticleService.putArticle(articlePageId, formData);
-
-        // TODO: 여행 상세 페이지로 이동
-        router.push(`/plan/detail/${articlePageId}`);
       } catch (err) {
         // TODO: 에러처리
         console.log(err);
+      } finally {
+        setIsEditFinished(true);
       }
 
       return;
@@ -132,15 +141,9 @@ export default function PlanInitialForm({ articlePageId }: { articlePageId?: str
   };
 
   useEffect(() => {
-    if (articleData) {
-      reset(articleData);
-    }
-  }, [articleData, reset]);
-
-  if (isError) {
-    // TODO: 에러처리
-    console.error('error: ', error.message);
-  }
+    console.log('isEditFinished', isEditFinished);
+    if (isEditFinished) window.location.href = `/plan/detail/${articlePageId}`;
+  }, [isEditFinished]);
 
   return (
     <form className="flex w-full min-w-80 flex-col gap-10 pt-10 md:pt-[3.75rem]" onSubmit={handleSubmit(onSubmit)}>
