@@ -23,7 +23,7 @@ export default function GNB() {
       <Link href="/">
         <LogoSvg width={123} height={32} />
       </Link>
-      <div className="flex w-full justify-end gap-5 md:justify-between md:gap-0">
+      <div className={`${skipIcons ? '' : 'flex w-full justify-end gap-5 md:justify-between md:gap-0'}`}>
         {!skipIcons && <HeaderSearchInput />}
         <ul className="flex-row-center gap-5">
           <li className="flex-row-center">
