@@ -24,6 +24,8 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
     imageUrl: '',
     isEditable: false
   });
+
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [profileError, setProfileError] = useState(false);
 
   const {
@@ -79,12 +81,6 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
   }, [userId]);
 
   useEffect(() => {
-    if (profileError) {
-      window.location.href = '/'; // 메인 페이지로 리다이렉트
-    }
-  }, [profileError]);
-
-  useEffect(() => {
     if (activeTab === '여행 계획') {
       refetchArticles();
     } else if (activeTab === '여행 후기') {
@@ -94,12 +90,10 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
     }
   }, [activeTab, refetchArticles, refetchReviews, refetchBookmarks]);
 
-  const handleProfileSave = async (newName: string, newIntroduce: string, newImage: File | string | null) => {
-    let file;
-    if (typeof newImage === 'string' && newImage.startsWith('http')) {
-      file = undefined;
-    } else if (typeof newImage === 'object' && newImage !== null) {
-      file = newImage;
+  const handleProfileSave = async (newName: string, newIntroduce: string, newImage: string | File | null) => {
+    let file: string | File | undefined = newImage || undefined;
+    if (!newImage) {
+      file = profile.imageUrl; // 파일이 없는 경우 기존 프로필 이미지 URL 사용
     }
 
     const updatedProfile = {
