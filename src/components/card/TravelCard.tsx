@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 import useToggleBookmark from '@/apis/useContentService/useToggleBookmark';
+
 import ImageBox from '@/components/common/ImageBox';
 
 export interface TravelCardProps {

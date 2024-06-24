@@ -13,12 +13,14 @@ function useIntersectingState<T extends Element>(initialState?: null): [boolean 
   const [isIntersecting, setIsIntersecting] = useState(initialState === null ? null : false);
   const ref = useRef<T>(null);
 
+  const callback = ([entry]: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+    setIsIntersecting(entry.isIntersecting);
+  };
+
   useEffect(() => {
     if (!ref.current) return;
 
-    const observer = new IntersectionObserver(([entry]) => {
-      setIsIntersecting(entry.isIntersecting);
-    });
+    const observer = new IntersectionObserver(callback);
 
     observer.observe(ref.current);
 
@@ -27,7 +29,7 @@ function useIntersectingState<T extends Element>(initialState?: null): [boolean 
         observer.unobserve(ref.current);
       }
     };
-  }, [ref.current]);
+  }, [ref.current, callback]);
 
   return [isIntersecting, ref];
 }

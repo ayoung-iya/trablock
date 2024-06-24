@@ -399,4 +399,14 @@ button {
   .scrollbar-custom::-webkit-scrollbar-thumb:hover {
     @apply bg-gray-01; /* 스크롤바 호버 색상 */
   }
+
+  .filter {
+    width: calc(100vw - 40px);
+  }
+
+  .shadow-box {
+    border-radius: 0.625rem;
+    background-color: #ffffff;
+    box-shadow: 0 0 0.625rem 0 rgba(0, 0, 0, 0.1);
+  }
 }
