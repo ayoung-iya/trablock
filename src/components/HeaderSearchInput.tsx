@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEventHandler, FormEventHandler, PropsWithChildren, useRef, useState } from 'react';
+import React, { ChangeEventHandler, FormEventHandler, PropsWithChildren, useEffect, useRef, useState } from 'react';
 
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -95,6 +95,10 @@ export default function HeaderSearchInput({ children }: PropsWithChildren) {
     setIsShowInMobile(false);
     handleDropdownClose();
   };
+
+  useEffect(() => {
+    setSearchString(initialSearchString || '');
+  }, [initialSearchString]);
 
   if (!pathname.includes('/profile') && !pathname.includes('/search')) {
     return children;
