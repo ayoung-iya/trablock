@@ -1,25 +1,31 @@
-import returnFetch from 'return-fetch';
+import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
+
+import getAuthToken from '@/apis/utils/getAuthToken';
 
 import API_URL from '../constants/url';
 import { formatSearchDataFromResponse } from '../utils/formatSearchResultData';
 
 const PAGE_SIZE = 10;
 
-const options = {
+const options: ReturnFetchDefaultOptions = {
   baseUrl: API_URL.API_BASE_URL,
-  headers: {
-    'authorization-token':
-      'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsImV4cCI6MTcxOTI5MTAxNX0.j9KqAhwZN4eOrAAbub1AJ-s1DYa_9QNWqPHdKV4i7bI'
-  }
+  headers: {}
 };
 
 const fetchService = returnFetch(options);
 
 const searchService = {
   getSearchResults: async (keyword: string, order: string, page: number) => {
+    const authToken = getAuthToken();
     const orderString = order === 'popularity' ? 'popularity' : '';
     const response = await fetchService(
-      `api/v1/search/article?keyword=${keyword}&page=${page}&size=${PAGE_SIZE}&order=${orderString}`
+      `api/v1/search/article?keyword=${keyword}&page=${page}&size=${PAGE_SIZE}&order=${orderString}`,
+      {
+        method: 'GET',
+        headers: {
+          'authorization-token': authToken
+        }
+      }
     );
 
     const rawData = await response.json();
