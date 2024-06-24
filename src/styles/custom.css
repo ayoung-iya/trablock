@@ -23,16 +23,16 @@
 }
 
 .tab-bar-hr {
-  @apply border-[1.4px];
+  @apply border-[1.4px] border-solid opacity-0;
 }
 .tab-bar-hr-vertical {
   @apply border;
 }
 
 .tab-bar-hr-active {
-  @apply border-black-01;
+  @apply border-solid border-black-01 opacity-100;
 }
 
-.tab-bar-hr {
-  @apply opacity-0;
-}
+/* .tab-bar-hr {
+  @apply;
+} */

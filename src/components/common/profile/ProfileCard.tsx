@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useRef } from 'react';
 
 import Button from '@/components/common/button/Button';
@@ -14,7 +15,7 @@ interface ProfileCardProps {
   onEdit: () => void;
   onCancel: () => void;
   onSave: () => void;
-  onImageChange: (newImageUrl: string) => void;
+  onImageChange: (newImage: string | File) => void;
   onNameChange: (newName: string) => void;
   onBioChange: (newBio: string) => void;
   canEdit: boolean;
@@ -34,7 +35,7 @@ export default function ProfileCard({
   canEdit
 }: ProfileCardProps) {
   const isDesktop = useMediaQuery('(min-width: 1024px)');
-  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
+  const isTablet = useMediaQuery('(min-width: 640px) and (max-width: 1024px)');
   const isMobile = !isTablet && !isDesktop;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -105,6 +106,13 @@ export default function ProfileCard({
     );
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      onImageChange(file);
+    }
+  };
+
   return (
     <div className={`relative rounded-lg bg-white-01 p-6 shadow-md ${isDesktop ? 'w-[22rem] pt-10' : 'w-full'}`}>
       <div className={`flex ${isDesktop ? 'flex-col items-center' : 'items-center space-x-4'}`}>
@@ -129,19 +137,13 @@ export default function ProfileCard({
               <button
                 type="button"
                 onClick={handleButtonClick}
-                // eslint-disable-next-line max-len
                 className={`absolute bottom-0 right-0 flex h-[3.375rem] w-[3.375rem] items-center justify-center rounded-full border-solid border-gray-02 bg-white-01 ${isDesktop ? 'block' : 'hidden'}`}
               >
                 <div className="relative h-8 w-8">
                   <ImageBox src="/icons/camera.svg" alt="Camera Icon" width={8} height={8} className="rounded-full" />
                 </div>
               </button>
-              <input
-                type="file"
-                ref={fileInputRef}
-                className="hidden"
-                onChange={(e) => e.target.files && onImageChange(URL.createObjectURL(e.target.files[0]))}
-              />
+              <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileChange} />
             </>
           )}
         </div>
@@ -157,7 +159,7 @@ export default function ProfileCard({
                 id="name"
                 value={name}
                 onChange={(e) => onNameChange(e.target.value)}
-                className="mb-2 w-full rounded border px-2 py-1"
+                className="mb-2 w-[calc(100%-6rem)] rounded border px-2 py-1 lg:w-full"
                 placeholder="닉네임을 입력하세요"
               />
               <Textarea
