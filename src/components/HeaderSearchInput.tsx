@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+
 'use client';
 
 import React, { ChangeEventHandler, FormEventHandler, PropsWithChildren, useEffect, useRef, useState } from 'react';
@@ -38,7 +40,7 @@ export default function HeaderSearchInput({ children }: PropsWithChildren) {
   const filteredCities = searchString ? selectMatchingCities(searchString as string) : INITIAL_CITIES;
 
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const { ref, isDropdownOpened, handleDropdownOpen, handleDropdownClose } = useDropdown<HTMLUListElement>({
+  const { ref, isDropdownOpened, handleDropdownOpen, handleDropdownClose } = useDropdown<HTMLButtonElement>({
     onClickInside: () => {
       handleDropdownClose();
     },
@@ -142,13 +144,15 @@ export default function HeaderSearchInput({ children }: PropsWithChildren) {
             </button>
           </div>
         </div>
-        <ul
-          // eslint-disable-next-line max-len
-          className={`md:shadow-box my-5 max-h-[90vh] overflow-y-auto ${isDropdownOpened ? 'md:absolute' : 'md:hidden'} md:top-[52px] md:z-10 md:m-0 md:max-h-44 md:w-full md:overflow-y-auto`}
-          ref={ref}
-        >
-          {filteredCities?.map((city) => (
-            <li>
+        <div className="relative w-full shadow-modal">
+          <button
+            // eslint-disable-next-line max-len
+            className={`md:shadow-box my-5 max-h-[90vh] overflow-y-auto ${isDropdownOpened ? 'md:absolute' : 'md:hidden'} md:top-[52px] md:z-10 md:m-0 md:max-h-44 md:w-full md:overflow-y-auto`}
+            ref={ref}
+            type="button"
+          />
+          <div className="absolute top-0">
+            {filteredCities?.map((city) => (
               <Link
                 href={`/search?keyword=${city}`}
                 onClick={handleLinkClick(city)}
@@ -160,9 +164,9 @@ export default function HeaderSearchInput({ children }: PropsWithChildren) {
                   {matchStringBold(city, searchString)}
                 </span>
               </Link>
-            </li>
-          ))}
-        </ul>
+            ))}
+          </div>
+        </div>
       </form>
       {children}
     </div>

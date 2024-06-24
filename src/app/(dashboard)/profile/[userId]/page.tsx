@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 import { useGetArticles, useGetBookmarks } from '@/apis/useContentService/useGetContent';
 import useGetReview from '@/apis/useContentService/useGetReview';
@@ -16,6 +17,7 @@ import TabBar from '@/components/TabBar';
 const queryClient = new QueryClient();
 
 export default function ProfilePage({ params }: { params: { userId: string } }) {
+  const router = useRouter();
   const { userId } = params;
   const [activeTab, setActiveTab] = useState('여행 계획');
   const [profile, setProfile] = useState({
@@ -70,6 +72,7 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
         });
       } catch (error) {
         console.error('Failed to fetch profile:', error);
+        router.push('/');
         setProfileError(true);
       }
     };

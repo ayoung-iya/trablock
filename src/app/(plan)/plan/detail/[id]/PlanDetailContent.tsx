@@ -174,7 +174,7 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
 
   // 여행 계획 편집 페이지로 이동
   const handleEditPlanPage = () => {
-    router.push(`/plan/initial/${articleId}`);
+    window.location.href = `/plan/initial/${articleId}`;
   };
 
   // 드롭다운 선택
@@ -272,11 +272,13 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
           <Button onClick={handleShareButtonClick}>
             <ShareSvg width={24} height={24} />
           </Button>
-          <div ref={divRef}>
-            <Button onClick={(e: any) => handleDropdownToggle(e)}>
-              <KebabSvg width={24} height={24} />
-            </Button>
-          </div>
+          {(scheduleList.is_editable || scheduleList.review_id) && (
+            <div ref={divRef}>
+              <Button onClick={(e: any) => handleDropdownToggle(e)}>
+                <KebabSvg width={24} height={24} />
+              </Button>
+            </div>
+          )}
           {isDropdownOpened && (
             <Dropdown
               className="scrollbar-custom  absolute right-0 top-0 z-10 overflow-auto px-0 py-[0.625rem]"
@@ -322,7 +324,7 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
         </div>
         <div className="flex-row-center gap-4">
           <p className="font-title-2">{planDetail.title}</p>
-          {!isEdit && (
+          {!isEdit && scheduleList.is_editable && (
             <Button onClick={handleEditPlanPage}>
               <PenEditSvg width={24} height={24} />
             </Button>
