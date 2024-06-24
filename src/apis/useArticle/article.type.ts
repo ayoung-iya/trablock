@@ -13,6 +13,10 @@ export interface ArticleFormData {
   travelStyle: string[];
 }
 
+export interface GetArticleFormData extends ArticleFormData {
+  isEditable: boolean;
+}
+
 export interface ArticleRequestFormData {
   title: string;
   location: { place_id: string; address: string; city: string }[];
@@ -22,4 +26,8 @@ export interface ArticleRequestFormData {
   travel_companion: string;
   style?: string[];
   travel_style?: string[];
+}
+
+export interface GetArticleRequestFormData extends ArticleRequestFormData {
+  is_editable: boolean;
 }

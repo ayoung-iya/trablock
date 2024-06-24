@@ -1,10 +1,8 @@
 import axios from 'axios';
-
+import getAuthToken from '@/apis/utils/getAuthToken';
 const API_BASE_URL = 'https://be.travel-laboratory.site/api/v1';
 
-const token =
-  'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjE3LCJleHAiOjE3MTkxMjg2NTl9.hCv-P6tT-l-gCu1FIApDJbU3ZZLeqoCinlEfNs4F7Po';
-
+const token = getAuthToken();
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
