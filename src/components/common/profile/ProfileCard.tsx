@@ -12,7 +12,7 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 interface ProfileCardProps {
   name: string;
   bio?: string;
-  imageUrl?: string;
+  imageUrl?: string | null;
   isEditing: boolean;
   onEdit: () => void;
   onCancel: () => void;
@@ -22,6 +22,17 @@ interface ProfileCardProps {
   onBioChange: (newBio: string) => void;
   canEdit: boolean;
 }
+
+const isValidUrl = (url: string | null): url is string => {
+  if (!url) return false;
+  try {
+    // eslint-disable-next-line no-new
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 export default function ProfileCard({
   name,
@@ -43,7 +54,7 @@ export default function ProfileCard({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const displayBio = bio || '한 줄 소개가 없습니다.';
-  const displayImageUrl = imageUrl || '/icons/profile-default.svg';
+  const displayImageUrl = imageUrl && isValidUrl(imageUrl) ? imageUrl : '/icons/profile-default.svg';
 
   const handleImageClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isDesktop && canEdit && isEditing && fileInputRef.current) {
@@ -121,7 +132,7 @@ export default function ProfileCard({
         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
         <div
           className={`relative flex items-center justify-center ${
-            isDesktop ? 'h-[185px] w-[185px]' : isTablet ? 'h-[120px] w-[120px]' : 'h-[80px] w-[80px]'
+            isDesktop ? 'h-[185px] w-[185px]' : isTablet ? 'h-[120px] w-[120px]' : 'w/[80px] h-[80px]'
           }`}
           onClick={handleImageClick}
           role="button"
@@ -166,7 +177,7 @@ export default function ProfileCard({
               />
               <Textarea
                 id="bio"
-                value={bio}
+                value={bio ?? ''}
                 onChange={(e) => onBioChange(e.target.value)}
                 className="w-full resize-none rounded border px-2 py-1 focus:outline-none"
                 placeholder="한 줄 소개를 입력하세요"

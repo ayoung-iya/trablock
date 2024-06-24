@@ -7,9 +7,13 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 import useToggleBookmark from '@/apis/useContentService/useToggleBookmark';
+import serviceSchedule from '@/apis/useScheduleService/fetch';
+import Badge from '@/components/common/Badge';
 import ImageBox from '@/components/common/ImageBox';
+import modalList from '@/components/modal/modalList/modalList';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import useResizeSize from '@/hooks/useResizeSize';
+import useModal from '@/libs/hooks/useModal';
 
 export interface TravelCardProps {
   id: string;
@@ -30,13 +34,12 @@ export interface TravelCardProps {
   isSearchPage?: boolean;
 }
 
-const isValidUrl = (url: string | null): boolean => {
-  if (!url) return false;
+const isValidUrl = (url: string | null): url is string => {
   try {
     // eslint-disable-next-line no-new
-    new URL(url);
+    new URL(url!);
     return true;
-  } catch (_) {
+  } catch {
     return false;
   }
 };
@@ -60,6 +63,8 @@ export default function TravelCard({
 }: TravelCardProps) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [bookmarked, setBookmarked] = useState(isBookmarked);
+
+  const { openModal, closeModal } = useModal();
   const { mutate: toggleBookmark } = useToggleBookmark();
   const isSmOrLarger = useMediaQuery('(min-width: 640px)');
 
@@ -75,11 +80,12 @@ export default function TravelCard({
   }, [isSmOrLarger, divHeight]);
 
   const combinedTags = [travelCompanion, ...travelStyle];
-  const imageSrc = isValidUrl(thumbnailImageUrl) ? (thumbnailImageUrl as string) : '/icons/article-default.svg';
-  const profileSrc = isValidUrl(profileImageUrl) ? (profileImageUrl as string) : '/icons/profile-default.svg';
+  const imageSrc = isValidUrl(thumbnailImageUrl) ? thumbnailImageUrl : '/icons/article-default.png';
+  const profileSrc = isValidUrl(profileImageUrl) ? profileImageUrl : '/icons/profile-default.svg';
 
   const handleMenuClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setMenuVisible(!menuVisible);
   };
 
@@ -99,6 +105,26 @@ export default function TravelCard({
     });
   };
 
+  const handleDeletePlan = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    openModal(
+      modalList.SubmitModal({
+        className: 'h-auto w-[20rem] md:w-[25rem] z-50',
+        text: '일정을 삭제하시겠습니까?',
+        submitText: '삭제하기',
+        negative: true,
+        sameMdPadding: true,
+        onCancel: () => closeModal(),
+        onSubmit: async () => {
+          await serviceSchedule.deleteSchedules(Number(id));
+          closeModal();
+          window.location.reload();
+        }
+      })
+    );
+  };
+
   useEffect(() => {
     if (menuVisible) {
       document.addEventListener('click', handleClickOutside);
@@ -112,9 +138,9 @@ export default function TravelCard({
   }, [menuVisible]);
 
   return (
-    <Link href={`/plan/detail/${id}`} passHref className={`${isSearchPage ? 'w-full xl:max-w-[590px]' : ''}`}>
+    <Link href={`/plan/detail/${id}`} passHref>
       <div
-        className="relative flex w-full flex-col overflow-hidden rounded-lg bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] sm:w-full sm:flex-row"
+        className={`relative flex w-full flex-col overflow-hidden rounded-lg bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] sm:w-full sm:flex-row ${isSearchPage ? 'w-full xl:max-w-[590px]' : ''}`}
         role="button"
         tabIndex={0}
         ref={divRef}
@@ -146,10 +172,11 @@ export default function TravelCard({
             </button>
             {menuVisible && (
               <div className="absolute right-0 mt-2 flex w-[110px] flex-col gap-4 rounded-md bg-white-01 p-4 shadow-[0_0_10px_0_rgba(0,0,0,0.1)]">
-                <button type="button" className="font-btn-text block w-full text-left text-black-01">
-                  수정하기
-                </button>
-                <button type="button" className="font-btn-text block w-full text-left text-red-01">
+                <button
+                  type="button"
+                  className="font-btn-text block w-full cursor-pointer text-left text-red-01"
+                  onClick={handleDeletePlan}
+                >
                   삭제하기
                 </button>
               </div>
@@ -188,9 +215,9 @@ export default function TravelCard({
             </div>
             <div className="flex-row-center flex-wrap gap-2">
               {combinedTags.map((item) => (
-                <p key={item} className="flex-shrink-0 bg-slate-300">
-                  #{item}
-                </p>
+                <Badge key={item} type="해시태그" className="mr-2">
+                  {item}
+                </Badge>
               ))}
             </div>
           </div>
