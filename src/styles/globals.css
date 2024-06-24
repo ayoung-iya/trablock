@@ -252,7 +252,6 @@ button {
   .font-tag {
     font-size: 14px;
     font-weight: 600;
-    line-height: 130%;
   }
 
   .font-tab-1 {
@@ -312,6 +311,10 @@ button {
 
   .btn-outline {
     @apply border border-solid border-gray-02 text-black-02;
+  }
+
+  .btn-kakao {
+    @apply border-kakao bg-kakao border border-solid text-black-02;
   }
 
   .btn-gray {
@@ -384,6 +387,7 @@ button {
   /* Custom scrollbar styles */
   .scrollbar-custom::-webkit-scrollbar {
     width: 8px; /* 스크롤바 너비 */
+    height: 8px;
   }
 
   .scrollbar-custom::-webkit-scrollbar-track {
