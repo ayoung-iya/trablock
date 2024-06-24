@@ -174,7 +174,7 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
 
   // 여행 계획 편집 페이지로 이동
   const handleEditPlanPage = () => {
-    router.push(`/plan/initial/${articleId}`);
+    window.location.href = `/plan/initial/${articleId}`;
   };
 
   // 드롭다운 선택
