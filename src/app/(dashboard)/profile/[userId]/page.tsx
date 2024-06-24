@@ -25,7 +25,7 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
     isEditable: false
   });
 
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [profileError, setProfileError] = useState(false);
 
   const {
@@ -90,7 +90,7 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
   const handleProfileSave = async (newName: string, newIntroduce: string, newImage: string | File | null) => {
     let file: string | File | undefined = newImage || undefined;
     if (!newImage) {
-      file = profile.imageUrl; // 파일이 없는 경우 기존 프로필 이미지 URL 사용
+      file = profile.imageUrl;
     }
 
     const updatedProfile = {
@@ -168,7 +168,7 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
           <aside className="mb-4 w-full rounded-lg p-4 lg:mb-0 lg:w-[500px]">
             <ProfileContainer profile={profile} onSave={handleProfileSave} canEdit={profile.isEditable} />
           </aside>
-          <main className="flex w-full flex-grow justify-center">
+          <main className="mt-4 flex w-full flex-grow justify-center">
             <div className="w-full max-w-3xl">
               <TabBar
                 tabBarList={['여행 계획', '여행 후기', '북마크']}

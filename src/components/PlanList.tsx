@@ -1,7 +1,5 @@
 'use client';
 
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import React, { useEffect, useRef } from 'react';
 
 import { InfiniteQueryObserverResult, FetchNextPageOptions, InfiniteData } from '@tanstack/react-query';
@@ -20,10 +18,6 @@ interface PlanListProps {
   status: string;
   isPlanTab: boolean;
 }
-
-const handleClick = (title: string) => {
-  alert(`Clicked on ${title}`);
-};
 
 export default function PlanList({
   data,
@@ -78,7 +72,7 @@ export default function PlanList({
 
   return (
     <>
-      <div className="mx-auto mt-5 flex flex-col items-center gap-4 md:mx-0">
+      <div className="mx-auto mt-5 flex flex-col gap-4 md:mx-0">
         {data.pages.map((page, pageIndex) => (
           // eslint-disable-next-line react/no-array-index-key
           <React.Fragment key={pageIndex}>
@@ -100,7 +94,6 @@ export default function PlanList({
                 isBookmarked={item.is_bookmarked}
                 isEditable={item.is_editable}
                 isPlanTab={isPlanTab}
-                onClick={() => handleClick(item.title)}
               />
             ))}
           </React.Fragment>
