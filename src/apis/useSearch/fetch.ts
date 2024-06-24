@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
 import getAuthToken from '@/apis/utils/getAuthToken';
@@ -9,7 +10,19 @@ const PAGE_SIZE = 10;
 
 const options: ReturnFetchDefaultOptions = {
   baseUrl: API_URL.API_BASE_URL,
-  headers: {}
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  interceptors: {
+    response: async (response) => {
+      const result = await response.json();
+      if (!response.ok) {
+        console.log('▷▶▷▶ response error', result);
+        redirect('/');
+      }
+      return result;
+    }
+  }
 };
 
 const fetchService = returnFetch(options);
