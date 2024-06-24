@@ -2,8 +2,11 @@
 
 import React from 'react';
 
+import Link from 'next/link';
+
 import { useGetBanners } from '@/apis/useBannerArticle/useGetBanners';
 import TravelCard from '@/components/card/TravelCard';
+import Button from '@/components/common/button/Button';
 
 export default function BannerList() {
   const { data, isLoading, error } = useGetBanners();
@@ -17,8 +20,17 @@ export default function BannerList() {
   }
 
   return (
-    <>
-      <h2 className="font-title-3 mb-6 w-full text-black-01">HOT 여행 계획 </h2>
+    <div className="container mx-auto">
+      <div className="my-4 flex flex-col items-center justify-between lg:flex-row">
+        <h2 className="font-title-3 mb-6 w-full text-black-01">HOT 여행 계획</h2>
+        <div className="hidden lg:block">
+          <Link href="/search" passHref>
+            <button type="button" className="font-btn-2 whitespace-nowrap text-primary-01">
+              더보기
+            </button>
+          </Link>
+        </div>
+      </div>
       <div className="justify-center">
         <div className="grid gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-5 lg:gap-y-5">
           {data?.map((article) => (
@@ -43,6 +55,11 @@ export default function BannerList() {
           ))}
         </div>
       </div>
-    </>
+      <div className="mt-8  flex justify-center lg:hidden">
+        <Link href="/search" passHref>
+          <Button className="btn-ghost btn-md ">여행 후기 더보기</Button>
+        </Link>
+      </div>
+    </div>
   );
 }
