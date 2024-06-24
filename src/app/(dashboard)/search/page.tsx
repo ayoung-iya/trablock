@@ -24,7 +24,7 @@ export default function Search({ searchParams }: { searchParams: { [key: string]
   }, [isIntersecting, hasNextPage, fetchNextPage, isFetchingNextPage]);
 
   return (
-    <div className="mx-5 my-5">
+    <div className="mx-5 my-5 max-w-[1200px]">
       <h1 className="font-title-2 md:font-title-3 mb-3 whitespace-nowrap">
         {keyword ? `‘${decodeURIComponent(keyword)}’` : '전체'} 여행 계획 검색 결과
       </h1>
@@ -35,7 +35,7 @@ export default function Search({ searchParams }: { searchParams: { [key: string]
         <OrderFilterSection />
       </div>
       <ul className="mt-5 flex flex-wrap gap-[18px] md:gap-5">
-        {data?.pages.flat().map(({ articleId, ...rest }) => <TravelCard id={articleId} {...rest} />)}
+        {data?.pages.flat().map(({ articleId, ...rest }) => <TravelCard id={articleId} {...rest} isSearchPage />)}
         {hasNextPage && !isFetchingNextPage && <li className="h-20 w-full" ref={ref} />}
       </ul>
       {isLoading && <p className="mt-[180px] text-center">로딩 중</p>}
