@@ -29,6 +29,7 @@ const fetchService = returnFetch(options.default);
 const getProfileService = {
   getProfile: async (id: string) => {
     const authToken = getAuthToken();
+
     const response = await fetchService(`api/v1/profile/${id}`, {
       method: 'GET',
       headers: {

@@ -63,8 +63,7 @@ const serviceSchedule = {
         'authorization-token': authToken
       }
     });
-    const result = response.json();
-    return returnData(result);
+    return returnData(response);
   },
   deleteSchedules: async (articleId: number) => {
     const authToken = getAuthToken();

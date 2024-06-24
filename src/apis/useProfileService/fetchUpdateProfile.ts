@@ -9,15 +9,6 @@ const options: { [key: string]: ReturnFetchDefaultOptions } = {
     baseUrl: API_URL.API_BASE_URL,
     headers: {
       'Content-Type': 'application/json'
-    },
-    interceptors: {
-      response: async (response) => {
-        const result = await response.json();
-        if (!response.ok) {
-          console.log('▷▶▷▶ response error', result);
-        }
-        return result;
-      }
     }
   }
 };

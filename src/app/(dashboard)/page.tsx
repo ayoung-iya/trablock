@@ -1,5 +1,10 @@
-/* eslint-disable max-len */
+import LandingSearchInput from '@/components/LandingSearchInput';
 
 export default function home() {
-  return <div>Page</div>;
+  return (
+    <div>
+      Page
+      <LandingSearchInput />
+    </div>
+  );
 }
