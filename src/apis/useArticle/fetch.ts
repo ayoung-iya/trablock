@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
 import type { ArticleFormData, ArticleRequestFormData } from '@/apis/useArticle/article.type';
@@ -20,6 +21,7 @@ const options: ReturnFetchDefaultOptions = {
       const result = await response.json();
       if (!response.ok) {
         console.log('▷▶▷▶ response error', result);
+        redirect('/');
       }
       return response;
     }
