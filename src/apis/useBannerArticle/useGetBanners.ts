@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 
 import bannerService from './fetch';
 import reviewService from './reviewFetch';
-import { Article, Review } from './type';
+import { Article, ReviewsResponse } from './type';
 
-const useGetBanners = () => {
+const useGetPlanBanners = () => {
   return useQuery<Article[], Error>({
     queryKey: ['banners'],
     queryFn: bannerService.getBannerArticles
@@ -12,10 +12,10 @@ const useGetBanners = () => {
 };
 
 const useGetReviewBanners = () => {
-  return useQuery<Review[], Error>({
+  return useQuery<ReviewsResponse, Error>({
     queryKey: ['reviewBanners'],
     queryFn: reviewService.getReviews
   });
 };
 
-export { useGetBanners, useGetReviewBanners };
+export { useGetPlanBanners, useGetReviewBanners };
