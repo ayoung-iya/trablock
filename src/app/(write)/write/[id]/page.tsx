@@ -152,10 +152,12 @@ export default function Page() {
     }));
   };
 
-  const handlePostReview = async () => {
+  const handleSaveAndPublish = async () => {
+    handleButtonClick(); // Save
     try {
-      const response = await postReview(reviewData);
+      const response = await postReview(reviewData); // Publish
       console.log('Response:', response);
+      router.push(`/review/${response.review_id}`);
     } catch (error) {
       console.error('Failed to post review:', error);
     }
@@ -268,17 +270,10 @@ export default function Page() {
         <div className="flex w-full flex-row place-content-end gap-10 px-10">
           <button
             type="button"
-            onClick={handleButtonClick}
+            onClick={handleSaveAndPublish}
             className="rounded bg-green-500 p-2 text-slate-50 hover:bg-blue-700"
           >
             저장하기
-          </button>
-          <button
-            type="button"
-            onClick={handlePostReview}
-            className="rounded bg-blue-500 p-2 text-slate-50 hover:bg-blue-700"
-          >
-            발행하기
           </button>
         </div>
       </div>
