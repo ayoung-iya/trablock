@@ -25,6 +25,16 @@ export interface TravelCardProps {
   isSearchPage?: boolean;
 }
 
+const isValidUrl = (url: string | null): url is string => {
+  try {
+    // eslint-disable-next-line no-new
+    new URL(url!);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 export default function TravelCard({
   id,
   title,
@@ -47,8 +57,8 @@ export default function TravelCard({
   const { mutate: toggleBookmark } = useToggleBookmark();
 
   const combinedTags = [travelCompanion, ...travelStyle];
-  const imageSrc = thumbnailImageUrl ?? '/icons/article-default.png';
-  const profileSrc = profileImageUrl ?? '/icons/profile-default.svg';
+  const imageSrc = isValidUrl(thumbnailImageUrl) ? thumbnailImageUrl : '/icons/article-default.png';
+  const profileSrc = isValidUrl(profileImageUrl) ? profileImageUrl : '/icons/profile-default.svg';
 
   const handleMenuClick = (e: React.MouseEvent) => {
     e.stopPropagation();
