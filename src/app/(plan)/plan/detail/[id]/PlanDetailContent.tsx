@@ -94,6 +94,9 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
   const [coverImage, setCoverImage] = useState(planDetail.cover_image || DefaultCoverImage);
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
 
+  console.log('planDetail', planDetail);
+  console.log('initList', initList);
+
   const router = useRouter();
   const params = useParams();
   const articleId = Number(params.id);
@@ -318,7 +321,7 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
           </p>
         </div>
         <div className="flex-row-center gap-4">
-          <p className="font-title-2">{planDetail.name}</p>
+          <p className="font-title-2">{planDetail.title}</p>
           {!isEdit && (
             <Button onClick={handleEditPlanPage}>
               <PenEditSvg width={24} height={24} />
