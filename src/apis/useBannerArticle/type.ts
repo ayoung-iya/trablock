@@ -29,7 +29,9 @@ export interface Review {
   representative_img_url: string;
   location: Location[];
   nickname: string;
-  profile_img_url: string;
+  profile_img_url: string | null;
 }
 
-export type ReviewsResponse = Review[];
+export interface ReviewsResponse {
+  reviews: Review[];
+}

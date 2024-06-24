@@ -60,7 +60,7 @@ function ToggleButton({ isOn, onClick }: { isOn: boolean } & { onClick: React.Mo
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions, jsx-a11y/interactive-supports-focus
     <div className="flex-row-center" onClick={onClick} role="button">
       <div
-        className={`flex h-5 w-8 items-center rounded-full p-1 transition-colors duration-300 ${isOn ? 'bg-[#4F80FF]' : 'bg-[#DDE2E9]'}`}
+        className={`ml-2 flex h-5 w-8 items-center rounded-full p-1 transition-colors duration-300 ${isOn ? 'bg-[#4F80FF]' : 'bg-[#DDE2E9]'}`}
       >
         <div
           className={`bg-white size-4 transform rounded-full bg-white-01 transition-transform duration-300 ${isOn ? 'translate-x-[0.625rem]' : 'translate-x-[-0.125rem]'}`}

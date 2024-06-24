@@ -4,12 +4,12 @@ import React from 'react';
 
 import Link from 'next/link';
 
-import { useGetBanners } from '@/apis/useBannerArticle/useGetBanners';
+import { useGetPlanBanners } from '@/apis/useBannerArticle/useGetBanners';
 import TravelCard from '@/components/card/TravelCard';
 import Button from '@/components/common/button/Button';
 
 export default function BannerList() {
-  const { data, isLoading, error } = useGetBanners();
+  const { data, isLoading, error } = useGetPlanBanners();
 
   if (isLoading) {
     return <div>Loading...</div>;
