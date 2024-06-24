@@ -13,7 +13,7 @@ const fetchSignin = returnFetch(options.signin);
 
 const serviceSignin = {
   postSignin: async (data: signinProps) => {
-    const response = await fetchSignin('/api/v1/auth/login', {
+    const response = await fetchSignin('api/v1/auth/login', {
       method: 'POST',
       body: JSON.stringify(data)
     });

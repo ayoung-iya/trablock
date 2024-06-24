@@ -36,17 +36,19 @@ export default function SigninForm() {
       {
         onSuccess: (response) => {
           // 쿠키에 토큰두개 , 끝나는 시간 세팅
-          router.push('/');
-          const authorizationToken = response.headers.get('Authorization-Token');
-          const expiresAt = response.headers.get('authorization-token-expired-at');
-          // refresh 도 세팅해야함
 
-          if (authorizationToken && expiresAt) {
+          const authorizationToken = response.headers.get('authorization-token');
+          const expiresAt = response.headers.get('authorization-token-expired-at');
+          const refreshToken = response.headers.get('refresh-token');
+
+          if (authorizationToken && expiresAt && refreshToken) {
             Cookies.set('authorization-token', authorizationToken, { secure: true });
             Cookies.set('expires-at', expiresAt);
+            Cookies.set('refresh-token', refreshToken, { secure: true });
           }
+          router.push('/');
         },
-        onError: (error) => console.error(error)
+        onError: () => alert('존재하지 않는 이메일입니다.') // 시간나면 에러메세지 가져오기
       }
     );
   };

@@ -5,10 +5,11 @@ import Cookies from 'js-cookie';
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
 const authorizationToken = Cookies.get('authorization-token');
+const refreshToken = Cookies.get('refresh-token');
 const headers: HeadersInit = {
   'Content-Type': 'application/json',
-  ...(authorizationToken && { 'Authorization-Token': authorizationToken })
-  //리프레시 토큰도 세팅
+  ...(authorizationToken && { 'Authorization-Token': authorizationToken }),
+  ...(refreshToken && { 'Refresh-Token': refreshToken })
 };
 const options: { [key: string]: ReturnFetchDefaultOptions } = {
   reissue: {
@@ -21,7 +22,7 @@ const fetchReissue = returnFetch(options.reissue);
 
 const serviceReissueToken = {
   postReissueToken: async () => {
-    const response = await fetchReissue('/api/v1/auth/reissue-token', {
+    const response = await fetchReissue('api/v1/auth/reissue-token', {
       method: 'GET'
     });
 
