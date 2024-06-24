@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import useGetProfile from '@/apis/useProfileService/useGetProfile';
 import HeaderSearchInput from '@/components/HeaderSearchInput';
@@ -15,15 +16,25 @@ import logout from '@/icons/logout.svg?url';
 import ProfileDefault from '@/icons/profile-default.svg?url';
 
 import ImageBox from './ImageBox';
-// import { LoginContext } from '@/libs/contexts/LoginContext';
 
 export default function GNB() {
-  // const { userProfileImage, userId } = useContext(LoginContext);
   const [hasCookie, setHasCookie] = useState(false);
-  const [displayImageUrl, setDisplayImageUrl] = useState(ProfileDefault); // 기본 프로필 이미지 URL
+  const [displayImageUrl, setDisplayImageUrl] = useState(ProfileDefault);
   const [decodeId, setDecodeId] = useState('');
 
   const { data: profileData } = useGetProfile(decodeId);
+  const router = useRouter();
+
+  const handleLogout: MouseEventHandler = () => {
+    Cookies.remove('authorization-token');
+    Cookies.remove('expires-at');
+    Cookies.remove('refresh-token');
+
+    setHasCookie(false);
+    setDisplayImageUrl(ProfileDefault);
+    setDecodeId('');
+    router.push('/');
+  };
 
   useEffect(() => {
     const token = Cookies.get('authorization-token');
@@ -45,7 +56,6 @@ export default function GNB() {
       setDisplayImageUrl(profileData.profile_img_url); // 실제 이미지 URL로 대체
     }
   }, [profileData]);
-
   return (
     <nav className="flex-row-center h-[3.75rem] w-full justify-between px-5 md:h-[4.5rem] md:px-7 xl:px-10">
       <Link href="/">
@@ -67,7 +77,7 @@ export default function GNB() {
           {hasCookie ? (
             <>
               <li className="flex-row-center">
-                <button type="button" className="size-6">
+                <button type="button" className="size-6" onClick={handleLogout}>
                   <ImageBox src={logout} alt="로그아웃" className="size-6" width={24} height={24} />
                 </button>
               </li>
