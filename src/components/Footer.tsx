@@ -13,9 +13,9 @@ export default function Footer() {
         <ImageBox className="size-9" src={githubIcon} alt="깃허브" width={36} height={36} />
       </Link>
       <ul className="flex-row-center gap-x-6 text-black-03">
-        <li>서비스 소개</li>
-        <li>이용약관</li>
-        <li>개인정보처리방침</li>
+        <li className="cursor-pointer">서비스 소개</li>
+        <li className="cursor-pointer">이용약관</li>
+        <li className="cursor-pointer">개인정보처리방침</li>
       </ul>
       <div className="flex-row-center">
         <ImageBox className="size-4" src={cIcon} alt="주식회사" width={16} height={16} />
