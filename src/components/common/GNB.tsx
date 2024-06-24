@@ -11,6 +11,7 @@ import useGetProfile from '@/apis/useProfileService/useGetProfile';
 import HeaderSearchInput from '@/components/HeaderSearchInput';
 import calendarAdd from '@/icons/calendar-add.svg?url';
 import LogoSvg from '@/icons/logo.svg';
+import logout from '@/icons/logout.svg?url';
 import ProfileDefault from '@/icons/profile-default.svg?url';
 
 import ImageBox from './ImageBox';
@@ -64,11 +65,18 @@ export default function GNB() {
           </Link>
 
           {hasCookie ? (
-            <Link href={`/profile/${decodeId}`}>
-              <li>
-                <Image src={displayImageUrl} alt="Profile Image" width={36} height={36} className="rounded-full" />
+            <>
+              <li className="flex-row-center">
+                <button type="button" className="size-6">
+                  <ImageBox src={logout} alt="로그아웃" className="size-6" width={24} height={24} />
+                </button>
               </li>
-            </Link>
+              <Link href={`/profile/${decodeId}`}>
+                <li>
+                  <Image src={displayImageUrl} alt="Profile Image" width={36} height={36} className="rounded-full" />
+                </li>
+              </Link>
+            </>
           ) : (
             <Link href="/login">
               <li>
