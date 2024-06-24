@@ -9,7 +9,6 @@ import TravelCard from '@/components/card/TravelCard';
 
 interface PlanListProps {
   data: InfiniteData<ArticlesResponse> | undefined;
-  error: Error | null;
   fetchNextPage: (
     options?: FetchNextPageOptions
   ) => Promise<InfiniteQueryObserverResult<InfiniteData<ArticlesResponse>, Error>>;
@@ -20,13 +19,8 @@ interface PlanListProps {
   isPlanTab: boolean;
 }
 
-const handleClick = (title: string) => {
-  alert(`Clicked on ${title}`);
-};
-
 export default function PlanList({
   data,
-  error,
   fetchNextPage,
   hasNextPage,
   isFetching,
@@ -60,14 +54,6 @@ export default function PlanList({
     };
   }, [hasNextPage, isFetchingNextPage]);
 
-  if (status === 'error') {
-    return (
-      <div className="mt-32 flex items-center justify-center">
-        <span className="font-caption-1 text-black-02">오류 발생: {error?.message}</span>
-      </div>
-    );
-  }
-
   if (status === 'loading') {
     return (
       <div className="mt-32 flex items-center justify-center">
@@ -86,7 +72,7 @@ export default function PlanList({
 
   return (
     <>
-      <div className="mx-auto mt-5 flex flex-col items-center gap-4 md:mx-0">
+      <div className="mx-auto mt-5 flex flex-col gap-4 md:mx-0">
         {data.pages.map((page, pageIndex) => (
           // eslint-disable-next-line react/no-array-index-key
           <React.Fragment key={pageIndex}>
@@ -108,7 +94,6 @@ export default function PlanList({
                 isBookmarked={item.is_bookmarked}
                 isEditable={item.is_editable}
                 isPlanTab={isPlanTab}
-                onClick={() => handleClick(item.title)}
               />
             ))}
           </React.Fragment>

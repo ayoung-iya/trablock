@@ -1,6 +1,7 @@
-import returnFetch from 'return-fetch';
+import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
 import type { ArticleFormData, ArticleRequestFormData } from '@/apis/useArticle/article.type';
+import getAuthToken from '@/apis/utils/getAuthToken';
 
 import API_URL from '../constants/url';
 import interceptor from '../interceptors/interceptor';
@@ -9,24 +10,17 @@ import {
   formatArticleInitialDataFromResponse
 } from '../utils/formatArticleInitialData';
 
-const options = {
+const options: ReturnFetchDefaultOptions = {
   baseUrl: API_URL.API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
-    'authorization-token':
-      'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsImV4cCI6MTcxOTI5MTAxNX0.j9KqAhwZN4eOrAAbub1AJ-s1DYa_9QNWqPHdKV4i7bI'
+    'Content-Type': 'application/json'
   },
   interceptors: {
-    request: async (args: any) => {
-      console.log('********* before sending request *********');
-      console.log('url:', args[0].toString());
-      console.log('requestInit:', args[1], '\n\n');
-      return args;
-    },
-    response: async (response: any, requestArgs: any) => {
-      console.log('********* after receiving response *********');
-      console.log('url:', requestArgs[0].toString());
-      console.log('requestInit:', requestArgs[1], '\n\n');
+    response: async (response) => {
+      const result = await response.json();
+      if (!response.ok) {
+        console.log('▷▶▷▶ response error', result);
+      }
       return response;
     }
   }
@@ -36,11 +30,16 @@ const fetchService = returnFetch({ fetch: interceptor.logging(options) });
 
 const ArticleService = {
   postRegisterArticle: async (data: ArticleFormData) => {
+    const authToken = getAuthToken();
+
     try {
       const formatData: ArticleRequestFormData = formatArticleInitialDataForRequest(data);
       const response = await fetchService('api/v1/article', {
         method: 'POST',
-        body: JSON.stringify(formatData)
+        body: JSON.stringify(formatData),
+        headers: {
+          'authorization-token': authToken
+        }
       });
       const responseData = await response.json();
 
@@ -54,11 +53,17 @@ const ArticleService = {
     }
   },
   getArticle: async (articleId?: string) => {
+    const authToken = getAuthToken();
     if (!articleId) {
       throw new Error('no article id');
     }
 
-    const response = await fetchService(`api/v1/article/${articleId}`, { method: 'GET' });
+    const response = await fetchService(`api/v1/article/${articleId}`, {
+      method: 'GET',
+      headers: {
+        'authorization-token': authToken
+      }
+    });
     const data = await response.json();
 
     if (!response.ok) {
@@ -70,11 +75,15 @@ const ArticleService = {
     return formattedData;
   },
   putArticle: async (articleId: string, data: ArticleFormData) => {
+    const authToken = getAuthToken();
     try {
       const formatData: ArticleRequestFormData = formatArticleInitialDataForRequest(data);
       const response = await fetchService(`/api/v1/article/${articleId}`, {
         method: 'PUT',
-        body: JSON.stringify(formatData)
+        body: JSON.stringify(formatData),
+        headers: {
+          'authorization-token': authToken
+        }
       });
       const responseData = await response.json();
 

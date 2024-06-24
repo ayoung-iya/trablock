@@ -26,17 +26,22 @@ const options: { [key: string]: ReturnFetchDefaultOptions } = {
 
 const fetchService = returnFetch(options.default);
 
-const bookmarkService = {
-  toggleBookmark: async (articleId: number) => {
-    const authToken = getAuthToken();
-    const response = await fetchService(`api/v1/bookmark/${articleId}`, {
-      method: 'PATCH',
-      headers: {
-        'authorization-token': authToken
-      }
-    });
-    return returnData(response);
+const fetchData = async (url: string) => {
+  const authToken = getAuthToken();
+  const response = await fetchService(url, {
+    method: 'GET',
+    headers: {
+      'authorization-token': authToken
+    }
+  });
+  return returnData(response);
+};
+
+const reviewService = {
+  getReviews: async (userId: string, page: number) => {
+    const url = `/api/v1/users/${userId}/reviews?page=${page}`;
+    return fetchData(url);
   }
 };
 
-export default bookmarkService;
+export default reviewService;
