@@ -166,13 +166,13 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="mx-auto max-w-screen-xl p-4">
-        <div className="flex flex-col gap-4 lg:flex-row">
-          <aside className="mb-4 w-full rounded-lg p-4 lg:mb-0 lg:w-[500px]">
+      <div className="mx-auto max-w-screen-xl p-5 md:p-7 lg:pt-14">
+        <div className="flex flex-col gap-4 lg:flex-row lg:gap-10">
+          <aside className="mb-4 w-full rounded-lg lg:mb-0 lg:w-[500px]">
             <ProfileContainer profile={profile} onSave={handleProfileSave} canEdit={profile.isEditable} />
           </aside>
           <main className="mt-4 flex w-full flex-grow justify-center">
-            <div className="w-full max-w-3xl">
+            <div className="w-full">
               <TabBar
                 tabBarList={['여행 계획', '여행 후기', '북마크']}
                 handleTabBarClick={handleTabBarClick}

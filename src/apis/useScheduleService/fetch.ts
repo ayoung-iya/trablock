@@ -46,7 +46,6 @@ const fetchCoverImage = returnFetch(options.coverImage);
 const serviceSchedule = {
   getSchedules: async (articleId: number) => {
     const authToken = getAuthToken();
-    console.log('authToken', authToken);
     const response = await fetchSchedule(`api/v1/articles/${articleId}/schedules`, {
       method: 'GET',
       headers: {
