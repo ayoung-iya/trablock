@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import LogoSvg from '@/icons/logo.svg';
-import ProfileDefault from '@/icons/profile-default.svg';
+import ProfileDefault from '@/icons/profile-default.svg?url';
 import SearchSvg from '@/icons/search.svg';
 
 export default function GNB() {
@@ -37,7 +37,7 @@ export default function GNB() {
         {!hasCookie && (
           <Link href="/login">
             <li>
-              <ProfileDefault width={36} height={36} />
+              <Image src={ProfileDefault} width={36} height={36} alt="profileDefault Image" />
             </li>
           </Link>
         )}

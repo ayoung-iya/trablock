@@ -12,7 +12,7 @@ type PropType = {
   slides: StaticImageData[];
   options?: CarouselOptions;
 };
-const EmblaCarousel = (props: PropType) => {
+export default function Carousel(props: PropType) {
   const { slides, options } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 4000 })]);
 
@@ -27,6 +27,4 @@ const EmblaCarousel = (props: PropType) => {
       </div>
     </div>
   );
-};
-
-export default EmblaCarousel;
+}

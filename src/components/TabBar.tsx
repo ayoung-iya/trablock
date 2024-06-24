@@ -10,7 +10,6 @@
 import { useState } from 'react';
 
 import classNames from 'classnames';
-import '@/styles/custom.css';
 
 /**
  * Props for the TabBar component.
