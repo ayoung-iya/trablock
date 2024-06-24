@@ -1,4 +1,4 @@
-('use client');
+'use client';
 
 import { EmblaOptionsType } from 'embla-carousel';
 
