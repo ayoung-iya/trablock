@@ -1,6 +1,9 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+/* eslint-disable max-len */
+
 'use client';
 
-import React, { ChangeEventHandler, FormEventHandler, PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { ChangeEventHandler, FormEventHandler, PropsWithChildren, useEffect, useRef, useState } from 'react';
 
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -38,7 +41,7 @@ export default function HeaderSearchInput({ children }: PropsWithChildren) {
   const filteredCities = searchString ? selectMatchingCities(searchString as string) : INITIAL_CITIES;
 
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const { ref, isDropdownOpened, handleDropdownOpen, handleDropdownClose } = useDropdown<HTMLUListElement>({
+  const { ref, isDropdownOpened, handleDropdownOpen, handleDropdownClose } = useDropdown<HTMLButtonElement>({
     onClickInside: () => {
       handleDropdownClose();
     },
@@ -111,8 +114,7 @@ export default function HeaderSearchInput({ children }: PropsWithChildren) {
       </button>
       <form
         onSubmit={handleSubmit}
-        // eslint-disable-next-line max-len
-        className={`fixed inset-0 z-20 bg-white-01 px-5 pb-[8px] pt-3 transition-all duration-500 md:relative md:ml-[71px] md:mr-[47px] md:w-full md:min-w-80 md:max-w-[400px] md:translate-x-0 md:p-0 ${isShowInMobile ? '' : 'translate-x-full'}`}
+        className={`fixed inset-0 z-20 bg-white-01 px-5 pb-[8px] pt-3 max-md:transition-all max-md:duration-500 md:relative md:ml-[71px] md:mr-[47px] md:w-full md:min-w-80 md:max-w-[400px] md:translate-x-0 md:p-0 ${isShowInMobile ? '' : 'translate-x-full'}`}
       >
         <div className="flex-row-center gap-3">
           <ImageBox
@@ -142,27 +144,29 @@ export default function HeaderSearchInput({ children }: PropsWithChildren) {
             </button>
           </div>
         </div>
-        <ul
-          // eslint-disable-next-line max-len
-          className={`md:shadow-box my-5 max-h-[90vh] overflow-y-auto ${isDropdownOpened ? 'md:absolute' : 'md:hidden'} md:top-[52px] md:z-10 md:m-0 md:max-h-44 md:w-full md:overflow-y-auto`}
-          ref={ref}
-        >
-          {filteredCities?.map((city) => (
-            <li>
-              <Link
-                href={`/search?keyword=${city}`}
-                onClick={handleLinkClick(city)}
-                // eslint-disable-next-line max-len
-                className="flex-row-center h-[41px] cursor-pointer gap-3 rounded-[5px] px-4 py-2 hover:bg-gray-03 md:h-11 md:py-3"
-              >
-                <SearchIcon className="size-[18px] fill-black-01 md:size-5 md:fill-gray-01" fill="#2d3136" />
-                <span className="text-sm leading-[180%] md:text-base md:font-medium md:leading-[125%]">
-                  {matchStringBold(city, searchString)}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="relative w-full shadow-modal">
+          <button
+            className="md:shadow-box my-5 hidden max-h-[90vh] overflow-y-auto md:top-[52px] md:z-10 md:m-0 md:max-h-44 md:w-full md:overflow-y-auto"
+            ref={ref}
+            type="button"
+          />
+          {isDropdownOpened && (
+            <div className="absolute top-3 w-[calc(100%-30px)] rounded-[0.3125rem] bg-white-01 shadow-modal max-md:left-[30px] md:w-full">
+              {filteredCities?.map((city) => (
+                <Link
+                  href={`/search?keyword=${city}`}
+                  onClick={handleLinkClick(city)}
+                  className="flex-row-center h-[41px] cursor-pointer gap-3 rounded-[5px] px-4 py-2 hover:bg-gray-03 md:h-11 md:py-3"
+                >
+                  <SearchIcon className="size-[18px] fill-black-01 md:size-5 md:fill-gray-01" fill="#2d3136" />
+                  <span className="text-sm leading-[180%] md:text-base md:font-medium md:leading-[125%]">
+                    {matchStringBold(city, searchString)}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
       </form>
       {children}
     </div>

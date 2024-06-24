@@ -120,7 +120,8 @@ export default function SignupForm() {
     pw_answer: register('pw_answer', validate.pw_answer)
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = () => {
+  const onSubmit: SubmitHandler<FieldValues> = (event) => {
+    event.preventDefault();
     const payloadValue = {
       username: payload.username,
       password: payload.password,
@@ -129,7 +130,6 @@ export default function SignupForm() {
       pw_answer: payload.pw_answer,
       is_agreement: true
     };
-    console.log(payloadValue);
     postSignupMutate(payloadValue, {
       onSuccess: () => {
         router.push('/login');
