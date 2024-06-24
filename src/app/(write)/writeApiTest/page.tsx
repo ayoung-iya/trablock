@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 
+import PopularPlaces from '@/components/common/PopluarPlaces/PopularPlaces';
 import { comment, replyComment, getComments, likeComment } from '@/components/textEditor/api/commentApi';
 import { getReview, createArticle, deleteReview, likeReview } from '@/components/textEditor/api/reviewApi';
 
@@ -129,6 +130,7 @@ function Page() {
 
   return (
     <div>
+      <PopularPlaces />
       <div className="flex flex-row flex-wrap gap-10 p-10">
         <button type="button" className="rounded-xl bg-blue-200 p-4" onClick={handleCreateArticle}>
           Create Article
