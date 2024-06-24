@@ -1,14 +1,15 @@
-import { cookies } from 'next/headers';
+'use client';
+
+import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import HeaderSearchInput from '@/components/HeaderSearchInput';
 import LogoSvg from '@/icons/logo.svg';
-import ProfileDefault from '@/icons/profile-default.svg?url';
+import ProfileDefault from '@/icons/profile-default.svg';
 
 export default function GNB() {
-  const cookieStore = cookies();
-  const hasCookie = cookieStore.has('authorization-token');
+  const hasCookie = Cookies.get('authorization-token');
 
   // const headerList = headers();
   // const skipIcons = headerList.get('X-Skip-Icons') === 'true';
