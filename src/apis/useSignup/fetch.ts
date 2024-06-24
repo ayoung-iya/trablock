@@ -31,7 +31,7 @@ const fetchCheckNickname = returnFetch(options.checkNickname);
 
 const serviceSignup = {
   postSignup: async (data: signupProps) => {
-    const response = await fetchSignup('/api/v1/auth/join', {
+    const response = await fetchSignup('api/v1/auth/join', {
       method: 'POST',
       body: JSON.stringify(data)
     });
@@ -39,7 +39,7 @@ const serviceSignup = {
     return result;
   },
   postUsernameCheck: async (data: string) => {
-    const response = await fetchCheckUsername('/api/v1/auth/username', {
+    const response = await fetchCheckUsername('api/v1/auth/username', {
       method: 'POST',
       body: JSON.stringify({ username: data })
     });
@@ -47,7 +47,7 @@ const serviceSignup = {
     return result;
   },
   postNicknameCheck: async (data: string) => {
-    const response = await fetchCheckNickname('/api/v1/auth/nickname', {
+    const response = await fetchCheckNickname('api/v1/auth/nickname', {
       method: 'POST',
       body: JSON.stringify({ nickname: data })
     });
