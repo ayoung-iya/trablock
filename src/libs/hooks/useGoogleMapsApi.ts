@@ -2,7 +2,7 @@
 
 import { useJsApiLoader } from '@react-google-maps/api';
 
-import { LIBRARIES } from '@/constants/googleMaps';
+import { GOOGLE_MAPS, LIBRARIES } from '@/constants/googleMaps';
 
 export type GoogleMapsApiReturn = {
   isLoaded: boolean;
@@ -12,8 +12,7 @@ export type GoogleMapsApiReturn = {
 export default function useGoogleMapsApi(): GoogleMapsApiReturn {
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    // googleMapsApiKey: GOOGLE_MAPS.API_KEY,
-    googleMapsApiKey: 'AIzaSyA60LilY-IBX50TbPKx99qtZkbxI8G1_3Q',
+    googleMapsApiKey: GOOGLE_MAPS.API_KEY,
     libraries: LIBRARIES
   });
 
