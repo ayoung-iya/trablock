@@ -1,5 +1,8 @@
+'use client';
+
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 
 import Link from 'next/link';
 
@@ -8,6 +11,8 @@ import serviceSchedule from '@/apis/useScheduleService/fetch';
 import Badge from '@/components/common/Badge';
 import ImageBox from '@/components/common/ImageBox';
 import modalList from '@/components/modal/modalList/modalList';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import useResizeSize from '@/hooks/useResizeSize';
 import useModal from '@/libs/hooks/useModal';
 
 export interface TravelCardProps {
@@ -61,6 +66,18 @@ export default function TravelCard({
 
   const { openModal, closeModal } = useModal();
   const { mutate: toggleBookmark } = useToggleBookmark();
+  const isSmOrLarger = useMediaQuery('(min-width: 640px)');
+
+  const { divRef, divHeight } = useResizeSize();
+  const [height, setHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (isSmOrLarger) {
+      setHeight(divHeight);
+    } else {
+      setHeight(undefined);
+    }
+  }, [isSmOrLarger, divHeight]);
 
   const combinedTags = [travelCompanion, ...travelStyle];
   const imageSrc = isValidUrl(thumbnailImageUrl) ? thumbnailImageUrl : '/icons/article-default.png';
@@ -126,6 +143,8 @@ export default function TravelCard({
         className={`relative flex w-full flex-col overflow-hidden rounded-lg bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] sm:w-full sm:flex-row ${isSearchPage ? 'w-full xl:max-w-[590px]' : ''}`}
         role="button"
         tabIndex={0}
+        ref={divRef}
+        style={isSmOrLarger && height ? { height } : undefined}
       >
         {/* 책갈피 아이콘 */}
         <button
@@ -165,13 +184,16 @@ export default function TravelCard({
           </div>
         )}
         {/* 대표 이미지 */}
-        <div className="relative h-[180px] w-full flex-shrink-0 sm:h-[201px] sm:w-[280px]">
+        <div
+          className="relative h-[180px] w-full flex-shrink-0 sm:h-[201px] sm:w-[280px]"
+          style={isSmOrLarger ? { height } : undefined}
+        >
           <ImageBox
             className="h-full w-full object-cover"
             src={imageSrc}
             alt="thumbnailImageUrl"
             width={280}
-            height={195}
+            height={isSmOrLarger && height ? height : 201}
           />
         </div>
         {/* 콘텐츠 */}

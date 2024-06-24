@@ -26,22 +26,16 @@ const options: { [key: string]: ReturnFetchDefaultOptions } = {
 
 const fetchService = returnFetch(options.default);
 
-const fetchData = async (url: string) => {
-  const authToken = getAuthToken();
-  const response = await fetchService(url, {
-    method: 'GET',
-    headers: {
-      'authorization-token': authToken
-    }
-  });
-  return returnData(response);
-};
-
-const reviewService = {
-  getReviews: async (userId: string, page: number) => {
-    const url = `api/v1/users/${userId}/reviews?page=${page}`;
-    return fetchData(url);
+const bannerService = {
+  getBannerArticles: async () => {
+    const authToken = getAuthToken();
+    const endpoint = authToken ? '/api/v1/auth/banner/articles' : '/api/v1/banner/articles';
+    const response = await fetchService(endpoint, {
+      method: 'GET',
+      headers: authToken ? { 'authorization-token': authToken } : {}
+    });
+    return returnData(response);
   }
 };
 
-export default reviewService;
+export default bannerService;

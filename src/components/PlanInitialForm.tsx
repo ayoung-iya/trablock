@@ -30,7 +30,7 @@ export default function PlanInitialForm({
   articleData
 }: {
   articlePageId?: string;
-  articleData: ArticleFormData;
+  articleData?: ArticleFormData;
 }) {
   const router = useRouter();
   const [isEditFinished, setIsEditFinished] = useState(false);
