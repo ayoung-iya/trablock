@@ -7,7 +7,7 @@ import { StaticImageData } from 'next/image';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import Image from 'next/image';
-import '@/styles/custom.css';
+
 type PropType = {
   slides: StaticImageData[];
   options?: CarouselOptions;
