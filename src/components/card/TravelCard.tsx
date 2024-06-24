@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 import useToggleBookmark from '@/apis/useContentService/useToggleBookmark';
 import serviceSchedule from '@/apis/useScheduleService/fetch';
+import Badge from '@/components/common/Badge';
 import ImageBox from '@/components/common/ImageBox';
 import modalList from '@/components/modal/modalList/modalList';
 import useModal from '@/libs/hooks/useModal';
@@ -192,9 +193,9 @@ export default function TravelCard({
             </div>
             <div className="flex-row-center flex-wrap gap-2">
               {combinedTags.map((item) => (
-                <p key={item} className="flex-shrink-0 bg-slate-300">
-                  #{item}
-                </p>
+                <Badge key={item} type="해시태그" className="mr-2">
+                  {item}
+                </Badge>
               ))}
             </div>
           </div>
