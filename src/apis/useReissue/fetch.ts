@@ -3,14 +3,16 @@
 
 import Cookies from 'js-cookie';
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
-
+import { cookies } from 'next/headers';
 const authorizationToken = Cookies.get('authorization-token');
 const refreshToken = Cookies.get('refresh-token');
+
 const headers: HeadersInit = {
   'Content-Type': 'application/json',
   ...(authorizationToken && { 'Authorization-Token': authorizationToken }),
   ...(refreshToken && { 'Refresh-Token': refreshToken })
 };
+
 const options: { [key: string]: ReturnFetchDefaultOptions } = {
   reissue: {
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
