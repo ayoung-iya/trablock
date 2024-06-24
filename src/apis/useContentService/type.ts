@@ -33,3 +33,26 @@ export interface ArticlesResponse {
   first: boolean;
   empty: boolean;
 }
+
+export interface Location {
+  place_id: string;
+  address: string;
+  city: string;
+}
+
+export interface Review {
+  review_id: number;
+  title: string;
+  representative_img_url: string;
+  location: Location[];
+  start_at: string;
+  end_at: string;
+}
+
+export interface ReviewsResponse {
+  reviews: Review[];
+  current_page: number;
+  page_size: number;
+  total_pages: number;
+  total_comment: number;
+}

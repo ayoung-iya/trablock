@@ -78,11 +78,12 @@ export default function TravelCard({
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menuVisible]);
 
   return (
     <div
-      className="relative flex w-full max-w-[320px] flex-col overflow-hidden rounded-lg bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] sm:max-w-[320px] sm:max-w-[730px] sm:flex-row"
+      className="relative flex w-full max-w-[320px] flex-col overflow-hidden rounded-lg bg-white-01 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] sm:max-w-[730px] sm:flex-row"
       role="button"
       tabIndex={0}
       onClick={onClick}
