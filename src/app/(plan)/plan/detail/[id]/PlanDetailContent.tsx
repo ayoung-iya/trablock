@@ -94,6 +94,9 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
   const [coverImage, setCoverImage] = useState(planDetail.cover_image || DefaultCoverImage);
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
 
+  console.log('planDetail', planDetail);
+  console.log('initList', initList);
+
   const router = useRouter();
   const params = useParams();
   const articleId = Number(params.id);
