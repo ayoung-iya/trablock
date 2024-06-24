@@ -17,7 +17,8 @@ export function middleware(request: NextRequest) {
     url !== '/kakaoLogin' &&
     url !== '/find-password-email' &&
     url !== '/find-password-question' &&
-    url !== '/find-password-newpassword'
+    url !== '/find-password-newpassword' &&
+    url !== '/plan/initial'
   ) {
     // 아예 로그인 경력이 없을 때
     return NextResponse.redirect(new URL('/login', request.url));
