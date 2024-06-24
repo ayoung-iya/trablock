@@ -1,9 +1,9 @@
 'use client';
 
-import { ChangeEventHandler, FormEventHandler, useRef, useState } from 'react';
+import React, { ChangeEventHandler, FormEventHandler, PropsWithChildren, useRef, useState } from 'react';
 
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import arrowIcon from '@/icons/arrow-left.svg?url';
 import SearchIcon from '@/icons/search-custom-color.svg';
@@ -27,9 +27,10 @@ const matchStringBold = (city: string, matchString: string) => {
   );
 };
 
-export default function HeaderSearchInput() {
+export default function HeaderSearchInput({ children }: PropsWithChildren) {
   const params = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
   const initialSearchString = params.get('keyword');
 
   const [searchString, setSearchString] = useState(initialSearchString || '');
@@ -95,8 +96,12 @@ export default function HeaderSearchInput() {
     handleDropdownClose();
   };
 
+  if (!pathname.includes('/profile') && !pathname.includes('/search')) {
+    return children;
+  }
+
   return (
-    <>
+    <div className="flex w-full justify-end gap-5 md:justify-between md:gap-0">
       <button type="button" onClick={handleMobileShow}>
         <SearchIcon className="size-[22px] fill-black-01 md:hidden" />
       </button>
@@ -155,6 +160,7 @@ export default function HeaderSearchInput() {
           ))}
         </ul>
       </form>
-    </>
+      {children}
+    </div>
   );
 }

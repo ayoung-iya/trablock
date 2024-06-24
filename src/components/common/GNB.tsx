@@ -1,17 +1,19 @@
-import { cookies, headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import LogoSvg from '@/icons/logo.svg';
 import ProfileDefault from '@/icons/profile-default.svg';
-import SearchSvg from '@/icons/search.svg';
+// import SearchSvg from '@/icons/search.svg';
+
+import HeaderSearchInput from '../HeaderSearchInput';
 
 export default function GNB() {
   const cookieStore = cookies();
   const hasCookie = cookieStore.has('authorization-token');
 
-  const headerList = headers();
-  const skipIcons = headerList.get('X-Skip-Icons') === 'true';
+  // const headerList = headers();
+  // const skipIcons = headerList.get('X-Skip-Icons') === 'true';
   // imageurl 받아야함. (profile 받을 때 받는걸루 )
   const displayImageUrl = '';
 
@@ -20,30 +22,31 @@ export default function GNB() {
       <Link href="/">
         <LogoSvg width={123} height={32} />
       </Link>
-      <ul className="flex gap-5">
-        <li>{!skipIcons && <SearchSvg width={24} height={24} />}</li>
-        <Link href="/plan/initial">
-          <li>
-            <button type="button" className="font-header text-primary-01">
-              계획 생성하기
-            </button>
-          </li>
-        </Link>
-        {hasCookie && (
-          <Link href="/profile">
+      <HeaderSearchInput>
+        <ul className="flex gap-5">
+          <Link href="/plan/initial">
             <li>
-              <Image src={displayImageUrl} alt="Profile Image" width={36} height={36} className="rounded-full" />
+              <button type="button" className="font-header whitespace-nowrap text-primary-01">
+                계획 생성하기
+              </button>
             </li>
           </Link>
-        )}
-        {!hasCookie && (
-          <Link href="/login">
-            <li>
-              <ProfileDefault width={36} height={36} />
-            </li>
-          </Link>
-        )}
-      </ul>
+          {hasCookie && (
+            <Link href="/profile">
+              <li>
+                <Image src={displayImageUrl} alt="Profile Image" width={36} height={36} className="rounded-full" />
+              </li>
+            </Link>
+          )}
+          {!hasCookie && (
+            <Link href="/login">
+              <li>
+                <ProfileDefault width={36} height={36} />
+              </li>
+            </Link>
+          )}
+        </ul>
+      </HeaderSearchInput>
     </nav>
   );
 }
