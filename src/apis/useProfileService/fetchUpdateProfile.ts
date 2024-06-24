@@ -1,34 +1,28 @@
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
 import interceptor from '@/apis/interceptors/interceptor';
+import getAuthToken from '@/apis/utils/getAuthToken';
 import { returnData } from '@/apis/utils/utils';
 
 const options: ReturnFetchDefaultOptions = {
   baseUrl: 'https://be.travel-laboratory.site',
-  headers: {
-    'authorization-token':
-      'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsImV4cCI6MTcxOTI5MTAxNX0.j9KqAhwZN4eOrAAbub1AJ-s1DYa_9QNWqPHdKV4i7bI'
-  },
+  headers: {},
   interceptors: {
-    request: async (args: any) => {
-      console.log('********* 요청 전 *********');
-      console.log('url:', args[0].toString());
-      console.log('requestInit:', args[1], '\n\n');
-      return args;
-    },
-    response: async (response: any, requestArgs: any) => {
-      console.log('********* 응답 후 *********');
-      console.log('url:', requestArgs[0].toString());
-      console.log('requestInit:', requestArgs[1], '\n\n');
-      return response;
+    response: async (response) => {
+      const result = await response.json();
+      if (!response.ok) {
+        console.log('▷▶▷▶ response error', result);
+      }
+      return result;
     }
-  } as { [key: string]: any }
+  }
 };
 
 const fetchService = returnFetch({ fetch: interceptor.logging(options) });
 
 const updateProfileService = {
   updateProfile: async (profileData: { nickname: string; introduce: string; file?: File }) => {
+    const authToken = getAuthToken();
     const formData = new FormData();
 
     if (profileData.file) {
@@ -44,11 +38,13 @@ const updateProfileService = {
 
     const response = await fetchService(`/api/v1/profile`, {
       method: 'PUT',
-      body: formData
+      body: formData,
+      headers: {
+        'authorization-token': authToken
+      }
     });
 
-    const result = await response.json();
-    return returnData(result);
+    return returnData(response);
   }
 };
 
