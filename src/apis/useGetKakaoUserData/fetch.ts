@@ -14,9 +14,9 @@ const options: {
 const fetchKakaoUser = returnFetch(options.kakaoUserData);
 
 const serviceKakaoUserData = {
-  getKakaoUserData: async (token: string) => {
+  postKakaoUserData: async (token: string) => {
     const response = await fetchKakaoUser('/v2/user/me', {
-      method: 'GET',
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`
       }

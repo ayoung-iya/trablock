@@ -25,10 +25,10 @@ export default function FindPasswordNewpassword() {
     defaultValues: { password: '', password_confirm: '', pw_quesiton_id: 1, pw_answer: '' }
   });
 
-  const { username, questionId } = useContext(PasswordFindContext);
+  const { username, questionId, answer } = useContext(PasswordFindContext);
 
   const payload = {
-    answer: watch('pw_answer'),
+    answer,
     password: watch('password'),
     pw_question_id: questionId,
     username
@@ -45,9 +45,7 @@ export default function FindPasswordNewpassword() {
 
   const registerList = {
     password: register('password', validate.password),
-    password_confirm: register('password_confirm', { onChange: () => validatePasswordCheck() }),
-    pw_answer: register('pw_answer', validate.pw_answer),
-    pw_question_id: register('pw_quesiton_id')
+    password_confirm: register('password_confirm', { onChange: () => validatePasswordCheck() })
   };
 
   const { mutate: postPasswordRenewal } = useFindPasswordRenewal();
@@ -57,6 +55,8 @@ export default function FindPasswordNewpassword() {
   const onSubmit: SubmitHandler<FieldValues> = () => {
     postPasswordRenewal(payload, {
       onSuccess: () => {
+        // 처리가 안되냐
+        alert('비밀번호가 갱신되었습니다. 다시 로그인 해 주세요.');
         router.push('/login');
       },
       onError: () => {
@@ -72,13 +72,6 @@ export default function FindPasswordNewpassword() {
       <p className="font-password-find">새 비밀번호 발급하기</p>
       <form onSubmit={handleSubmit(onSubmit)} className="flex-col-start m-0 w-80 gap-6 pt-10">
         <section className="mg-0 mb-14 flex w-full flex-col gap-5">
-          <SignInput label="질문" id="pw_question" />
-          <SignInput
-            label="답변"
-            id="pw_answer"
-            errorMessage={errors.pw_answer?.message as string}
-            {...registerList.pw_answer}
-          />
           <SignInput
             label="새 비밀번호"
             type="password"
