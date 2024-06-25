@@ -1,6 +1,13 @@
 /* eslint-disable max-len */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
+/* eslint-disable no-undef */
+/* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-new */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable array-callback-return */
 
 'use client';
 
@@ -9,9 +16,14 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 
+import Button from '@/components/common/button/Button';
+import Dropdown from '@/components/common/Dropdown';
 import { comment as addComment, getComments, deleteComment, editComment } from '@/components/textEditor/api/commentApi';
 import { getReview, deleteReview as deleteReviewApi } from '@/components/textEditor/api/reviewApi';
+import KebabSvg from '@/icons/kebab.svg';
 import ProfileDefault from '@/icons/profile-default.svg?url';
+import useDropdownEdit from '@/libs/hooks/useDropdownEdit';
+import useResizeSize from '@/libs/hooks/useResizeSize';
 
 interface ReviewData {
   user_id: number;
@@ -58,6 +70,9 @@ interface CommentData {
   editedText?: string;
 }
 
+type DropdownList = '비공개' | '삭제하기';
+const DROPDOWN_LIST: DropdownList[] = ['비공개', '삭제하기'];
+
 export default function Page() {
   const params = useParams();
   const reviewId = Number(params.id);
@@ -66,7 +81,8 @@ export default function Page() {
   const [commentText, setCommentText] = useState<string>('');
   const [comments, setComments] = useState<CommentData[]>([]);
   const [totalComments, setTotalComments] = useState<number>(0);
-
+  const { ref, isDropdownOpened, handleDropdownToggle, handleDropdownClose } = useDropdownEdit('articleDetailDropdown');
+  const { divRef, divHeight } = useResizeSize();
   const handleGetReviewData = async () => {
     try {
       const response = await getReview(reviewId);
@@ -169,7 +185,7 @@ export default function Page() {
 
     return (
       <>
-        {Object.keys(parsedDescription).map((key, index) => (
+        {Object.keys(parsedDescription).map((key) => (
           <div>
             <div className="flex w-full flex-col gap-[12px] rounded-xl bg-gray-100 px-[32px] py-[24px] text-[16px]">
               <h3 className="text-[20px] font-bold">{key}</h3>
@@ -188,7 +204,21 @@ export default function Page() {
       console.log('Review deleted successfully');
     } catch (error) {
       console.error('Failed to delete review:', error);
+    } finally {
+      // Redirect to the previous page
+      window.history.back();
     }
+  };
+
+  const handleDropdownSelect = (selectedMenu: DropdownList) => {
+    console.log(`Dropdown option selected: ${selectedMenu}`);
+    if (selectedMenu === '비공개') {
+      console.log('Toggle privacy');
+    } else if (selectedMenu === '삭제하기') {
+      handleDeleteReview();
+      console.log('Initiate delete');
+    }
+    handleDropdownClose();
   };
 
   const handleDeleteComment = async (commentId: number) => {
@@ -211,9 +241,33 @@ export default function Page() {
       <div className="flex flex-col px-[20px] pt-[20px] md:px-[30px] xl:px-[280px]">
         <div className="flex flex-row justify-between">
           <div className="w-full pb-[20px] text-[32px] font-bold">{data?.title}</div>
-          <button type="button" onClick={handleDeleteReview} className="text-red-500">
-            Delete
-          </button>
+          <div className="relative w-full p-5 md:p-7 xl:p-10 xl:pb-5">
+            <div className=" flex-row-center absolute right-5 top-5 w-full justify-end gap-5 md:right-7 md:top-7 xl:right-10 xl:top-10">
+              {data?.is_editable && (
+                <div ref={divRef}>
+                  <Button onClick={(e: any) => handleDropdownToggle(e)}>
+                    <KebabSvg width={24} height={24} />
+                  </Button>
+                </div>
+              )}
+              {isDropdownOpened && data?.is_editable && (
+                <Dropdown className="absolute right-0 z-10" style={{ top: `${divHeight + 30}px` }} ref={ref}>
+                  <div className="flex flex-col">
+                    {DROPDOWN_LIST.map((item, index) => (
+                      <button
+                        type="button"
+                        className={`cursor-pointer p-2 hover:bg-gray-100 ${index === 1 && 'text-red-400'} `}
+                        onClick={() => handleDropdownSelect(item)}
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
+                </Dropdown>
+              )}
+            </div>
+          </div>
+          <div className="mx-10 hidden border-b border-gray-02 xl:block" />
         </div>
         <div className="flex flex-row items-center gap-4">
           <div className="flex w-full flex-row gap-[20px] border-b-2 pb-[20px]">
@@ -225,8 +279,8 @@ export default function Page() {
               height={48}
             />
             <div className="flex flex-col">
-              <div>{data?.nickname}</div>
-              <div>{data?.created_at}</div>
+              <div className="text-[20px] font-bold">{data?.nickname}</div>
+              <div className="text-gray-400">{data?.created_at}</div>
             </div>
           </div>
         </div>
@@ -273,7 +327,7 @@ export default function Page() {
                 />
               </div>
 
-              <div className="flex flex-col gap-[8px]">
+              <div className="flex flex-row gap-[10px]">
                 <div>{comment.nickname}</div>
                 {comment.isEditing ? (
                   <>
@@ -283,15 +337,17 @@ export default function Page() {
                       onChange={(e) => handleEditChange(e.target.value, comment.comment_id)}
                       className="rounded border p-2"
                     />
-                    <button type="button" onClick={() => submitEdit(comment.comment_id)}>
-                      Save
-                    </button>
-                    <button type="button" onClick={() => cancelEdit(comment.comment_id)}>
-                      Cancel
-                    </button>
+                    <div className="flex flex-row gap-[20px]">
+                      <button className="text-blue-500" type="button" onClick={() => submitEdit(comment.comment_id)}>
+                        저장
+                      </button>
+                      <button className="text-red-500" type="button" onClick={() => cancelEdit(comment.comment_id)}>
+                        취소
+                      </button>
+                    </div>
                   </>
                 ) : (
-                  <>
+                  <div className="flex flex-col">
                     <div>{comment.reply_comment}</div>
                     <div className="flex flex-row gap-[12px]">
                       <div className="text-gray-400">{comment.created_at}</div>
@@ -312,7 +368,7 @@ export default function Page() {
                         </div>
                       )}
                     </div>
-                  </>
+                  </div>
                 )}
               </div>
             </div>
