@@ -14,6 +14,7 @@ import ImageBox from '@/components/common/ImageBox';
 import modalList from '@/components/modal/modalList/modalList';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import useResizeSize from '@/hooks/useResizeSize';
+import ArticleDefaultIcon from '@/icons/article-default.svg';
 import BookmarkFilledIcon from '@/icons/bookmark-filled.svg';
 import BookmarkGrayIcon from '@/icons/bookmark-gray.svg';
 import BookmarkIcon from '@/icons/bookmark.svg';
@@ -87,7 +88,7 @@ export default function TravelCard({
   }, [isSmOrLarger, divHeight]);
 
   const combinedTags = [travelCompanion, ...travelStyle];
-  const imageSrc = isValidUrl(thumbnailImageUrl) ? thumbnailImageUrl : '/icons/article-default.png';
+  const imageSrc = isValidUrl(thumbnailImageUrl) ? thumbnailImageUrl : null;
   const profileSrc = isValidUrl(profileImageUrl) ? profileImageUrl : null;
 
   const handleMenuClick = (e: React.MouseEvent) => {
@@ -185,13 +186,19 @@ export default function TravelCard({
           className="relative h-[180px] w-full flex-shrink-0 sm:h-[201px] sm:w-[280px]"
           style={isSmOrLarger ? { height } : undefined}
         >
-          <ImageBox
-            className="h-full w-full object-cover"
-            src={imageSrc}
-            alt="thumbnailImageUrl"
-            width={280}
-            height={isSmOrLarger && height ? height : 201}
-          />
+          {imageSrc ? (
+            <ImageBox
+              className="h-full w-full object-cover"
+              src={imageSrc}
+              alt="thumbnailImageUrl"
+              width={280}
+              height={isSmOrLarger && height ? height : 201}
+            />
+          ) : (
+            <div className="h-full w-full object-cover">
+              <ArticleDefaultIcon className="h-full w-full" />
+            </div>
+          )}
         </div>
         {/* 콘텐츠 */}
         <div className="flex flex-grow flex-col">
