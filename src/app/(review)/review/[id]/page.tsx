@@ -13,9 +13,12 @@
 
 import { useEffect, useState } from 'react';
 
+import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 
+import useGetProfile from '@/apis/useProfileService/useGetProfile';
 import Button from '@/components/common/button/Button';
 import Dropdown from '@/components/common/Dropdown';
 import { comment as addComment, deleteComment, editComment, getComments } from '@/components/textEditor/api/commentApi';
@@ -83,6 +86,18 @@ export default function Page() {
   const [totalComments, setTotalComments] = useState<number>(0);
   const { ref, isDropdownOpened, handleDropdownToggle, handleDropdownClose } = useDropdownEdit('articleDetailDropdown');
   const { divRef, divHeight } = useResizeSize();
+  const [myUserId, setMyUserId] = useState('');
+
+  useEffect(() => {
+    const token = Cookies.get('authorization-token');
+    if (!token) return;
+    const decode: { userId: string } = jwtDecode(token);
+    const { userId } = decode;
+    setMyUserId(userId);
+  }, []);
+
+  const { data: myProfileData } = useGetProfile(myUserId);
+
   const handleGetReviewData = async () => {
     try {
       const response = await getReview(reviewId);
@@ -292,7 +307,7 @@ export default function Page() {
           </div>
           <div className="relative flex w-full flex-row items-center gap-2">
             <Image
-              src={data?.profile_img_url || ProfileDefault}
+              src={myProfileData?.profile_img_url || ProfileDefault}
               alt="Profile"
               className="h-12 w-12 rounded-full object-cover"
               width={48}
