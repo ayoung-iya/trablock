@@ -4,13 +4,13 @@
 
 'use client';
 
-import React, { useEffect, useRef, useState, ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { Descendant } from 'slate';
 
-import { postReview, getSchedule } from '@/components/textEditor/api/reviewApi';
+import { getSchedule, postReview } from '@/components/textEditor/api/reviewApi';
 import DayButton from '@/components/textEditor/DayButton';
 import LoadingComponent from '@/components/textEditor/LoadingComponent';
 import SlateEditor, { SlateEditorRef } from '@/components/textEditor/SlateEditor';
@@ -152,16 +152,26 @@ export default function Page() {
     }));
   };
 
+  const [isDone, setIsDone] = useState(false);
+
   const handleSaveAndPublish = async () => {
     handleButtonClick(); // Save
-    try {
-      const response = await postReview(reviewData); // Publish
-      console.log('Response:', response);
-      router.push(`/review/${response.review_id}`);
-    } catch (error) {
-      console.error('Failed to post review:', error);
-    }
+    setIsDone(true);
   };
+
+  useEffect(() => {
+    const post = async () => {
+      try {
+        const response = await postReview(reviewData); // Publish
+        console.log('Response:', response);
+        router.push(`/review/${response.review_id}`);
+      } catch (error) {
+        console.error('Failed to post review:', error);
+      }
+    };
+
+    if (isDone) post();
+  }, [isDone]);
 
   if (loading) {
     return <LoadingComponent />;
