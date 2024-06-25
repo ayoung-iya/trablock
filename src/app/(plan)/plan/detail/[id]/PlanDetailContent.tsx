@@ -103,7 +103,9 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
 
   const { mutate: apiPutSchedules } = usePutSchedules(articleId, { schedules: scheduleList.schedules });
   const { mutate: apiDeleteSchedules } = useDeleteSchedules(articleId);
-  const { mutate: apiPatchSchedulesPrivacy } = usePatchSchedulesPrivacy(articleId, { is_private: !isPrivate });
+  const { mutate: apiPatchSchedulesPrivacy, data: apiIsPrivate } = usePatchSchedulesPrivacy(articleId, {
+    is_private: !isPrivate
+  });
   const {
     mutate: apiPutSchedulesCoverImage,
     data: apiCoverImage,
@@ -150,7 +152,7 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
 
   // 비공개 토글
   const handleTogglePrivate = () => {
-    apiPatchSchedulesPrivacy(undefined, { onSuccess: () => setIsPrivate(!isPrivate) });
+    apiPatchSchedulesPrivacy();
   };
 
   // 여행 계획 삭제
@@ -165,12 +167,17 @@ export default function PlanDetailContent({ className, planDetail, initList }: P
         onCancel: () => closeModal(),
         onSubmit: () => {
           // 삭제 후 홈페이지로 이동
-          apiDeleteSchedules(undefined, { onSuccess: () => router.push('/') });
+          apiDeleteSchedules();
           closeModal();
         }
       })
     );
   };
+
+  useEffect(() => {
+    if (!apiIsPrivate) return;
+    setIsPrivate(apiIsPrivate.is_private);
+  }, [apiIsPrivate]);
 
   // 여행 계획 편집 페이지로 이동
   const handleEditPlanPage = () => {
