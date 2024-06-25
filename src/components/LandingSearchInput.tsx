@@ -24,7 +24,7 @@ export default function LandingSearchInput() {
   };
 
   return (
-    <div className="flex-col-center mx-5 gap-5 md:gap-10">
+    <div className="flex-col-center mx-5 gap-5 py-16 md:gap-10 md:py-28">
       <p className="md:font-title-1 text-2xl font-bold leading-[125%]">여행을 계획하고 계신가요?</p>
       <form
         onSubmit={handleSubmit}

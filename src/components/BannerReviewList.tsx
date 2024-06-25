@@ -1,6 +1,6 @@
-'use client';
+/* eslint-disable max-len */
 
-import React from 'react';
+'use client';
 
 import { useGetReviewBanners } from '@/apis/useBannerArticle/useGetBanners';
 import ReviewCard from '@/components/card/ReviewCard';
@@ -21,27 +21,23 @@ export default function BannerReviewList() {
   }
 
   return (
-    <div className="container mx-auto">
-      <div className=" my-4 flex flex-col items-center justify-between lg:flex-row">
-        <h2 className="font-title-3 mb-6 w-full text-black-01">최신 여행 후기</h2>
+    <div className="mx-auto w-full overflow-hidden py-16 md:py-24">
+      <div className=" flex-col-center my-4 justify-between xl:flex-row">
+        <h2 className="font-title-3 mb-6 w-full px-5 text-black-01 md:px-7 xl:px-0">최신 여행 후기</h2>
       </div>
-      <div className="flex w-full justify-center scrollbar-hide xl:overflow-y-auto">
-        {/* 캐러셀 수정예정 */}
-        {/* 이미지 크기는 피그마 시안에 따라 임의로 저장, 캐러셀에 따라서 수정예정 */}
-        <div className="flex gap-[18px]">
-          {data.reviews.map((review) => (
-            <ReviewCard
-              key={review.review_id}
-              reviewId={review.review_id}
-              title={review.title}
-              city={review.location.map((loc) => loc.city)}
-              imageUrl={review.representative_img_url}
-              name={review.nickname}
-              profileImageUrl={review.profile_img_url}
-              type="main"
-            />
-          ))}
-        </div>
+      <div className="scrollbar-custom flex w-full gap-[18px] max-md:flex-col max-md:px-5 md:overflow-x-scroll md:px-7 xl:px-0">
+        {data.reviews.map((review) => (
+          <ReviewCard
+            key={review.review_id}
+            reviewId={review.review_id}
+            title={review.title}
+            city={review.location.map((loc) => loc.city)}
+            imageUrl={review.representative_img_url}
+            name={review.nickname}
+            profileImageUrl={review.profile_img_url}
+            type="main"
+          />
+        ))}
       </div>
     </div>
   );

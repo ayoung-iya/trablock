@@ -34,7 +34,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col gap-[60px] md:gap-[120px]">
+    <div className="mx-auto max-w-[1200px] gap-[60px] md:gap-[120px]">
       <Carousel slides={SLIDES} options={OPTIONS} />
       <LandingSearchInput />
       <PopularPlaces />

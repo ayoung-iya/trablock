@@ -1,7 +1,5 @@
 /* eslint-disable max-len */
 
-import React from 'react';
-
 import Link from 'next/link';
 
 import ImageBox from '@/components/common/ImageBox';
@@ -47,7 +45,7 @@ export default function ReviewCard({
   const getClassNames = () => {
     if (type === 'main') {
       // 이미지 크기는 피그마 시안에 따라 임의로 저장, 캐러셀에 따라서 수정예정
-      return 'w-[285px] h-[220px] sm:w-[320px] sm:h-[240px] md:w-[345px] md:h-[254px]';
+      return 'w-full h-[240px] md:w-[285px] md:h-[220px]';
     }
     return 'w-[156px] h-[156px] sm:w-[210px] sm:h-[210px] md:w-[236px] md:h-[236px]';
   };
@@ -61,8 +59,8 @@ export default function ReviewCard({
       <div
         className={`relative overflow-hidden rounded-lg bg-gray-200 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] ${getClassNames()} `}
       >
-        <ImageBox className="h-full w-full" src={validImageUrl} alt={imageUrl} width={80} height={80} />
-        <div className="absolute inset-0 z-10 bg-black-01 opacity-20" />
+        <ImageBox className="size-full" src={validImageUrl} alt={imageUrl} width={80} height={80} />
+        <div className="absolute inset-0 z-10 w-full bg-black-01 opacity-20" />
         <div className="absolute bottom-4 left-4 z-20">
           <p className="font-subtitle-1 mb-1 text-white-01">{title}</p>
           {type === 'default' && (
