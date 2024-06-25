@@ -25,7 +25,7 @@ export default function BannerReviewList() {
       <div className=" flex-col-center my-4 justify-between xl:flex-row">
         <h2 className="font-title-3 mb-6 w-full px-5 text-black-01 md:px-7 xl:px-0">최신 여행 후기</h2>
       </div>
-      <div className="scrollbar-custom grid w-full grid-cols-1 gap-[18px] max-md:flex-col max-md:px-5 md:grid-cols-2 md:overflow-x-scroll md:px-7 xl:flex xl:px-0">
+      <div className="scrollbar-custom grid w-full grid-cols-1 gap-[18px] max-md:flex-col max-md:px-5 md:grid-cols-2 md:px-7 xl:flex xl:overflow-x-auto xl:px-0">
         {data.reviews.map((review) => (
           <ReviewCard
             key={review.review_id}
