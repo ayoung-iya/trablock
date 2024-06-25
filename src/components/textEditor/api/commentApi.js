@@ -14,9 +14,29 @@ const api = axios.create({
   }
 });
 
+export const editComment = async (data, id) => {
+  try {
+    const response = await api.patch(`/comments/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const comment = async (data) => {
   try {
     const response = await api.post(`/comment`, data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const deleteComment = async (id) => {
+  try {
+    const response = await api.patch(`/comments/${id}/status`);
     return response.data;
   } catch (error) {
     console.error(error);
