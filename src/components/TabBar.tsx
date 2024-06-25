@@ -41,7 +41,7 @@ export default function TabBar({ tabBarList, handleTabBarClick, size }: TabBarPr
       hrClassName: 'tab-bar-hr'
     },
     S: {
-      ulClassName: 'justify-start flex gap-16',
+      ulClassName: 'justify-start flex gap-4',
       liClassName: 'flex flex-col gap-2 w-max',
       hrClassName: 'tab-bar-hr'
     },

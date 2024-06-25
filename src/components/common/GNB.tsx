@@ -4,7 +4,6 @@ import { MouseEventHandler, useEffect, useState } from 'react';
 
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -83,7 +82,13 @@ export default function GNB() {
               </li>
               <Link href={`/profile/${decodeId}`}>
                 <li>
-                  <Image src={displayImageUrl} alt="Profile Image" width={36} height={36} className="rounded-full" />
+                  <ImageBox
+                    src={displayImageUrl}
+                    alt="Profile Image"
+                    className="size-9 rounded-full"
+                    width={36}
+                    height={36}
+                  />
                 </li>
               </Link>
             </>
