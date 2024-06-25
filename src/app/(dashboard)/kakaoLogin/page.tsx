@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import usePostOauthLogin from '@/apis/oauthLogin/usePostOauthLogin';
 import usePostKakaoUserData from '@/apis/useGetKakaoUserData/usePostKakaoUserData';
