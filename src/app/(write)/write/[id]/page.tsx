@@ -266,16 +266,15 @@ export default function Page() {
           </div>
         ))}
       </div>
-      <div className="flex flex-row place-content-evenly">
-        <div className="flex w-full flex-row place-content-end gap-10 px-10 xl:px-[280px]">
-          <button
-            type="button"
-            onClick={handleSaveAndPublish}
-            className="rounded bg-blue-700 p-2 px-[24px] py-[6px] text-slate-50 hover:bg-slate-50 hover:text-blue-700"
-          >
-            발행하기
-          </button>
-        </div>
+
+      <div className="mb-[20px] flex w-full flex-row place-content-end gap-10 px-[20px] xl:px-[280px]">
+        <button
+          type="button"
+          onClick={handleSaveAndPublish}
+          className="rounded bg-blue-700 px-[24px] py-[6px] text-slate-50 hover:bg-slate-50 hover:text-blue-700"
+        >
+          발행하기
+        </button>
       </div>
     </div>
   );
