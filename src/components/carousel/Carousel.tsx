@@ -16,10 +16,10 @@ export default function Carousel(props: PropType) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 4000 })]);
 
   return (
-    <div className="h-auto w-full overflow-hidden md:h-96" ref={emblaRef}>
-      <div className="flex-col-center h-60 md:h-96">
+    <div className="embla" ref={emblaRef}>
+      <div className="embla__container">
         {slides.map((slide, index) => (
-          <div className="relative h-60 w-full flex-none md:h-96" key={index}>
+          <div className="embla__slide" key={index}>
             <ImageBox className="h-full" src={slide} alt={`Slide ${index}`} width={1920} height={1080} />
           </div>
         ))}

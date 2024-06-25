@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
 import getAuthToken from '@/apis/utils/getAuthToken';
@@ -12,16 +11,6 @@ const options: ReturnFetchDefaultOptions = {
   baseUrl: API_URL.API_BASE_URL,
   headers: {
     'Content-Type': 'application/json'
-  },
-  interceptors: {
-    response: async (response) => {
-      const result = await response.json();
-      if (!response.ok) {
-        console.log('▷▶▷▶ response error', result);
-        redirect('/');
-      }
-      return result;
-    }
   }
 };
 

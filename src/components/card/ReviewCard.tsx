@@ -3,6 +3,8 @@
 import Link from 'next/link';
 
 import ImageBox from '@/components/common/ImageBox';
+import ArticleDefaultSvgUrl from '@/icons/article-default.svg?url';
+import ProfileDefaultSvgUrl from '@/icons/profile-default.svg?url';
 
 export interface ReviewCardProps {
   reviewId: number;
@@ -50,16 +52,25 @@ export default function ReviewCard({
     return 'w-[156px] h-[156px] sm:w-[210px] sm:h-[210px] md:w-[236px] md:h-[236px]';
   };
 
-  const validImageUrl: string = isValidUrl(imageUrl) ? imageUrl : '/icons/article-default.svg';
-  const profileImgUrl = profileImageUrl ?? '/icons/profile-default.svg';
-  const validProfileImageUrl: string = isValidUrl(profileImgUrl) ? profileImgUrl : '/icons/profile-default.svg';
+  const validImageUrl: string = isValidUrl(imageUrl) ? imageUrl : '';
+  const profileImgUrl = profileImageUrl ?? '';
+  const validProfileImageUrl: string = isValidUrl(profileImgUrl) ? profileImgUrl : '';
+
+  console.log('validImageUrl', validImageUrl);
+  console.log('validProfileImageUrl', validProfileImageUrl);
 
   return (
     <Link href={`/review/${reviewId}`} passHref>
       <div
         className={`relative overflow-hidden rounded-lg bg-gray-200 shadow-[0_0_10px_0_rgba(0,0,0,0.08)] ${getClassNames()} `}
       >
-        <ImageBox className="size-full" src={validImageUrl} alt={imageUrl} width={80} height={80} />
+        <ImageBox
+          className="size-full"
+          src={validImageUrl || ArticleDefaultSvgUrl}
+          alt={imageUrl}
+          width={80}
+          height={80}
+        />
         <div className="absolute inset-0 z-10 w-full bg-black-01 opacity-20" />
         <div className="absolute bottom-4 left-4 z-20">
           <p className="font-subtitle-1 mb-1 text-white-01">{title}</p>
@@ -79,7 +90,7 @@ export default function ReviewCard({
                   <div className="relative h-8 w-8 overflow-hidden rounded-full">
                     <ImageBox
                       className="h-full w-full"
-                      src={validProfileImageUrl}
+                      src={validProfileImageUrl || ProfileDefaultSvgUrl}
                       alt="profileImageUrl"
                       width={32}
                       height={32}
