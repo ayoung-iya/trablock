@@ -11,15 +11,15 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 
 import Button from '@/components/common/button/Button';
 import Dropdown from '@/components/common/Dropdown';
-import { comment as addComment, getComments, deleteComment, editComment } from '@/components/textEditor/api/commentApi';
-import { getReview, deleteReview as deleteReviewApi } from '@/components/textEditor/api/reviewApi';
+import { comment as addComment, deleteComment, editComment, getComments } from '@/components/textEditor/api/commentApi';
+import { deleteReview as deleteReviewApi, getReview } from '@/components/textEditor/api/reviewApi';
 import KebabSvg from '@/icons/kebab.svg';
 import ProfileDefault from '@/icons/profile-default.svg?url';
 import useDropdownEdit from '@/libs/hooks/useDropdownEdit';
@@ -99,6 +99,7 @@ export default function Page() {
   const handleGetComments = async () => {
     try {
       const response = await getComments(reviewId);
+      console.log('response', response);
       setComments(response.comments);
       setTotalComments(response.total_comments);
       console.log('Comments:', response);
@@ -323,7 +324,7 @@ export default function Page() {
                   alt="Profile"
                   width={48}
                   height={48}
-                  className="rounded-full object-cover"
+                  className="aspect-square rounded-full object-cover"
                 />
               </div>
 
