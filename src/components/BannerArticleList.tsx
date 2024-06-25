@@ -20,9 +20,9 @@ export default function BannerList() {
   return (
     <div className="mx-auto w-full">
       <div className="px-5 md:px-7 xl:mx-auto xl:px-0">
-        <div className="lg:flex-row-center my-4 justify-between lg:justify-between">
+        <div className="xl:flex-row-center my-4 justify-between xl:justify-between">
           <h2 className="font-title-3 mb-6 w-full text-black-01">HOT 여행 계획</h2>
-          <div className="hidden lg:block">
+          <div className="hidden xl:block">
             <Link href="/search" passHref>
               <button type="button" className="font-btn-2 whitespace-nowrap text-primary-01">
                 더보기
@@ -31,7 +31,7 @@ export default function BannerList() {
           </div>
         </div>
         <div className="justify-center">
-          <div className="grid gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-5 lg:gap-y-5">
+          <div className="grid gap-4 sm:gap-5 xl:grid-cols-2 xl:gap-5 xl:gap-y-5">
             {data?.map((article) => (
               <TravelCard
                 key={article.article_id}
@@ -54,7 +54,7 @@ export default function BannerList() {
             ))}
           </div>
         </div>
-        <div className="mt-8 lg:hidden">
+        <div className="mt-8 xl:hidden">
           <Link href="/search" passHref>
             <Button className="btn-ghost font-subtitle-1 h-12 w-full gap-x-2.5 rounded-md">여행 후기 더보기</Button>
           </Link>
