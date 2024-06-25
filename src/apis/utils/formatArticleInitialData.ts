@@ -29,7 +29,7 @@ export const formatArticleInitialDataForRequest = ({
   }
 
   if (travelStyle.length) {
-    formatData.style = travelStyle;
+    formatData.travel_styles = travelStyle;
   }
 
   return formatData;
@@ -41,7 +41,7 @@ export const formatArticleInitialDataFromResponse = ({
   start_at,
   end_at,
   travel_companion,
-  travel_style,
+  travel_styles,
   expense,
   is_editable
 }: GetArticleRequestFormData) => {
@@ -53,7 +53,7 @@ export const formatArticleInitialDataFromResponse = ({
       to: new Date(end_at)
     },
     travelCompanion: travel_companion,
-    travelStyle: travel_style || [],
+    travelStyle: travel_styles || [],
     isEditable: is_editable
   };
 

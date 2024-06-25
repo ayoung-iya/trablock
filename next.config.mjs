@@ -8,6 +8,12 @@ const nextConfig = {
         hostname: '**',
         port: '',
         pathname: '/**'
+      },
+      {
+        protocol: 'http', //카카오톡 이미지 로딩 가능
+        hostname: '**',
+        port: '',
+        pathname: '/**'
       }
     ]
   },
