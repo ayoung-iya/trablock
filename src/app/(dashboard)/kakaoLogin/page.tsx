@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import usePostOauthLogin from '@/apis/oauthLogin/usePostOauthLogin';
 import usePostKakaoUserData from '@/apis/useGetKakaoUserData/usePostKakaoUserData';
@@ -26,6 +26,7 @@ export default function Kakaologin() {
           Cookies.set('kakao', accessToken);
           console.log('토큰 성공');
           console.log(accessToken);
+
           postKakaoUserData.mutate(accessToken, {
             onSuccess: (res) => {
               console.log(res);
@@ -39,13 +40,14 @@ export default function Kakaologin() {
                 account_email: email,
                 is_agreement: true
               };
+
               console.log(payload);
               postOauthData.mutate(payload, {
                 onSuccess: (responses) => {
-                  console.log(responses, '오어스');
-                  const authorizationToken = response.headers.get('authorization-token');
-                  const expiresAt = response.headers.get('authorization-token-expired-at');
-                  const refreshToken = response.headers.get('refresh-token');
+                  console.log(response, '오어스');
+                  const authorizationToken = responses.headers.get('authorization-token');
+                  const expiresAt = responses.headers.get('authorization-token-expired-at');
+                  const refreshToken = responses.headers.get('refresh-token');
 
                   if (authorizationToken && expiresAt && refreshToken) {
                     Cookies.set('authorization-token', authorizationToken, { secure: true });
@@ -68,7 +70,7 @@ export default function Kakaologin() {
         }
       });
     }
-  }, []);
+  }, [code]);
 
   return (
     <div>
