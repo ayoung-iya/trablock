@@ -17,22 +17,22 @@ export default function Kakaologin() {
   const postKakaoUserData = usePostKakaoUserData();
   const postOauthData = usePostOauthLogin();
   const router = useRouter();
+
   useEffect(() => {
     if (code) {
       console.log(code);
       postKakaoTokenMutate.mutate(code, {
         onSuccess: (response) => {
-          const { access_token: accessToken } = response;
+          const { access_token: accessToken } = response.data;
           Cookies.set('kakao', accessToken);
           console.log('토큰 성공');
           console.log(accessToken);
           postKakaoUserData.mutate(accessToken, {
             onSuccess: (res) => {
               console.log(res);
-              const { kakao_account: kakaoAccount } = res;
+              const { kakao_account: kakaoAccount } = res.data;
               const { email, profile } = kakaoAccount;
               const { nickname, profile_image_url: profileImage } = profile;
-
               const payload = {
                 profile_nickname: nickname,
                 profile_image: profileImage,
@@ -43,9 +43,9 @@ export default function Kakaologin() {
               postOauthData.mutate(payload, {
                 onSuccess: (responses) => {
                   console.log(responses, '오어스');
-                  const authorizationToken = response.headers.get('authorization-token');
-                  const expiresAt = response.headers.get('authorization-token-expired-at');
-                  const refreshToken = response.headers.get('refresh-token');
+                  const authorizationToken = responses.headers['authorization-token'];
+                  const expiresAt = responses.headers['authorization-token-expired-at'];
+                  const refreshToken = responses.headers['refresh-token'];
 
                   if (authorizationToken && expiresAt && refreshToken) {
                     Cookies.set('authorization-token', authorizationToken, { secure: true });
@@ -61,14 +61,13 @@ export default function Kakaologin() {
               console.log('userdata', error);
             }
           });
-          // router.push('/');
         },
         onError: (err) => {
           console.log('token', err);
         }
       });
     }
-  }, []);
+  }, [code, postKakaoTokenMutate, postKakaoUserData, postOauthData, router]);
 
   return (
     <div>
