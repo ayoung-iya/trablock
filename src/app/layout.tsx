@@ -5,7 +5,6 @@ import localFont from 'next/font/local';
 
 import ReactQueryProvider from '@/apis/components/ReactQueryProvider';
 import AsyncBoundary from '@/components/common/AsyncBoundary';
-import KakaoScript from '@/components/social/KaKaoScript';
 import { DropdownProvider } from '@/libs/contexts/DropdownContext';
 import { LoginContextProvider } from '@/libs/contexts/LoginContext';
 import ModalProvider from '@/libs/contexts/ModalProvider';
@@ -52,7 +51,7 @@ export default function RootLayout({
             </LoginContextProvider>
           </AsyncBoundary>
         </PasswordFindProvider>
-        <KakaoScript />
+        {/* <KakaoScript /> */}
       </body>
     </html>
   );
