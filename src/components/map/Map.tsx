@@ -41,6 +41,14 @@ export default function Map({
   const handleOnLoad = useCallback(
     (map: google.maps.Map) => {
       setMap(map);
+
+      // 줌 변경 이벤트 리스너 추가
+      map.addListener('zoom_changed', () => {
+        const currentZoom = map.getZoom() || 0;
+        if (currentZoom > MAX_ZOOM) {
+          map.setZoom(MAX_ZOOM);
+        }
+      });
     },
     [map, coordinateList]
   );
@@ -124,7 +132,10 @@ export default function Map({
 
     // 마커 거리에 맞춰 줌 레벨 제어
     map.fitBounds(bounds);
+  }, [map, coordinateList, markerCategoryList]);
 
+  useEffect(() => {
+    if (!map) return;
     // idle 이벤트 리스너를 추가하여 맵 최대 줌 레벨 제어
     const listener = window.google.maps.event.addListenerOnce(map, 'idle', () => {
       const currentZoom = map.getZoom() || 0;
@@ -141,7 +152,7 @@ export default function Map({
     });
 
     return () => window.google.maps.event.removeListener(listener);
-  }, [map, coordinateList, markerCategoryList]);
+  }, [map]);
 
   if (!coordinateList && !alwaysRender) return null;
   if (coordinateList.length === 0 && !alwaysRender) return null;
