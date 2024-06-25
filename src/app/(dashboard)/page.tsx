@@ -2,7 +2,12 @@
 
 import { EmblaOptionsType } from 'embla-carousel';
 
+import BannerArticleList from '@/components/BannerArticleList';
+import BannerReviewList from '@/components/BannerReviewList';
 import Carousel from '@/components/carousel/Carousel';
+import PopularPlaces from '@/components/common/PopluarPlaces/PopularPlaces';
+import Footer from '@/components/Footer';
+import LandingSearchInput from '@/components/LandingSearchInput';
 import heroL1 from '@/images/heroL1.png';
 import heroL2 from '@/images/heroL2.png';
 import heroL3 from '@/images/heroL3.png';
@@ -28,5 +33,14 @@ export default function Home() {
     SLIDES = [heroS1, heroS2, heroS3];
   }
 
-  return <Carousel slides={SLIDES} options={OPTIONS} />;
+  return (
+    <div className="flex flex-col gap-[60px] md:gap-[120px]">
+      <Carousel slides={SLIDES} options={OPTIONS} />
+      <LandingSearchInput />
+      <PopularPlaces />
+      <BannerReviewList />
+      <BannerArticleList />
+      <Footer />
+    </div>
+  );
 }

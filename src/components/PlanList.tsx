@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 
-import { InfiniteQueryObserverResult, FetchNextPageOptions, InfiniteData } from '@tanstack/react-query';
+import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from '@tanstack/react-query';
 
 import { ArticlesResponse } from '@/apis/useContentService/type';
 import TravelCard from '@/components/card/TravelCard';
@@ -72,7 +72,7 @@ export default function PlanList({
 
   return (
     <>
-      <div className="mx-auto mt-5 flex flex-col gap-4 p-4 md:mx-0 md:p-0">
+      <div className="mx-auto mt-5 flex flex-col gap-4 md:mx-0 md:p-0">
         {data.pages.map((page, pageIndex) => (
           // eslint-disable-next-line react/no-array-index-key
           <React.Fragment key={pageIndex}>

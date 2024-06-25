@@ -25,10 +25,10 @@ export default function BannerReviewList() {
       <div className=" my-4 flex flex-col items-center justify-between lg:flex-row">
         <h2 className="font-title-3 mb-6 w-full text-black-01">최신 여행 후기</h2>
       </div>
-      <div className="justify-center">
+      <div className="flex w-full justify-center scrollbar-hide xl:overflow-y-auto">
         {/* 캐러셀 수정예정 */}
         {/* 이미지 크기는 피그마 시안에 따라 임의로 저장, 캐러셀에 따라서 수정예정 */}
-        <div className="flex gap-1">
+        <div className="flex gap-[18px]">
           {data.reviews.map((review) => (
             <ReviewCard
               key={review.review_id}
