@@ -44,10 +44,10 @@ export default function Kakaologin() {
               console.log(payload);
               postOauthData.mutate(payload, {
                 onSuccess: (responses) => {
-                  console.log(responses, '오어스');
-                  const authorizationToken = response.headers.get('authorization-token');
-                  const expiresAt = response.headers.get('authorization-token-expired-at');
-                  const refreshToken = response.headers.get('refresh-token');
+                  console.log(response, '오어스');
+                  const authorizationToken = responses.headers.get('authorization-token');
+                  const expiresAt = responses.headers.get('authorization-token-expired-at');
+                  const refreshToken = responses.headers.get('refresh-token');
 
                   if (authorizationToken && expiresAt && refreshToken) {
                     Cookies.set('authorization-token', authorizationToken, { secure: true });
