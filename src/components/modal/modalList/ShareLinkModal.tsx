@@ -9,7 +9,6 @@ export interface ShareLinkModalProps extends ModalProps {
   onSubmit?: () => void;
   imageUrl?: string;
 }
-
 // edit 모드 여부 설정해야 함
 export default function ShareLinkModal({ onSubmit, imageUrl = '', ...props }: ShareLinkModalProps) {
   const currentLink = window.location.href;
