@@ -4,7 +4,7 @@
 
 import React, { useEffect, useRef } from 'react';
 
-import { InfiniteQueryObserverResult, FetchNextPageOptions, InfiniteData } from '@tanstack/react-query';
+import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from '@tanstack/react-query';
 
 import { ReviewsResponse } from '@/apis/useContentService/type';
 import ReviewCard from '@/components/card/ReviewCard';
@@ -72,8 +72,8 @@ export default function ReviewList({
 
   return (
     <>
-      <div className="mt-5 flex w-full justify-center">
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
+      <div className="mt-5 w-full">
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3">
           {data.pages.map((page, pageIndex) => (
             // eslint-disable-next-line react/no-array-index-key
             <React.Fragment key={pageIndex}>

@@ -49,7 +49,7 @@ export default function ReviewCard({
       // 이미지 크기는 피그마 시안에 따라 임의로 저장, 캐러셀에 따라서 수정예정
       return 'w-full h-[240px] xl:w-[285px] md:h-[220px]';
     }
-    return 'w-[156px] h-[156px] sm:w-[210px] sm:h-[210px] md:w-[236px] md:h-[236px]';
+    return 'w-full aspect-square';
   };
 
   const validImageUrl: string = isValidUrl(imageUrl) ? imageUrl : '';
