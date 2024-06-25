@@ -7,7 +7,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="mx-auto max-w-[1280px]">
       <GNB />
       <main>{children}</main>
-      <footer>푸터</footer>
     </div>
   );
 }
