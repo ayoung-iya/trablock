@@ -87,6 +87,9 @@ export default function Page() {
   const { ref, isDropdownOpened, handleDropdownToggle, handleDropdownClose } = useDropdownEdit('articleDetailDropdown');
   const { divRef, divHeight } = useResizeSize();
   const [myUserId, setMyUserId] = useState('');
+  const [myProfileImg, setMyProfileImg] = useState<string | null>(null);
+
+  const { data: myProfileData } = useGetProfile(myUserId);
 
   useEffect(() => {
     const token = Cookies.get('authorization-token');
@@ -96,7 +99,9 @@ export default function Page() {
     setMyUserId(userId);
   }, []);
 
-  const { data: myProfileData } = useGetProfile(myUserId);
+  useEffect(() => {
+    setMyProfileImg(myProfileData?.profile_img_url || null);
+  }, [myProfileData]);
 
   const handleGetReviewData = async () => {
     try {
@@ -307,7 +312,7 @@ export default function Page() {
           </div>
           <div className="relative flex w-full flex-row items-center gap-2">
             <Image
-              src={myProfileData?.profile_img_url || ProfileDefault}
+              src={myProfileImg || ProfileDefault}
               alt="Profile"
               className="h-12 w-12 rounded-full object-cover"
               width={48}
