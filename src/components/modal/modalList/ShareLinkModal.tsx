@@ -46,7 +46,7 @@ export default function ShareLinkModal({ onSubmit, imageUrl = '', ...props }: Sh
 
   const handleShareKakaoButtonClick = async () => {
     try {
-      await loadKakaoSDK(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
+      await loadKakaoSDK('ff773a6bba32e319bb8ad6084343972d');
       if (window.Kakao) {
         window.Kakao.Link.sendDefault({
           objectType: 'feed',
@@ -80,7 +80,7 @@ export default function ShareLinkModal({ onSubmit, imageUrl = '', ...props }: Sh
   };
 
   useEffect(() => {
-    loadKakaoSDK(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
+    loadKakaoSDK('ff773a6bba32e319bb8ad6084343972d');
   }, []);
 
   return (
