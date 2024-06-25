@@ -14,6 +14,12 @@ import ImageBox from '@/components/common/ImageBox';
 import modalList from '@/components/modal/modalList/modalList';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import useResizeSize from '@/hooks/useResizeSize';
+import BookmarkFilledIcon from '@/icons/bookmark-filled.svg';
+import BookmarkGrayIcon from '@/icons/bookmark-gray.svg';
+import BookmarkIcon from '@/icons/bookmark.svg';
+import CalendarIcon from '@/icons/calendar.svg';
+import MapPinIcon from '@/icons/map-pin.svg';
+import ProfileDefaultIcon from '@/icons/profile-default.svg';
 import useModal from '@/libs/hooks/useModal';
 
 export interface TravelCardProps {
@@ -82,7 +88,7 @@ export default function TravelCard({
 
   const combinedTags = [travelCompanion, ...travelStyle];
   const imageSrc = isValidUrl(thumbnailImageUrl) ? thumbnailImageUrl : '/icons/article-default.png';
-  const profileSrc = isValidUrl(profileImageUrl) ? profileImageUrl : '/icons/profile-default.svg';
+  const profileSrc = isValidUrl(profileImageUrl) ? profileImageUrl : null;
 
   const handleMenuClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -150,20 +156,10 @@ export default function TravelCard({
         {/* 책갈피 아이콘 */}
         <button
           type="button"
-          className="absolute left-4 top-4 z-10 h-9 w-9 flex-shrink-0 rounded-[5px] bg-white-01 p-2 backdrop-blur-[10px]"
+          className="absolute left-4 top-4 z-10 flex h-[40px] w-[40px] flex-shrink-0 items-center justify-center rounded-[5px] bg-white-01 p-2 backdrop-blur-[10px]"
           onClick={handleBookmarkClick}
         >
-          {bookmarked ? (
-            <ImageBox
-              className="h-full w-full"
-              src="/icons/bookmark-filled.svg"
-              alt="bookmarked"
-              width={18}
-              height={18}
-            />
-          ) : (
-            <ImageBox className="h-full w-full" src="/icons/bookmark.svg" alt="not bookmarked" width={18} height={18} />
-          )}
+          {bookmarked ? <BookmarkFilledIcon /> : <BookmarkIcon />}
         </button>
         {/* 케밥 메뉴 */}
         {isEditable && isPlanTab && (
@@ -204,11 +200,11 @@ export default function TravelCard({
             <p className="font-subtitle-1 w-full truncate sm:w-auto sm:pr-20">{title}</p>
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-[6px]">
-                <ImageBox src="/icons/map-pin.svg" alt="location" className="h-4 w-4" width={16} height={16} />
+                <MapPinIcon width={16} height={16} />
                 <span className="font-subtitle-3 text-gray-01">{city.join(', ')}</span>
               </div>
               <div className="flex items-center gap-[6px]">
-                <ImageBox src="/icons/calendar.svg" alt="calendar" className="h-4 w-4" width={16} height={16} />
+                <CalendarIcon width={16} height={16} />
                 <span className="font-subtitle-3 text-gray-01">
                   {startAt} ~ {endAt}
                 </span>
@@ -224,24 +220,24 @@ export default function TravelCard({
           </div>
           <div className="flex-row-center justify-between p-4">
             <div className="flex-row-center gap-2">
-              <ImageBox
-                className="size-full max-h-8 max-w-8 rounded-full"
-                src={profileSrc}
-                alt="profileImageUrl"
-                width={8}
-                height={8}
-              />
+              {profileSrc ? (
+                <ImageBox
+                  className="size-full max-h-8 max-w-8 rounded-full"
+                  src={profileSrc}
+                  alt="profileImageUrl"
+                  width={32}
+                  height={32}
+                />
+              ) : (
+                <div className="size-full max-h-8 max-w-8 rounded-full">
+                  <ProfileDefaultIcon className="h-full w-full" />
+                </div>
+              )}
               <p className="font-caption-2 text-black-01">{name}</p>
             </div>
             <div className="flex-row-center gap-1 p-1">
               <div className="inline h-[11px] w-[11px]">
-                <ImageBox
-                  src="/icons/bookmark-gray.svg"
-                  alt="bookmark count"
-                  className="inline"
-                  width={11}
-                  height={11}
-                />
+                <BookmarkGrayIcon width={11} height={11} />
               </div>
               <span className="font-caption-3 text-gray-01">{bookmarkCount}</span>
             </div>
