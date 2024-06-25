@@ -58,7 +58,7 @@ export default function GNB() {
   return (
     <nav className="flex-row-center h-[3.75rem] w-full justify-between px-5 md:h-[4.5rem] md:px-7 xl:px-10">
       <Link href="/">
-        <LogoSvg width={123} height={32} />
+        <LogoSvg width={131} height={28} />
       </Link>
       <HeaderSearchInput>
         <ul className="flex-row-center gap-5">
