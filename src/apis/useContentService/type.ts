@@ -10,6 +10,7 @@ export interface Article {
   end_at: string;
   expense: string | null;
   profile_image_url: string;
+  cover_image: string | null;
   cover_image_url: string | null;
   travel_companion: string;
   travel_styles: string[];

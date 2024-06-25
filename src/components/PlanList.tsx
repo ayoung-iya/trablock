@@ -88,7 +88,7 @@ export default function PlanList({
                 travelStyle={item.travel_styles}
                 name={item.name}
                 profileImageUrl={item.profile_image_url}
-                thumbnailImageUrl={item.cover_image_url}
+                thumbnailImageUrl={item.cover_image_url || item.cover_image}
                 price={item.expense ? Number(item.expense) : 0}
                 bookmarkCount={item.bookmark_count}
                 isBookmarked={item.is_bookmarked}
