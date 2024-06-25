@@ -1,8 +1,9 @@
-'use client';
-
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable max-len */
 
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 
 import Link from 'next/link';
 

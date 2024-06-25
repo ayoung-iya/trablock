@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import React from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -47,11 +46,12 @@ export default function PopularPlaces() {
   };
 
   return (
-    <div className="bg-blue-100 p-[40px]">
-      <div className="text-[24px] font-bold">🔥 지금 인기 있는 여행지</div>
-      <div className="mt-10 flex w-full flex-row place-content-center gap-10 overflow-x-auto scrollbar-hide">
+    <div className="bg-primary-03 py-10 md:py-14">
+      <div className="mb-6 ml-5 text-[24px] font-bold md:ml-7 xl:ml-10">🔥 지금 인기 있는 여행지</div>
+      <div className="flex w-full flex-row place-content-center gap-3 overflow-x-auto scrollbar-hide max-md:justify-start md:gap-5 xl:gap-10">
         {places.map((place) => (
           <CircleImage
+            className="first:ml-5 last:mr-5 md:first:ml-7 md:last:mr-7"
             imageUrl={place.imageUrl}
             text={place.text}
             onClick={() => handlePlaceClick(place.searchQuery)}
