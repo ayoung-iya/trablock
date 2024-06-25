@@ -25,7 +25,7 @@ export interface ArticleRequestFormData {
   expense?: string;
   travel_companion: string;
   style?: string[];
-  travel_style?: string[];
+  travel_styles?: string[];
 }
 
 export interface GetArticleRequestFormData extends ArticleRequestFormData {
