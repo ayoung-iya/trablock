@@ -9,11 +9,11 @@ import usePostNicknameCheck from '@/apis/useSignup/usePostNicknameCheck';
 import usePostSignup from '@/apis/useSignup/usePostSignup';
 import usePostUsernameCheck from '@/apis/useSignup/usePostUsernamCheck';
 import Button from '@/components/common/button/Button';
+import Dropdown from '@/components/common/Dropdown';
 import SignInput from '@/components/common/input/SignInput';
 import PlanInputTitle from '@/components/PlanInputTitle';
+import passwordList from '@/libs/constants/passwordQuestion';
 import { validate } from '@/libs/constants/validation';
-import passWordList from '@/libs/constants/passWordQuestion';
-import Dropdown from '@/components/common/Dropdown';
 import useDropdown from '@/libs/hooks/useDropdown';
 
 export default function SignupForm() {
@@ -200,17 +200,18 @@ export default function SignupForm() {
                 />
                 <div className="absolute top-20">
                   {isQuestionListOpened && (
-                    <Dropdown ref={questionListRef}>
-                      {passWordList.map((sentence, index) => (
-                        <li
-                          key={sentence}
-                          className="cursor-pointer pb-3 pt-3 hover:bg-gray-100"
-                          onClick={() => {
-                            handleSelectQuestion(sentence, index);
-                            onChange(index + 1);
-                          }}
-                        >
-                          {sentence}
+                    <Dropdown className="overflow-hidden" ref={questionListRef}>
+                      {passwordList.map((sentence, index) => (
+                        <li className="-mx-5 cursor-pointer px-5 pb-3 pt-3 first:-mt-5 last:-mb-5 hover:bg-gray-100">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onChange(index + 1);
+                              handleQuestionListClose();
+                            }}
+                          >
+                            {sentence}
+                          </button>
                         </li>
                       ))}
                     </Dropdown>

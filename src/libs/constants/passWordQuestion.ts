@@ -1,4 +1,4 @@
-const passWordList = [
+const passwordList = [
   '가장 기억에 남는 반려동물의 이름은 무엇인가요?',
   '유년 시절 꿈꾸던 직업은 무엇인가요?',
   '가장 좋아하는 인물은 누구인가요?',
@@ -9,4 +9,4 @@ const passWordList = [
   '다니던 초등학교의 이름은 무엇인가요?'
 ];
 
-export default passWordList;
+export default passwordList;
