@@ -1,10 +1,11 @@
 /* eslint-disable */
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import { useRouter } from 'next/navigation';
 import { useForm, SubmitHandler, FieldValues, Controller } from 'react-hook-form';
+
 import usePostNicknameCheck from '@/apis/useSignup/usePostNicknameCheck';
 import usePostSignup from '@/apis/useSignup/usePostSignup';
 import usePostUsernameCheck from '@/apis/useSignup/usePostUsernamCheck';
@@ -16,31 +17,31 @@ import passwordList from '@/libs/constants/passwordQuestion';
 import { validate } from '@/libs/constants/validation';
 import useDropdown from '@/libs/hooks/useDropdown';
 
+const DEFAULT_PW_QUESTION_ID = 1;
+
 export default function SignupForm() {
   const {
     register,
-    handleSubmit,
+    getValues,
     setError,
-    clearErrors,
-    watch,
     control,
-    formState: { errors }
+    formState: { errors, isValid }
   } = useForm({
-    mode: 'onChange',
+    mode: 'onBlur',
     defaultValues: {
       username: '',
       password: '',
       password_confirm: '',
       nickname: '',
-      pw_question_id: 1,
+      pw_question_id: DEFAULT_PW_QUESTION_ID,
       pw_answer: '',
-      is_agreement: true
+      is_agreement: false
     }
   });
 
-  const [selectedQuestion, setSelectedQuestion] = useState(passWordList[0]);
-  const [selectedQuestionId, setSelectedQuestionId] = useState(1);
-  const [isAgree, setIsAgree] = useState(false);
+  const selectedQuestionId = getValues('pw_question_id');
+  const isAgreement = getValues('is_agreement');
+  const selectedQuestion = passwordList[selectedQuestionId - 1];
   const questionInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -58,12 +59,6 @@ export default function SignupForm() {
       handleQuestionListClose();
     }
   });
-
-  const handleSelectQuestion = (question: string, id: number) => {
-    setSelectedQuestion(question);
-    setSelectedQuestionId(id + 1);
-    handleQuestionListClose();
-  };
 
   const router = useRouter();
 
@@ -210,7 +205,7 @@ export default function SignupForm() {
           <SignInput label="답변" id="pw_answer" {...registerList.pw_answer} />
         </section>
 
-        <Button disabled={!isAgree} onClick={onSubmit} type="submit" className={buttonStyle}>
+        <Button disabled={!isAgreement || !isValid} onClick={onSubmit} type="submit" className={buttonStyle}>
           회원가입
         </Button>
       </form>
