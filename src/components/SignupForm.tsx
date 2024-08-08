@@ -79,23 +79,24 @@ export default function SignupForm() {
   const { mutate: postUsernameCheckMutate } = usePostUsernameCheck();
 
   const validateUsername = () => {
-    postUsernameCheckMutate(payload.username, {
-      onSuccess: (response) => {
-        if (response.available) {
-          clearErrors('username');
-        } else {
-          setError('username', { message: '중복된 이메일입니다.' });
+    if (errors?.username?.type) {
+      return;
+    }
+
+    const username = getValues('username');
+
+    postUsernameCheckMutate(username, {
+      onSuccess: ({ error }) => {
+        if (error) {
+          throw new Error(error.local_message);
         }
+      },
+      onError: ({ message }) => {
+        setError('username', { message });
       }
     });
   };
-  const validatePasswordCheck = () => {
-    if (payload.password !== passwordCheckWatch) {
-      setError('password_confirm', { type: 'password-mismatch', message: '비밀번호가 일치하지 않습니다.' });
-    } else {
-      clearErrors('password_confirm');
-    }
-  };
+
   const validateNickname = () => {
     if (errors?.nickname?.type) {
       return;
@@ -123,6 +124,7 @@ export default function SignupForm() {
 
   const registerList = {
     nickname: register('nickname', { ...validate.nickname, onBlur: validateNickname }),
+    username: register('username', { ...validate.username, onBlur: validateUsername }),
     password: register('password', validate.password),
     password_confirm: register('password_confirm', { validate: validatePasswordConfirm }),
     pw_answer: register('pw_answer', validate.pw_answer)
