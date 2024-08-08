@@ -159,30 +159,20 @@ export default function SignupForm() {
       <form className="flex-col-start m-0 mb-5 w-80 gap-6 pt-10">
         <PlanInputTitle>기본 정보 입력</PlanInputTitle>
         <section className="mg-0 mb-14 flex w-full flex-col gap-5">
-          <SignInput
-            label="닉네임"
-            id="nickname"
-            errorMessage={errors.nickname?.message as string}
-            {...registerList.nickname}
-          />
-          <SignInput
-            label="이메일"
-            id="username"
-            errorMessage={errors.username?.message as string}
-            {...registerList.username}
-          />
+          <SignInput label="닉네임" id="nickname" errorMessage={errors.nickname?.message} {...registerList.nickname} />
+          <SignInput label="이메일" id="username" errorMessage={errors.username?.message} {...registerList.username} />
           <SignInput
             label="비밀번호"
             id="password"
             type="password"
-            errorMessage={errors.password?.message as string}
+            errorMessage={errors.password?.message}
             {...registerList.password}
           />
           <SignInput
             label="비밀번호 확인"
             type="password"
             id="password_confirm"
-            errorMessage={errors.password_confirm?.message as string}
+            errorMessage={errors.password_confirm?.message}
             {...registerList.password_confirm}
           />
         </section>
