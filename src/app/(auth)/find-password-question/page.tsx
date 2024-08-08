@@ -8,7 +8,7 @@ import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 import useFindPasswordVerification from '@/apis/useFindPassword/usePostPasswordFindVerification';
 import Button from '@/components/common/button/Button';
 import SignInput from '@/components/common/input/SignInput';
-import passWordList from '@/libs/constants/passWordQuestion';
+import passWordList from '@/libs/constants/passwordQuestion';
 import { validate } from '@/libs/constants/validation';
 import { PasswordFindContext } from '@/libs/contexts/passwordFindContext';
 
