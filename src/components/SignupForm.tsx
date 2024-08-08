@@ -145,7 +145,8 @@ export default function SignupForm() {
     <div>
       <form className="flex-col-start m-0 mb-5 w-80 gap-6 pt-10" onSubmit={onSubmit}>
         <PlanInputTitle>기본 정보 입력</PlanInputTitle>
-        <section className="mg-0 mb-14 flex w-full flex-col gap-5">
+
+        <section className="mg-0 mb-9 flex w-full flex-col gap-5">
           <SignInput label="닉네임" id="nickname" errorMessage={errors.nickname?.message} {...registerList.nickname} />
           <SignInput label="이메일" id="username" errorMessage={errors.username?.message} {...registerList.username} />
           <SignInput
@@ -163,13 +164,15 @@ export default function SignupForm() {
             {...registerList.password_confirm}
           />
         </section>
+
         <PlanInputTitle>비밀번호 정보 입력</PlanInputTitle>
-        <section className="mg-0 relative mb-14 flex w-full flex-col gap-5">
+
+        <section className="mg-0 relative mb-9 flex w-full flex-col gap-5">
           <Controller
             control={control}
             name="pw_question_id"
             render={({ field: { value, onChange } }) => (
-              <div className={`relative ${value ? 'pt-2' : ''}`}>
+              <div className={`${value ? 'pt-2' : ''}`}>
                 <SignInput
                   label="질문"
                   id="pw_question_id"
@@ -177,13 +180,14 @@ export default function SignupForm() {
                   readOnly
                   onClickInput={handleQuestionListToggle}
                 />
-                <div className="absolute top-20">
+                <div className="relative">
                   {isQuestionListOpened && (
-                    <Dropdown className="overflow-hidden" ref={questionListRef}>
+                    <Dropdown className="absolute top-1 overflow-hidden p-0" ref={questionListRef}>
                       {passwordList.map((sentence, index) => (
-                        <li className="-mx-5 cursor-pointer px-5 pb-3 pt-3 first:-mt-5 last:-mb-5 hover:bg-gray-100">
+                        <li>
                           <button
                             type="button"
+                            className="w-full px-5 py-3 hover:bg-gray-100"
                             onClick={() => {
                               onChange(index + 1);
                               handleQuestionListClose();
@@ -202,16 +206,19 @@ export default function SignupForm() {
           <SignInput label="답변" id="pw_answer" errorMessage={errors.pw_answer?.message} {...registerList.pw_answer} />
         </section>
 
+        <PlanInputTitle>약관 동의</PlanInputTitle>
+
+        <section className="mb-4">
+          <div className="flex gap-4">
+            <input type="checkbox" id="is_agreement" {...register('is_agreement')} />
+            <label htmlFor="is_agreement">(필수)개인정보 수집 및 이용 동의</label>
+          </div>
+        </section>
+
         <Button disabled={!isAgreement || !isValid} onClick={onSubmit} type="submit" className={buttonStyle}>
           회원가입
         </Button>
       </form>
-
-      <PlanInputTitle>약관 동의</PlanInputTitle>
-      <div className="mt-5 flex gap-4">
-        <input type="checkbox" id="is_agreement" {...register('is_agreement')} />
-        <label htmlFor="is_agreement">(필수)개인정보 수집 및 이용 동의</label>
-      </div>
     </div>
   );
 }
