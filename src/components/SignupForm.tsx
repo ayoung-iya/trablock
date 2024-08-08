@@ -1,46 +1,46 @@
-/* eslint-disable */
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import { useRouter } from 'next/navigation';
 import { useForm, SubmitHandler, FieldValues, Controller } from 'react-hook-form';
+
 import usePostNicknameCheck from '@/apis/useSignup/usePostNicknameCheck';
 import usePostSignup from '@/apis/useSignup/usePostSignup';
 import usePostUsernameCheck from '@/apis/useSignup/usePostUsernamCheck';
 import Button from '@/components/common/button/Button';
+import Dropdown from '@/components/common/Dropdown';
 import SignInput from '@/components/common/input/SignInput';
 import PlanInputTitle from '@/components/PlanInputTitle';
+import passwordList from '@/libs/constants/passwordQuestion';
 import { validate } from '@/libs/constants/validation';
-import passWordList from '@/libs/constants/passWordQuestion';
-import Dropdown from '@/components/common/Dropdown';
 import useDropdown from '@/libs/hooks/useDropdown';
+
+const DEFAULT_PW_QUESTION_ID = 1;
 
 export default function SignupForm() {
   const {
     register,
-    handleSubmit,
+    getValues,
     setError,
-    clearErrors,
-    watch,
     control,
-    formState: { errors }
+    formState: { errors, isValid }
   } = useForm({
-    mode: 'onChange',
+    mode: 'onBlur',
     defaultValues: {
       username: '',
       password: '',
       password_confirm: '',
       nickname: '',
-      pw_question_id: 1,
+      pw_question_id: DEFAULT_PW_QUESTION_ID,
       pw_answer: '',
-      is_agreement: true
+      is_agreement: false
     }
   });
 
-  const [selectedQuestion, setSelectedQuestion] = useState(passWordList[0]);
-  const [selectedQuestionId, setSelectedQuestionId] = useState(1);
-  const [isAgree, setIsAgree] = useState(false);
+  const selectedQuestionId = getValues('pw_question_id');
+  const isAgreement = getValues('is_agreement');
+  const selectedQuestion = passwordList[selectedQuestionId - 1];
   const questionInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -59,128 +59,120 @@ export default function SignupForm() {
     }
   });
 
-  const handleSelectQuestion = (question: string, id: number) => {
-    setSelectedQuestion(question);
-    setSelectedQuestionId(id + 1);
-    handleQuestionListClose();
-  };
-
   const router = useRouter();
-  const payload = {
-    username: watch('username'),
-    password: watch('password'),
-    nickname: watch('nickname'),
-    pw_answer: watch('pw_answer')
-  };
 
-  const passwordCheckWatch = watch('password_confirm');
   const { mutate: postSignupMutate } = usePostSignup();
   const { mutate: postNicknameCheckMutate } = usePostNicknameCheck();
   const { mutate: postUsernameCheckMutate } = usePostUsernameCheck();
 
   const validateUsername = () => {
-    postUsernameCheckMutate(payload.username, {
-      onSuccess: (response) => {
-        if (response.available) {
-          clearErrors('username');
-        } else {
-          setError('username', { message: '중복된 이메일입니다.' });
-        }
-      }
-    });
-  };
-  const validatePasswordCheck = () => {
-    if (payload.password !== passwordCheckWatch) {
-      setError('password_confirm', { type: 'password-mismatch', message: '비밀번호가 일치하지 않습니다.' });
-    } else {
-      clearErrors('password_confirm');
+    if (errors?.username?.type) {
+      return;
     }
-  };
-  const validateNickname = () => {
-    postNicknameCheckMutate(payload.nickname, {
-      onSuccess: (response) => {
-        if (response.available) {
-          clearErrors('nickname');
-        } else {
-          setError('nickname', { message: '중복된 닉네임입니다.' });
+
+    const username = getValues('username');
+
+    postUsernameCheckMutate(username, {
+      onSuccess: ({ error }) => {
+        if (error) {
+          throw new Error(error.local_message);
         }
+      },
+      onError: ({ message }) => {
+        setError('username', { message });
       }
     });
   };
 
-  const handleCheckboxClick = () => {
-    setIsAgree((prev) => !prev);
+  const validateNickname = () => {
+    if (errors?.nickname?.type) {
+      return;
+    }
+
+    const nickname = getValues('nickname');
+
+    postNicknameCheckMutate(nickname, {
+      onSuccess: (response) => {
+        const { error } = response;
+
+        if (error) {
+          throw new Error(error.local_message);
+        }
+      },
+      onError: ({ message }) => {
+        setError('nickname', { message });
+      }
+    });
+  };
+
+  const validatePasswordConfirm = (value: string) => {
+    const password = getValues('password');
+
+    return value === password || '비밀번호가 일치하지 않습니다.';
   };
 
   const registerList = {
-    username: register('username', { ...validate.username, onBlur: () => validateUsername() }),
+    nickname: register('nickname', { ...validate.nickname, onBlur: validateNickname }),
+    username: register('username', { ...validate.username, onBlur: validateUsername }),
     password: register('password', validate.password),
-    password_confirm: register('password_confirm', { onChange: () => validatePasswordCheck() }),
-    nickname: register('nickname', { ...validate.nickname, onBlur: () => validateNickname() }),
+    password_confirm: register('password_confirm', { validate: validatePasswordConfirm }),
     pw_answer: register('pw_answer', validate.pw_answer)
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = (event) => {
-    event.preventDefault();
-    const payloadValue = {
-      username: payload.username,
-      password: payload.password,
-      nickname: payload.nickname,
-      pw_question_id: selectedQuestionId,
-      pw_answer: payload.pw_answer,
-      is_agreement: true
-    };
-    postSignupMutate(payloadValue, {
-      onSuccess: () => {
+  const onSubmit: SubmitHandler<FieldValues> = (e) => {
+    e.preventDefault();
+    // eslint-disable-next-line camelcase, @typescript-eslint/no-unused-vars
+    const { password_confirm, ...submitFormData } = getValues();
+
+    postSignupMutate(submitFormData, {
+      onSuccess: ({ error }) => {
+        if (error) {
+          throw new Error(error.local_message);
+        }
+
         router.push('/login');
       },
-      onError: (error) => console.log(error)
+      onError: (error) => {
+        // TODO: 에러 처리
+        console.log(error);
+      }
     });
   };
 
-  useEffect(() => {}, [isAgree]);
-
-  const buttonStyle = 'bg-primary-01 text-white-01 w-full rounded font-signin-button h-12 ';
+  const buttonStyle = 'bg-primary-01 text-white-01 w-full rounded font-signin-button h-12 disabled:btn-gray';
 
   return (
     <div>
-      <form className="flex-col-start m-0 mb-5 w-80 gap-6 pt-10">
+      <form className="flex-col-start m-0 mb-5 w-80 gap-6 pt-10" onSubmit={onSubmit}>
         <PlanInputTitle>기본 정보 입력</PlanInputTitle>
-        <section className="mg-0 mb-14 flex w-full flex-col gap-5">
-          <SignInput
-            label="닉네임"
-            id="nickname"
-            errorMessage={errors.nickname?.message as string}
-            {...registerList.nickname}
-          />
-          <SignInput
-            label="이메일"
-            id="username"
-            errorMessage={errors.username?.message as string}
-            {...registerList.username}
-          />
+
+        <section className="mg-0 mb-9 flex w-full flex-col gap-5">
+          <SignInput label="닉네임" id="nickname" errorMessage={errors.nickname?.message} {...registerList.nickname} />
+          <SignInput label="이메일" id="username" errorMessage={errors.username?.message} {...registerList.username} />
           <SignInput
             label="비밀번호"
             id="password"
             type="password"
-            errorMessage={errors.password?.message as string}
+            errorMessage={errors.password?.message}
             {...registerList.password}
           />
           <SignInput
             label="비밀번호 확인"
             type="password"
             id="password_confirm"
-            errorMessage={errors.password_confirm?.message as string}
+            errorMessage={errors.password_confirm?.message}
             {...registerList.password_confirm}
           />
         </section>
+
         <PlanInputTitle>비밀번호 정보 입력</PlanInputTitle>
-        <section className="mg-0 relative mb-14 flex w-full flex-col gap-5">
+
+        <section className="mg-0 relative mb-9 flex w-full flex-col gap-5">
           <Controller
             control={control}
             name="pw_question_id"
             render={({ field: { value, onChange } }) => (
-              <div className={`relative ${value ? 'pt-2' : ''}`}>
+              <div className={`${value ? 'pt-2' : ''}`}>
                 <SignInput
                   label="질문"
                   id="pw_question_id"
@@ -188,19 +180,21 @@ export default function SignupForm() {
                   readOnly
                   onClickInput={handleQuestionListToggle}
                 />
-                <div className="absolute top-20">
+                <div className="relative">
                   {isQuestionListOpened && (
-                    <Dropdown ref={questionListRef}>
-                      {passWordList.map((sentence, index) => (
-                        <li
-                          key={sentence}
-                          className="cursor-pointer pb-3 pt-3 hover:bg-gray-100"
-                          onClick={() => {
-                            handleSelectQuestion(sentence, index);
-                            onChange(index + 1);
-                          }}
-                        >
-                          {sentence}
+                    <Dropdown className="absolute top-1 overflow-hidden p-0" ref={questionListRef}>
+                      {passwordList.map((sentence, index) => (
+                        <li>
+                          <button
+                            type="button"
+                            className="w-full px-5 py-3 hover:bg-gray-100"
+                            onClick={() => {
+                              onChange(index + 1);
+                              handleQuestionListClose();
+                            }}
+                          >
+                            {sentence}
+                          </button>
                         </li>
                       ))}
                     </Dropdown>
@@ -209,20 +203,22 @@ export default function SignupForm() {
               </div>
             )}
           />
-          <SignInput label="답변" id="pw_answer" {...registerList.pw_answer} />
+          <SignInput label="답변" id="pw_answer" errorMessage={errors.pw_answer?.message} {...registerList.pw_answer} />
         </section>
 
-        <Button disabled={!isAgree} onClick={onSubmit} type="submit" className={buttonStyle}>
+        <PlanInputTitle>약관 동의</PlanInputTitle>
+
+        <section className="mb-4">
+          <div className="flex gap-4">
+            <input type="checkbox" id="is_agreement" {...register('is_agreement')} />
+            <label htmlFor="is_agreement">(필수)개인정보 수집 및 이용 동의</label>
+          </div>
+        </section>
+
+        <Button disabled={!isAgreement || !isValid} onClick={onSubmit} type="submit" className={buttonStyle}>
           회원가입
         </Button>
       </form>
-
-      <PlanInputTitle>약관 동의</PlanInputTitle>
-      <div className="mt-5 flex gap-4">
-        <input type="checkbox" id="is_agreement" onClick={handleCheckboxClick} />
-        <p>개인정보 수집 및 이용 동의</p>
-      </div>
-      {!isAgree && <p className="mt-3 text-red-01">약관에 동의해 주세요</p>}
     </div>
   );
 }
