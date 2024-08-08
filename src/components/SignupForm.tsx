@@ -97,13 +97,22 @@ export default function SignupForm() {
     }
   };
   const validateNickname = () => {
-    postNicknameCheckMutate(payload.nickname, {
+    if (errors?.nickname?.type) {
+      return;
+    }
+
+    const nickname = getValues('nickname');
+
+    postNicknameCheckMutate(nickname, {
       onSuccess: (response) => {
-        if (response.available) {
-          clearErrors('nickname');
-        } else {
-          setError('nickname', { message: '중복된 닉네임입니다.' });
+        const { error } = response;
+
+        if (error) {
+          throw new Error(error.local_message);
         }
+      },
+      onError: ({ message }) => {
+        setError('nickname', { message });
       }
     });
   };
@@ -113,10 +122,9 @@ export default function SignupForm() {
   };
 
   const registerList = {
-    username: register('username', { ...validate.username, onBlur: () => validateUsername() }),
+    nickname: register('nickname', { ...validate.nickname, onBlur: validateNickname }),
     password: register('password', validate.password),
-    password_confirm: register('password_confirm', { onChange: () => validatePasswordCheck() }),
-    nickname: register('nickname', { ...validate.nickname, onBlur: () => validateNickname() }),
+    password_confirm: register('password_confirm', { validate: validatePasswordConfirm }),
     pw_answer: register('pw_answer', validate.pw_answer)
   };
 
