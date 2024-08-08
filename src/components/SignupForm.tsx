@@ -140,9 +140,7 @@ export default function SignupForm() {
     });
   };
 
-  useEffect(() => {}, [isAgree]);
-
-  const buttonStyle = 'bg-primary-01 text-white-01 w-full rounded font-signin-button h-12 ';
+  const buttonStyle = 'bg-primary-01 text-white-01 w-full rounded font-signin-button h-12 disabled:btn-gray';
 
   return (
     <div>
@@ -202,7 +200,7 @@ export default function SignupForm() {
               </div>
             )}
           />
-          <SignInput label="답변" id="pw_answer" {...registerList.pw_answer} />
+          <SignInput label="답변" id="pw_answer" errorMessage={errors.pw_answer?.message} {...registerList.pw_answer} />
         </section>
 
         <Button disabled={!isAgreement || !isValid} onClick={onSubmit} type="submit" className={buttonStyle}>
@@ -212,10 +210,9 @@ export default function SignupForm() {
 
       <PlanInputTitle>약관 동의</PlanInputTitle>
       <div className="mt-5 flex gap-4">
-        <input type="checkbox" id="is_agreement" onClick={handleCheckboxClick} />
-        <p>개인정보 수집 및 이용 동의</p>
+        <input type="checkbox" id="is_agreement" {...register('is_agreement')} />
+        <label htmlFor="is_agreement">(필수)개인정보 수집 및 이용 동의</label>
       </div>
-      {!isAgree && <p className="mt-3 text-red-01">약관에 동의해 주세요</p>}
     </div>
   );
 }
