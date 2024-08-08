@@ -66,14 +66,7 @@ export default function SignupForm() {
   };
 
   const router = useRouter();
-  const payload = {
-    username: watch('username'),
-    password: watch('password'),
-    nickname: watch('nickname'),
-    pw_answer: watch('pw_answer')
-  };
 
-  const passwordCheckWatch = watch('password_confirm');
   const { mutate: postSignupMutate } = usePostSignup();
   const { mutate: postNicknameCheckMutate } = usePostNicknameCheck();
   const { mutate: postUsernameCheckMutate } = usePostUsernameCheck();
@@ -132,21 +125,23 @@ export default function SignupForm() {
     pw_answer: register('pw_answer', validate.pw_answer)
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = (event) => {
-    event.preventDefault();
-    const payloadValue = {
-      username: payload.username,
-      password: payload.password,
-      nickname: payload.nickname,
-      pw_question_id: selectedQuestionId,
-      pw_answer: payload.pw_answer,
-      is_agreement: true
-    };
-    postSignupMutate(payloadValue, {
-      onSuccess: () => {
+  const onSubmit: SubmitHandler<FieldValues> = (e) => {
+    e.preventDefault();
+    // eslint-disable-next-line camelcase, @typescript-eslint/no-unused-vars
+    const { password_confirm, ...submitFormData } = getValues();
+
+    postSignupMutate(submitFormData, {
+      onSuccess: ({ error }) => {
+        if (error) {
+          throw new Error(error.local_message);
+        }
+
         router.push('/login');
       },
-      onError: (error) => console.log(error)
+      onError: (error) => {
+        // TODO: 에러 처리
+        console.log(error);
+      }
     });
   };
 
@@ -156,7 +151,7 @@ export default function SignupForm() {
 
   return (
     <div>
-      <form className="flex-col-start m-0 mb-5 w-80 gap-6 pt-10">
+      <form className="flex-col-start m-0 mb-5 w-80 gap-6 pt-10" onSubmit={onSubmit}>
         <PlanInputTitle>기본 정보 입력</PlanInputTitle>
         <section className="mg-0 mb-14 flex w-full flex-col gap-5">
           <SignInput label="닉네임" id="nickname" errorMessage={errors.nickname?.message} {...registerList.nickname} />
