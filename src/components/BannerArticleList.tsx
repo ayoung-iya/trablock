@@ -1,21 +1,51 @@
-'use client';
-
 import Link from 'next/link';
 
-import { useGetPlanBanners } from '@/apis/useBannerArticle/useGetBanners';
+import type { CustomError } from '@/apis/interceptors/customError.type';
+import { fetchExtended } from '@/apis/interceptors/fetchExtended';
 import TravelCard from '@/components/card/TravelCard';
 import Button from '@/components/common/button/Button';
 
-export default function BannerList() {
-  const { data, isLoading, error } = useGetPlanBanners();
+interface Article {
+  article_id: number;
+  title: string;
+  locations: {
+    place_id: string;
+    address: string;
+    city: string;
+  }[];
+  start_at: string;
+  end_at: string;
+  expense: string;
+  profile_img_url: string;
+  cover_img_url: string;
+  travel_companion: string;
+  travel_styles: string[];
+  name: string;
+  bookmark_count: number;
+  is_bookmarked: boolean;
+  is_editable: boolean;
+}
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+interface ArticlesResponse {
+  data: Article[];
+  error?: CustomError;
+}
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+export default async function BannerList() {
+  const fetchBannerArticles = async () => {
+    try {
+      const {
+        body: { data: articles }
+      } = await fetchExtended<ArticlesResponse>('api/v1/banner/articles');
+
+      return articles;
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
+  };
+
+  const articles = await fetchBannerArticles();
 
   return (
     <div className="mx-auto w-full">
@@ -32,19 +62,19 @@ export default function BannerList() {
         </div>
         <div className="justify-center">
           <div className="grid gap-4 sm:gap-5 xl:grid-cols-2 xl:gap-5 xl:gap-y-5">
-            {data?.map((article) => (
+            {articles?.map((article) => (
               <TravelCard
                 key={article.article_id}
                 id={article.article_id.toString()}
                 title={article.title}
-                city={article.location.map((loc) => loc.city)}
+                city={article.locations.map((loc) => loc.city)}
                 startAt={article.start_at}
                 endAt={article.end_at}
                 travelCompanion={article.travel_companion}
                 travelStyle={article.travel_styles}
                 name={article.name}
-                profileImageUrl={article.profile_image_url}
-                thumbnailImageUrl={article.cover_image_url}
+                profileImageUrl={article.profile_img_url}
+                thumbnailImageUrl={article.cover_img_url}
                 price={article.expense ? Number(article.expense) : 0}
                 bookmarkCount={article.bookmark_count}
                 isBookmarked={article.is_bookmarked}
