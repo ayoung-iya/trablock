@@ -8,7 +8,8 @@ import { ProfileUserData } from './type';
 export default function useGetProfile(id: string) {
   const query = useQuery<ProfileUserData, Error>({
     queryKey: ['useGetProfile', id],
-    queryFn: () => profileService.getProfile(id)
+    queryFn: () => profileService.getProfile(id),
+    enabled: !!id
   });
 
   return query;
