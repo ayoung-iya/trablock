@@ -1,37 +1,61 @@
 /* eslint-disable max-len */
-
-'use client';
-
-import { useGetReviewBanners } from '@/apis/useBannerArticle/useGetBanners';
+import type { CustomError } from '@/apis/interceptors/customError.type';
+import { fetchExtended } from '@/apis/interceptors/fetchExtended';
 import ReviewCard from '@/components/card/ReviewCard';
 
-export default function BannerReviewList() {
-  const { data, isLoading, error } = useGetReviewBanners();
+interface Review {
+  review_id: number;
+  title: string;
+  representative_img_url: string;
+  locations: {
+    place_id: string;
+    address: string;
+    city: string;
+  }[];
+  nickname: string;
+  profile_img_url: string;
+}
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+interface ReviewsResponse {
+  data: {
+    reviews: Review[];
+  };
+  error?: CustomError;
+}
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+export default async function BannerReviewList() {
+  const fetchBannerReviews = async () => {
+    try {
+      const {
+        body: {
+          data: { reviews }
+        }
+      } = await fetchExtended<ReviewsResponse>('api/v1/banner/reviews');
 
-  if (!data || !Array.isArray(data.reviews)) {
-    return <div>Error: Invalid data format</div>;
-  }
+      return reviews;
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
+  };
+
+  const reviews = await fetchBannerReviews();
 
   return (
     <div className="mx-auto w-full overflow-hidden py-16 md:py-24">
       <div className=" flex-col-center my-4 justify-between xl:flex-row">
         <h2 className="font-title-3 mb-6 w-full px-5 text-black-01 md:px-7 xl:px-0">최신 여행 후기</h2>
       </div>
+      {reviews.length === 0 && (
+        <div className="flex h-24 items-center justify-center px-7">최신 여행 후기가 없습니다.</div>
+      )}
       <div className="scrollbar-custom grid w-full grid-cols-1 gap-[18px] max-md:flex-col max-md:px-5 md:grid-cols-2 md:px-7 xl:flex xl:overflow-x-auto xl:px-0">
-        {data.reviews.map((review) => (
+        {reviews?.map((review) => (
           <ReviewCard
             key={review.review_id}
             reviewId={review.review_id}
             title={review.title}
-            city={review.location.map((loc) => loc.city)}
+            city={review.locations.map((location) => location.city)}
             imageUrl={review.representative_img_url}
             name={review.nickname}
             profileImageUrl={review.profile_img_url}

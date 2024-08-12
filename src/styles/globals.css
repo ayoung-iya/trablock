@@ -488,14 +488,14 @@ button {
   }
 
   .embla {
-    @apply h-96 w-full overflow-hidden;
+    @apply h-48 overflow-hidden md:h-[400px] lg:h-[440px];
   }
 
   .embla__container {
-    @apply flex h-96;
+    @apply flex h-48 md:h-[400px] lg:h-[440px];
   }
 
   .embla__slide {
-    @apply relative h-96 w-full flex-none;
+    @apply relative h-48 w-full flex-none md:h-[400px] lg:h-[440px];
   }
 }
