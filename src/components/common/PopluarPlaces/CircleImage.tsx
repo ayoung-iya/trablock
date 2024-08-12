@@ -6,7 +6,7 @@ interface CircleImageProps {
   className?: string;
   imageUrl: StaticImageData;
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export default function CircleImage({ className, imageUrl, text, onClick }: CircleImageProps) {
