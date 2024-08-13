@@ -1,36 +1,34 @@
 /* eslint-disable camelcase */
-import { SearchResponseContentData, SearchResponseData } from '../useSearch/search.type';
+import { SearchResponse, SearchResultContentData } from '@/apis/useSearch/search.type';
 
-export const formatSearchContentDataFromResponse = (content: SearchResponseContentData[]) => {
+export const formatSearchContentDataFromResponse = (content: SearchResultContentData[]) => {
   return content.map(
     ({
       article_id,
       title,
       bookmark_count,
-      cover_image_url,
+      cover_img_url,
       start_at,
       end_at,
       is_bookmarked,
       is_editable,
-      location,
-      price,
+      locations,
       name,
-      profile_image_url,
+      profile_img_url,
       travel_companion,
       travel_styles
     }) => {
       return {
         articleId: `${article_id}`,
         title,
-        city: location.map(({ city }) => city),
+        city: locations.map(({ city }) => city),
         startAt: start_at,
         endAt: end_at,
         travelCompanion: travel_companion,
         travelStyle: travel_styles,
-        price: +price,
         name,
-        profileImageUrl: profile_image_url,
-        thumbnailImageUrl: cover_image_url,
+        profileImageUrl: profile_img_url,
+        thumbnailImageUrl: cover_img_url,
         bookmarkCount: bookmark_count,
         isBookmarked: is_bookmarked,
         isEditable: is_editable
@@ -39,14 +37,14 @@ export const formatSearchContentDataFromResponse = (content: SearchResponseConte
   );
 };
 
-export const formatSearchDataFromResponse = (rawData: SearchResponseData) => {
-  const resultContentList = formatSearchContentDataFromResponse(rawData.content);
+export const formatSearchDataFromResponse = ({ data }: SearchResponse) => {
+  const formattedData = formatSearchContentDataFromResponse(data.content);
 
   return {
-    content: resultContentList,
-    totalElements: rawData.total_elements,
-    totalPages: rawData.total_pages,
-    currentPage: rawData.pageable.page_number,
-    isLastPage: rawData.last
+    content: formattedData,
+    totalElements: data.total_elements,
+    totalPages: data.total_pages,
+    currentPage: data.pageable.page_number,
+    isLastPage: data.last
   };
 };

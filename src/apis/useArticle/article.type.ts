@@ -19,7 +19,7 @@ export interface GetArticleFormData extends ArticleFormData {
 
 export interface ArticleRequestFormData {
   title: string;
-  location: { place_id: string; address: string; city: string }[];
+  locations: { place_id: string; address: string; city: string }[];
   start_at: string;
   end_at: string;
   expense?: string;

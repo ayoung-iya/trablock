@@ -18,7 +18,7 @@ export const formatArticleInitialDataForRequest = ({
 }: ArticleFormData) => {
   const formatData: ArticleRequestFormData = {
     title,
-    location: location.map(({ placeId, address, city }) => ({ place_id: placeId, address, city })),
+    locations: location.map(({ placeId, address, city }) => ({ place_id: placeId, address, city })),
     start_at: dateRequestFormat(date.from),
     end_at: dateRequestFormat(date.to),
     travel_companion: travelCompanion
@@ -37,7 +37,7 @@ export const formatArticleInitialDataForRequest = ({
 
 export const formatArticleInitialDataFromResponse = ({
   title,
-  location,
+  locations,
   start_at,
   end_at,
   travel_companion,
@@ -47,7 +47,7 @@ export const formatArticleInitialDataFromResponse = ({
 }: GetArticleRequestFormData) => {
   const formatData: GetArticleFormData = {
     title,
-    location: location.map(({ place_id, address, city }) => ({ placeId: place_id, address, city })),
+    location: locations.map(({ place_id, address, city }) => ({ placeId: place_id, address, city })),
     date: {
       from: new Date(start_at),
       to: new Date(end_at)

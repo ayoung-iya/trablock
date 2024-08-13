@@ -31,9 +31,9 @@ const searchService = {
     );
 
     const rawData = await response.json();
-    const formatData = formatSearchDataFromResponse(rawData);
+    const formattedData = formatSearchDataFromResponse(rawData);
 
-    return formatData;
+    return formattedData;
   }
 };
 

@@ -34,7 +34,6 @@ export interface TravelCardProps {
   name: string;
   profileImageUrl: string | null;
   thumbnailImageUrl: string | null;
-  price: number;
   bookmarkCount: number;
   isBookmarked: boolean;
   isEditable?: boolean;
