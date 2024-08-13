@@ -1,8 +1,9 @@
-export interface SearchResponseContentData {
+import { CustomError } from '@/apis/interceptors/customError.type';
+
+export interface SearchResultContentData {
   article_id: number;
   title: string;
-  price: string;
-  location: {
+  locations: {
     place_id: string;
     address: string;
     city: string;
@@ -10,8 +11,8 @@ export interface SearchResponseContentData {
   start_at: string;
   end_at: string;
   expense: string;
-  profile_image_url: string;
-  cover_image_url: string;
+  profile_img_url: string;
+  cover_img_url: string;
   travel_companion: string;
   travel_styles: string[];
   name: string;
@@ -20,31 +21,36 @@ export interface SearchResponseContentData {
   is_editable: boolean;
 }
 
-export interface SearchResponseData {
+export interface SearchResultData {
   total_elements: number;
   total_pages: number;
   size: number;
-  content: SearchResponseContentData[];
-  number: 0;
+  content: SearchResultContentData[];
+  number: number;
   sort: {
-    empty: true;
-    sorted: true;
-    unsorted: true;
+    empty: boolean;
+    sorted: boolean;
+    unsorted: boolean;
   };
-  number_of_elements: 0;
+  number_of_elements: number;
   pageable: {
-    offset: 0;
+    offset: number;
     sort: {
-      empty: true;
-      sorted: true;
-      unsorted: true;
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
     };
-    paged: true;
-    page_number: 0;
-    page_size: 0;
-    unpaged: true;
+    paged: boolean;
+    page_number: number;
+    page_size: number;
+    unpaged: boolean;
   };
-  first: true;
-  last: true;
-  empty: true;
+  first: boolean;
+  last: boolean;
+  empty: boolean;
+}
+
+export interface SearchResponse {
+  data: SearchResultData;
+  error: CustomError;
 }
