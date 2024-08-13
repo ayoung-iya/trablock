@@ -9,7 +9,7 @@ const useGetSearch = (keyword: string, order: string) => {
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       const { currentPage, isLastPage, totalPages } = lastPage;
-      if (isLastPage || currentPage >= totalPages) {
+      if (isLastPage || currentPage + 1 >= totalPages) {
         return null;
       }
 
