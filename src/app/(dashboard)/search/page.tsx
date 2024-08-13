@@ -35,7 +35,9 @@ export default function Search({ searchParams }: { searchParams: { [key: string]
         <OrderFilterSection />
       </div>
       <ul className="mt-5 grid grid-cols-1 gap-[18px] md:gap-5 lg:grid-cols-2">
-        {data?.pages.flat().map(({ articleId, ...rest }) => <TravelCard id={articleId} {...rest} isSearchPage />)}
+        {data?.pages
+          .flat()
+          .map(({ articleId, ...rest }) => <TravelCard key={articleId} id={articleId} {...rest} isSearchPage />)}
         {hasNextPage && !isFetchingNextPage && <li className="h-20 w-full" ref={ref} />}
       </ul>
       {isLoading && <p className="mt-[180px] text-center">로딩 중</p>}
