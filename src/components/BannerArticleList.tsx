@@ -75,7 +75,6 @@ export default async function BannerList() {
                 name={article.name}
                 profileImageUrl={article.profile_img_url}
                 thumbnailImageUrl={article.cover_img_url}
-                price={article.expense ? Number(article.expense) : 0}
                 bookmarkCount={article.bookmark_count}
                 isBookmarked={article.is_bookmarked}
                 isEditable={article.is_editable}
