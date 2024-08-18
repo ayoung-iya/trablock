@@ -6,7 +6,7 @@ export interface CityInfo {
 
 export interface ArticleFormData {
   title: string;
-  location: CityInfo[];
+  locations: CityInfo[];
   date: { from: Date; to: Date };
   expense?: number;
   travelCompanion: string;

@@ -44,7 +44,7 @@ export default function PlanInitialForm({
   } = useForm<ArticleFormData>({
     defaultValues: {
       title: articleData?.title || '',
-      location: articleData?.location || [],
+      locations: articleData?.locations || [],
       date: articleData?.date || {},
       travelCompanion: articleData?.travelCompanion || '혼자서',
       travelStyle: articleData?.travelStyle || []
@@ -87,7 +87,7 @@ export default function PlanInitialForm({
 
   const date = getValues('date');
   const title = register('title', { required: true });
-  register('location', { validate: { moreThanOne: (placeList) => placeList.length > 0 } });
+  register('locations', { validate: { moreThanOne: (placeList) => placeList.length > 0 } });
   register('date', { validate: { dateRange: (dateRange) => !!dateRange?.from && !!dateRange?.to } });
   register('travelCompanion', { required: true });
 
@@ -175,7 +175,7 @@ export default function PlanInitialForm({
         </InputWithTitle>
         <Controller
           control={control}
-          name="location"
+          name="locations"
           render={({ field: { value, onChange } }) => {
             return (
               <div className={`relative ${value.length ? 'pt-2' : ''}`}>
