@@ -73,15 +73,14 @@ export default function PlanList({
   return (
     <>
       <div className="mx-auto mt-5 flex flex-col gap-4 md:mx-0 md:p-0">
-        {data.pages.map((page, pageIndex) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <React.Fragment key={pageIndex}>
+        {data.pages.map((page) => (
+          <React.Fragment key={page.number}>
             {page.content.map((item) => (
               <TravelCard
                 key={item.article_id}
                 id={item.article_id.toString()}
                 title={item.title}
-                city={item.location.map((loc) => loc.city)}
+                city={item.locations.map((loc) => loc.city)}
                 startAt={item.start_at}
                 endAt={item.end_at}
                 travelCompanion={item.travel_companion}
