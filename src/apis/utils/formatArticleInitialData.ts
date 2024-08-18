@@ -10,7 +10,7 @@ import {
 
 export const formatArticleInitialDataForRequest = ({
   title,
-  location,
+  locations,
   date,
   expense,
   travelCompanion,
@@ -18,7 +18,7 @@ export const formatArticleInitialDataForRequest = ({
 }: ArticleFormData) => {
   const formatData: ArticleRequestFormData = {
     title,
-    locations: location.map(({ placeId, address, city }) => ({ place_id: placeId, address, city })),
+    locations: locations.map(({ placeId, address, city }) => ({ place_id: placeId, address, city })),
     start_at: dateRequestFormat(date.from),
     end_at: dateRequestFormat(date.to),
     travel_companion: travelCompanion
@@ -47,7 +47,7 @@ export const formatArticleInitialDataFromResponse = ({
 }: GetArticleRequestFormData) => {
   const formatData: GetArticleFormData = {
     title,
-    location: locations.map(({ place_id, address, city }) => ({ placeId: place_id, address, city })),
+    locations: locations?.map(({ place_id, address, city }) => ({ placeId: place_id, address, city })),
     date: {
       from: new Date(start_at),
       to: new Date(end_at)

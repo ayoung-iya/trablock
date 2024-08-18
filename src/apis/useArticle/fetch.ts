@@ -66,10 +66,10 @@ const ArticleService = {
         'authorization-token': authToken
       }
     });
-    const data = await response.json();
+    const { data, error } = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.local_message);
+      throw new Error(error.local_message);
     }
 
     const formattedData: GetArticleFormData = formatArticleInitialDataFromResponse(data);
