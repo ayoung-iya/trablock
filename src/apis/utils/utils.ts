@@ -2,8 +2,8 @@
 export function returnData<T>(res: any) {
   if (!res?.data) return res;
   const { data: resData, ...rest } = res;
-  const data: T = resData?.data;
-  return { data, ...rest };
+  const data: T = resData;
+  return { ...data, ...rest };
 }
 
 export function removeQueryParams(url: string) {

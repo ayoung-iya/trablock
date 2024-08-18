@@ -1,7 +1,7 @@
 export interface Article {
   article_id: number;
   title: string;
-  location: {
+  locations: {
     place_id: string;
     address: string;
     city: string;
