@@ -1,8 +1,14 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 
 import KakaoLogin from '@/components/KakaoLogin';
 import SignupForm from '@/components/SignupForm';
 import Logo from '@/icons/logo.svg';
+import { PAGE_TITLES } from '@/libs/constants/title';
+
+export const metadata: Metadata = {
+  title: PAGE_TITLES.signup
+};
 
 export default function signup() {
   return (

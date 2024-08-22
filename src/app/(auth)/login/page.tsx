@@ -1,8 +1,13 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 
 import KakaoLogin from '@/components/KakaoLogin';
 import SigninForm from '@/components/SigninForm';
 import Logo from '@/icons/logo.svg';
+
+export const metadata: Metadata = {
+  title: '로그인 - 트래블록'
+};
 
 export default function login() {
   return (
