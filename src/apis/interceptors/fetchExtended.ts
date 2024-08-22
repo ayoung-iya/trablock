@@ -2,12 +2,19 @@ import returnFetch, { FetchArgs, ReturnFetch, ReturnFetchDefaultOptions } from '
 
 import API_URL from '@/apis/constants/url';
 
+import getAuthToken from '../utils/getAuthToken';
+
 type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, 'body'> & { body?: object };
 // eslint-disable-next-line no-undef
 type ResponseGenericBody<T> = Omit<Awaited<ReturnType<typeof fetch>>, keyof Body | 'clone'> & { body: T };
 type JsonResponse<T> = T extends object ? ResponseGenericBody<T> : ResponseGenericBody<unknown>;
 
-const baseURL = { baseUrl: API_URL.API_BASE_URL };
+const baseURL = {
+  baseUrl: API_URL.API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
 
 const returnFetchThrowingErrorByStatusCode: ReturnFetch = (args) =>
   returnFetch({
@@ -20,6 +27,32 @@ const returnFetchThrowingErrorByStatusCode: ReturnFetch = (args) =>
         }
 
         return response;
+      }
+    }
+  });
+
+const returnFetchAddAuthTokenInHeader: ReturnFetch = (args) =>
+  returnFetch({
+    ...args,
+    interceptors: {
+      request: async (request) => {
+        const [url, options] = request;
+        const token = getAuthToken();
+
+        if (!token) {
+          return request;
+        }
+
+        const updatedOptions = {
+          ...options,
+          headers: {
+            ...options?.headers,
+            'Content-Type': 'application/json',
+            'authorization-token': token
+          }
+        };
+
+        return [url, updatedOptions];
       }
     }
   });
@@ -60,7 +93,12 @@ const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
   };
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const fetchExtended = returnFetchJson({
   fetch: returnFetchThrowingErrorByStatusCode(baseURL)
+});
+
+export const fetchExtendedWithAuthToken = returnFetchJson({
+  fetch: returnFetchThrowingErrorByStatusCode({
+    fetch: returnFetchAddAuthTokenInHeader(baseURL)
+  })
 });
