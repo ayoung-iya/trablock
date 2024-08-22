@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 import { DateRange } from 'react-day-picker';
@@ -33,7 +33,6 @@ export default function PlanInitialForm({
   articleData?: ArticleFormData;
 }) {
   const router = useRouter();
-  const [isEditFinished, setIsEditFinished] = useState(false);
 
   const {
     control,
@@ -119,11 +118,11 @@ export default function PlanInitialForm({
     if (isEditPage) {
       try {
         await ArticleService.putArticle(articlePageId, formData);
+
+        router.push(`/plan/detail/${articlePageId}`);
       } catch (err) {
         // TODO: 에러처리
         console.log(err);
-      } finally {
-        setIsEditFinished(true);
       }
 
       return;
@@ -139,11 +138,6 @@ export default function PlanInitialForm({
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    console.log('isEditFinished', isEditFinished);
-    if (isEditFinished) window.location.href = `/plan/detail/${articlePageId}`;
-  }, [isEditFinished]);
 
   return (
     <form className="flex w-full min-w-80 flex-col gap-10 pt-10 md:pt-[3.75rem]" onSubmit={handleSubmit(onSubmit)}>

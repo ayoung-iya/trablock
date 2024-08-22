@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 
@@ -10,7 +11,8 @@ import LogoSvg from '@/icons/logo.svg';
 
 export default function GNB() {
   const cookieStore = cookies();
-  const hasAuthToken = cookieStore.has('authorization-token');
+  const authToken = cookieStore.get('authorization-token')?.value || '';
+  const userId = authToken ? `${jwtDecode<{ userId: number; exp: number }>(authToken)?.userId}` : '';
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -33,7 +35,7 @@ export default function GNB() {
                 </button>
               </li>
             </Link>
-            <UserGNBButton hasAuthToken={hasAuthToken} />
+            <UserGNBButton hasAuthToken={!!authToken} initialUserId={userId} />
           </ul>
         </HeaderSearchInput>
       </nav>

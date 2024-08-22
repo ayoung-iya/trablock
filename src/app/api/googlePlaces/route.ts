@@ -28,9 +28,9 @@ export async function POST(request: NextRequest) {
   });
   const rawData: GooglePlaceResponse = await response.json();
 
-  const data = rawData.suggestions.map(({ placePrediction: { placeId, text, structuredFormat } }) => {
+  const data = rawData.suggestions?.map(({ placePrediction: { placeId, text, structuredFormat } }) => {
     return { placeId, address: text.text, city: structuredFormat.mainText.text };
   });
 
-  return Response.json(data);
+  return Response.json(data ?? []);
 }

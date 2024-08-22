@@ -14,13 +14,19 @@ import ProfileDefault from '@/icons/profile-default.svg?url';
 
 const DEFAULT_IMAGE_URL = ProfileDefault.src;
 
-export default function UserGNBButton({ hasAuthToken }: { hasAuthToken: boolean }) {
+export default function UserGNBButton({
+  hasAuthToken,
+  initialUserId
+}: {
+  hasAuthToken: boolean;
+  initialUserId: string;
+}) {
   const authToken = Cookies.get('authorization-token') || '';
-  const userId = authToken ? jwtDecode<{ userId: number; exp: number }>(authToken)?.userId : '';
 
-  const { data: profileData } = useGetProfile(`${userId}`);
   const [isLoggedIn, setIsLoggedIn] = useState(hasAuthToken);
+  const [userId, setUserId] = useState(initialUserId);
   const [profileImgURL, setProfileImgURL] = useState(DEFAULT_IMAGE_URL);
+  const { data: profileData } = useGetProfile(`${userId}`);
   const router = useRouter();
 
   const handleLogout: React.MouseEventHandler = () => {
@@ -35,9 +41,11 @@ export default function UserGNBButton({ hasAuthToken }: { hasAuthToken: boolean 
   useEffect(() => {
     if (authToken) {
       setIsLoggedIn(true);
+      setUserId(`${jwtDecode<{ userId: number; exp: number }>(authToken).userId}`);
       setProfileImgURL(profileData?.profile_img_url || DEFAULT_IMAGE_URL);
     } else {
       setIsLoggedIn(false);
+      setUserId('');
       setProfileImgURL(DEFAULT_IMAGE_URL);
     }
   }, [authToken, profileData]);
