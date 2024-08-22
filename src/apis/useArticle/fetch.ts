@@ -46,10 +46,10 @@ const ArticleService = {
       const responseData = await response.json();
 
       if (!response.ok) {
-        throw new Error(responseData.local_message);
+        throw new Error(responseData.error?.local_message);
       }
 
-      return { articleId: responseData.article_id };
+      return { articleId: responseData.data.article_id };
     } catch (err) {
       throw (err as Error).message;
     }
@@ -93,7 +93,7 @@ const ArticleService = {
         throw new Error(responseData.local_message);
       }
 
-      return responseData;
+      return responseData.data;
     } catch (err) {
       throw (err as Error).message;
     }
