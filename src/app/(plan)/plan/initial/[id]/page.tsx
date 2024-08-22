@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { redirect } from 'next/navigation';
 
 import ArticleService from '@/apis/useArticle/fetch';
@@ -10,7 +11,14 @@ async function Plan({ params }: { params: { id: string } }) {
     redirect('/plan/initial');
   }
 
-  return <PlanInitialForm articlePageId={params.id} articleData={articleData} />;
+  return (
+    <>
+      <Head>
+        <title>여행 계획 수정하기 - 트래블록</title>
+      </Head>
+      <PlanInitialForm articlePageId={params.id} articleData={articleData} />
+    </>
+  );
 }
 
 export default Plan;
