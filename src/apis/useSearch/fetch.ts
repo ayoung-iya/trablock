@@ -21,7 +21,7 @@ const searchService = {
     const authToken = getAuthToken();
     const orderString = order === 'popularity' ? 'popularity' : '';
     const response = await fetchService(
-      `api/v1/search/article?keyword=${keyword}&page=${page}&size=${PAGE_SIZE}&order=${orderString}`,
+      `api/v1/search/article?keyword=${keyword}&page=${page}&size=${PAGE_SIZE}&sort=${orderString}`,
       {
         method: 'GET',
         headers: {
