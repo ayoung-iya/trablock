@@ -1,22 +1,29 @@
-import Head from 'next/head';
+import type { Metadata } from 'next';
 
 import SearchList from '@/components/SearchList';
+import { PAGE_TITLES } from '@/libs/constants/title';
 
-export default function Search({ searchParams }: { searchParams: { [key: string]: string } }) {
+interface Params {
+  searchParams: { [key: string]: string };
+}
+
+export async function generateMetadata({ searchParams }: Params): Promise<Metadata> {
+  const { keyword = '' } = searchParams;
+
+  return {
+    title: PAGE_TITLES.search(keyword)
+  };
+}
+
+export default function Search({ searchParams }: Params) {
   const { keyword = '', order } = searchParams;
 
   return (
-    <>
-      <Head>
-        <title>&quot;{keyword}&quot; 검색 결과 - 트래블록</title>
-      </Head>
-
-      <div className="mx-5 my-5 max-w-[1200px] md:mx-auto md:px-7">
-        <h1 className="font-title-2 md:font-title-3 mb-3 whitespace-nowrap">
-          {keyword ? `‘${decodeURIComponent(keyword)}’` : '전체'} 여행 계획 검색 결과
-        </h1>
-        <SearchList keyword={keyword} order={order} />
-      </div>
-    </>
+    <div className="mx-5 my-5 max-w-[1200px] md:mx-auto md:px-7">
+      <h1 className="font-title-2 md:font-title-3 mb-3 whitespace-nowrap">
+        {keyword ? `‘${decodeURIComponent(keyword)}’` : '전체'} 여행 계획 검색 결과
+      </h1>
+      <SearchList keyword={keyword} order={order} />
+    </div>
   );
 }

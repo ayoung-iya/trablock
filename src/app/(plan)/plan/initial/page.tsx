@@ -1,16 +1,14 @@
-import Head from 'next/head';
+import type { Metadata } from 'next';
 
 import PlanInitialForm from '@/components/PlanInitialForm';
+import { PAGE_TITLES } from '@/libs/constants/title';
+
+export const metadata: Metadata = {
+  title: PAGE_TITLES.createInitialPlan
+};
 
 function Plan() {
-  return (
-    <>
-      <Head>
-        <title>여행 계획 생성하기 - 트래블록</title>
-      </Head>
-      <PlanInitialForm />
-    </>
-  );
+  return <PlanInitialForm />;
 }
 
 export default Plan;

@@ -1,8 +1,13 @@
-import Head from 'next/head';
+import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import ArticleService from '@/apis/useArticle/fetch';
 import PlanInitialForm from '@/components/PlanInitialForm';
+import { PAGE_TITLES } from '@/libs/constants/title';
+
+export const metadata: Metadata = {
+  title: PAGE_TITLES.modifyInitialPlan
+};
 
 async function Plan({ params }: { params: { id: string } }) {
   const articleData = await ArticleService.getArticle(params.id);
@@ -11,14 +16,7 @@ async function Plan({ params }: { params: { id: string } }) {
     redirect('/plan/initial');
   }
 
-  return (
-    <>
-      <Head>
-        <title>여행 계획 수정하기 - 트래블록</title>
-      </Head>
-      <PlanInitialForm articlePageId={params.id} articleData={articleData} />
-    </>
-  );
+  return <PlanInitialForm articlePageId={params.id} articleData={articleData} />;
 }
 
 export default Plan;
