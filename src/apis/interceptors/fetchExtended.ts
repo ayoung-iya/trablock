@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import returnFetch, { FetchArgs, ReturnFetch, ReturnFetchDefaultOptions } from 'return-fetch';
 
 import API_URL from '@/apis/constants/url';
@@ -23,8 +24,23 @@ const returnFetchThrowingErrorByStatusCode: ReturnFetch = (args) =>
     interceptors: {
       response: async (response) => {
         if (response.status >= 400) {
-          const { error } = await response.json();
-          throw new Error(error);
+          const { error } = (await response.json()) as { error: CustomError };
+
+          throw error;
+        }
+
+        return response;
+      }
+    }
+  });
+
+const returnFetchHandleNotFound: ReturnFetch = (args) =>
+  returnFetch({
+    ...args,
+    interceptors: {
+      response: async (response) => {
+        if (response.status === 404) {
+          notFound();
         }
 
         return response;
@@ -93,11 +109,15 @@ const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
 };
 
 export const fetchExtended = returnFetchJson({
-  fetch: returnFetchThrowingErrorByStatusCode(defaultApiOptions)
+  fetch: returnFetchThrowingErrorByStatusCode({
+    fetch: returnFetchHandleNotFound(defaultApiOptions)
+  })
 });
 
 export const fetchExtendedWithAuthToken = returnFetchJson({
   fetch: returnFetchThrowingErrorByStatusCode({
-    fetch: returnFetchAddAuthTokenInHeader(defaultApiOptions)
+    fetch: returnFetchAddAuthTokenInHeader({
+      fetch: returnFetchHandleNotFound(defaultApiOptions)
+    })
   })
 });
