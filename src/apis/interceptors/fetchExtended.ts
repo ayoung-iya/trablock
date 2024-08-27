@@ -1,15 +1,16 @@
 import returnFetch, { FetchArgs, ReturnFetch, ReturnFetchDefaultOptions } from 'return-fetch';
 
 import API_URL from '@/apis/constants/url';
-
-import getAuthToken from '../utils/getAuthToken';
+import type { CustomError } from '@/apis/interceptors/customError.type';
+import getAuthToken from '@/apis/utils/getAuthToken';
 
 type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, 'body'> & { body?: object };
-// eslint-disable-next-line no-undef
-type ResponseGenericBody<T> = Omit<Awaited<ReturnType<typeof fetch>>, keyof Body | 'clone'> & { body: T };
-type JsonResponse<T> = T extends object ? ResponseGenericBody<T> : ResponseGenericBody<unknown>;
+interface ApiResponse<T> {
+  data: T;
+  error?: CustomError;
+}
 
-const baseURL = {
+const defaultApiOptions = {
   baseUrl: API_URL.API_BASE_URL,
   headers: {
     'Content-Type': 'application/json'
@@ -47,7 +48,6 @@ const returnFetchAddAuthTokenInHeader: ReturnFetch = (args) =>
           ...options,
           headers: {
             ...options?.headers,
-            'Content-Type': 'application/json',
             'authorization-token': token
           }
         };
@@ -72,33 +72,32 @@ const parseJsonSafely = (text: string): object | string => {
 const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
   const fetch = returnFetch(args);
 
-  return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<JsonResponse<T>> => {
+  return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<T> => {
     const response = await fetch(url, {
       ...init,
       body: init?.body && JSON.stringify(init.body)
     });
 
-    const body = parseJsonSafely(await response.text()) as T;
+    const { data, error } = parseJsonSafely(await response.text()) as ApiResponse<T>;
 
-    return {
-      headers: response.headers,
-      ok: response.ok,
-      redirected: response.redirected,
-      status: response.status,
-      statusText: response.statusText,
-      type: response.type,
-      url: response.url,
-      body
-    } as JsonResponse<T>;
+    if (error) {
+      throw error;
+    }
+
+    if (Array.isArray(data)) {
+      return { data } as T;
+    }
+
+    return data;
   };
 };
 
 export const fetchExtended = returnFetchJson({
-  fetch: returnFetchThrowingErrorByStatusCode(baseURL)
+  fetch: returnFetchThrowingErrorByStatusCode(defaultApiOptions)
 });
 
 export const fetchExtendedWithAuthToken = returnFetchJson({
   fetch: returnFetchThrowingErrorByStatusCode({
-    fetch: returnFetchAddAuthTokenInHeader(baseURL)
+    fetch: returnFetchAddAuthTokenInHeader(defaultApiOptions)
   })
 });
