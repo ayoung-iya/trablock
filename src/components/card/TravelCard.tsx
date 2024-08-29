@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 import useToggleBookmark from '@/apis/useContentService/useToggleBookmark';
 import serviceSchedule from '@/apis/useScheduleService/fetch';
-import Badge from '@/components/common/Badge';
+// import Badge from '@/components/common/Badge';
 import ImageBox from '@/components/common/ImageBox';
 import modalList from '@/components/modal/modalList/modalList';
 import useMediaQuery from '@/hooks/useMediaQuery';
@@ -30,10 +30,10 @@ export interface TravelCardProps {
   startAt: string;
   endAt: string;
   travelCompanion: string;
-  travelStyle: string[];
+  travelStyle?: string[];
   name: string;
-  profileImageUrl: string | null;
-  thumbnailImageUrl: string | null;
+  profileImageUrl?: string;
+  thumbnailImageUrl?: string;
   bookmarkCount: number;
   isBookmarked: boolean;
   isEditable?: boolean;
@@ -41,7 +41,11 @@ export interface TravelCardProps {
   isSearchPage?: boolean;
 }
 
-const isValidUrl = (url: string | null): url is string => {
+const isValidUrl = (url?: string): url is string => {
+  if (!url) {
+    return false;
+  }
+
   try {
     // eslint-disable-next-line no-new
     new URL(url!);
@@ -54,11 +58,11 @@ const isValidUrl = (url: string | null): url is string => {
 export default function TravelCard({
   id,
   title,
-  city,
+  // city,
   startAt,
   endAt,
-  travelCompanion,
-  travelStyle,
+  // travelCompanion,
+  // travelStyle,
   name,
   profileImageUrl,
   thumbnailImageUrl,
@@ -86,7 +90,7 @@ export default function TravelCard({
     }
   }, [isSmOrLarger, divHeight]);
 
-  const combinedTags = [travelCompanion, ...travelStyle];
+  // const combinedTags = [travelCompanion, ...travelStyle];
   const imageSrc = isValidUrl(thumbnailImageUrl) ? thumbnailImageUrl : null;
   const profileSrc = isValidUrl(profileImageUrl) ? profileImageUrl : null;
 
@@ -207,7 +211,7 @@ export default function TravelCard({
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-[6px]">
                 <MapPinIcon width={16} height={16} />
-                <span className="font-subtitle-3 text-gray-01">{city.join(', ')}</span>
+                {/* <span className="font-subtitle-3 text-gray-01">{city.join(', ')}</span> */}
               </div>
               <div className="flex items-center gap-[6px]">
                 <CalendarIcon width={16} height={16} />
@@ -216,13 +220,13 @@ export default function TravelCard({
                 </span>
               </div>
             </div>
-            <div className="flex-row-center flex-wrap gap-2">
+            {/* <div className="flex-row-center flex-wrap gap-2">
               {combinedTags.map((item) => (
                 <Badge key={item} type="해시태그" className="mr-2">
                   {item}
                 </Badge>
               ))}
-            </div>
+            </div> */}
           </div>
           <div className="flex-row-center justify-between p-4">
             <div className="flex-row-center gap-2">
