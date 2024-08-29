@@ -4,6 +4,7 @@ import returnFetch, { FetchArgs, ReturnFetch, ReturnFetchDefaultOptions } from '
 import API_URL from '@/apis/constants/url';
 import type { CustomError } from '@/apis/interceptors/customError.type';
 import getAuthToken from '@/apis/utils/getAuthToken';
+import { CamelCase, changeKeysToCamelCase } from '@/libs/utils/snakeToCamel';
 
 type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, 'body'> & { body?: object };
 interface ApiResponse<T> {
@@ -88,20 +89,21 @@ const parseJsonSafely = (text: string): object | string => {
 const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
   const fetch = returnFetch(args);
 
-  return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<T> => {
+  return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<CamelCase<T>> => {
     const response = await fetch(url, {
       ...init,
       body: init?.body && JSON.stringify(init.body)
     });
 
-    const { data, error } = parseJsonSafely(await response.text()) as ApiResponse<T>;
+    const { data: rawData, error } = parseJsonSafely(await response.text()) as ApiResponse<T>;
+    const data = changeKeysToCamelCase(rawData);
 
     if (error) {
       throw error;
     }
 
     if (Array.isArray(data)) {
-      return { data } as T;
+      return { data } as CamelCase<T>;
     }
 
     return data;
