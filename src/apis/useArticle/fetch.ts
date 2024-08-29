@@ -8,7 +8,7 @@ import type {
   ArticleInitial,
   ArticleInitialRawData,
   ArticleRawData,
-  ArticleThumbnailRawData
+  ArticleInfoRawData
 } from '@/apis/useArticle/article.type';
 import { formatArticleDataForRequest, formatArticleDataForUse } from '@/apis/utils/formatArticleInitialData';
 import { Schedule, ScheduleList } from '@/libs/types/dragAndDropType';
@@ -43,10 +43,9 @@ const ARTICLE_SERVICE = {
       throw new Error('no article id');
     }
 
-    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticleThumbnailRawData>>(
-      `api/v1/article/${articleId}`,
-      { method: 'GET' }
-    );
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticleInfoRawData>>(`api/v1/article/${articleId}`, {
+      method: 'GET'
+    });
 
     if (!response.isEditable) {
       notFound();
