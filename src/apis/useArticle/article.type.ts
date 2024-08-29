@@ -1,57 +1,36 @@
-import { CamelCase } from '@/libs/utils/snakeToCamel';
-
-export interface articleID {
-  article_id: number;
+interface RawDataDateAndExpense {
+  startAt: string;
+  endAt: string;
+  expense?: string;
 }
 
-export interface articleIdCamelCase {
+export interface articleId {
   articleId: number;
 }
 
-export interface CityInfoSnakeCase {
-  place_id: string;
-  address: string;
-  city: string;
-}
-
-export interface CityInfoCamelCase {
+export interface CityInfo {
   placeId: string;
   address: string;
   city: string;
 }
 
-export interface ArticleInitialSnakeCase {
+export interface ArticleInitial {
   title: string;
-  locations: CityInfoSnakeCase[];
-  start_at: string;
-  end_at: string;
-  expense?: string;
-  travel_companion: string;
-  travel_styles?: string[];
-}
-
-export interface ArticleInitialCamelCase {
-  title: string;
-  locations: CityInfoCamelCase[];
+  locations: CityInfo[];
   date: { from: Date; to: Date };
   expense?: number;
   travelCompanion: string;
-  travelStyles: string[];
+  travelStyles?: string[];
 }
 
-export interface ArticleThumbnailSnakeCase extends ArticleInitialSnakeCase {
-  name: string;
-  bookmark_count: number;
-  is_bookmarked: boolean;
-  is_editable: boolean;
-}
-
-export interface ArticleThumbnailCamelCase extends ArticleInitialCamelCase {
+export interface ArticleThumbnail extends ArticleInitial {
   name: string;
   bookmarkCount: number;
   isBookmarked: boolean;
   isEditable: boolean;
 }
 
-export interface ArticleSnakeCase extends articleID, ArticleThumbnailSnakeCase {}
-export type ArticleCamelCase = CamelCase<ArticleSnakeCase>;
+export interface ArticleInitialRawData extends Omit<ArticleInitial, 'date' | 'expense'>, RawDataDateAndExpense {}
+export interface ArticleThumbnailRawData extends Omit<ArticleThumbnail, 'date' | 'expense'>, RawDataDateAndExpense {}
+export interface Article extends articleId, ArticleThumbnail {}
+export interface ArticleRawData extends articleId, ArticleThumbnailRawData {}

@@ -1,69 +1,71 @@
+/* eslint-disable no-shadow */
 import { notFound } from 'next/navigation';
 
-import { PaginationParams, PaginationSnakeCase } from '@/apis/constants/pagination.type';
+import { PaginationParams, Pagination } from '@/apis/constants/pagination.type';
 import { fetchExtendedWithAuthToken } from '@/apis/interceptors/fetchExtended';
 import type {
-  articleID,
-  ArticleInitialCamelCase,
-  ArticleInitialSnakeCase,
-  ArticleSnakeCase,
-  ArticleThumbnailSnakeCase
+  articleId,
+  ArticleInitial,
+  ArticleInitialRawData,
+  ArticleRawData,
+  ArticleThumbnailRawData
 } from '@/apis/useArticle/article.type';
-import {
-  formatArticleInitialDataToCamelCase,
-  formatArticleInitialDataToSnakeCase
-} from '@/apis/utils/formatArticleInitialData';
+import { formatArticleDataForRequest, formatArticleDataForUse } from '@/apis/utils/formatArticleInitialData';
 import { Schedule, ScheduleList } from '@/libs/types/dragAndDropType';
-import { changeKeysToCamelCase } from '@/libs/utils/snakeToCamel';
+import { SnakeCase } from '@/libs/utils/snakeToCamel';
 
-interface ArticlesResponse extends PaginationSnakeCase {
-  content: ArticleSnakeCase[];
+interface ArticlesResponse extends Pagination {
+  content: ArticleRawData[];
 }
 
 const ARTICLE_SERVICE = {
   getArticles: async ({ page = 0, size = 10, sort = 'createdAt,DESC' }: PaginationParams) => {
-    const response = await fetchExtendedWithAuthToken<ArticlesResponse>(
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticlesResponse>>(
       `api/v1/articles?page=${page}&size=${size}&sort=${sort}`,
-      {
-        method: 'GET'
-      }
+      { method: 'GET' }
     );
 
-    return changeKeysToCamelCase<ArticlesResponse>(response);
+    return response;
   },
 
-  postArticle: async (data: ArticleInitialCamelCase) => {
-    const formatData: ArticleInitialSnakeCase = formatArticleInitialDataToSnakeCase(data);
-    const { article_id: articleId } = await fetchExtendedWithAuthToken<articleID>('api/v1/article', {
+  postArticle: async (data: ArticleInitial) => {
+    const formatData = formatArticleDataForRequest(data);
+    const response = await fetchExtendedWithAuthToken<SnakeCase<articleId>>('api/v1/article', {
       method: 'POST',
       body: formatData
     });
 
-    return { articleId };
+    return response;
   },
+
   getArticle: async (articleId?: string) => {
     if (!articleId) {
       throw new Error('no article id');
     }
 
-    const response = await fetchExtendedWithAuthToken<ArticleThumbnailSnakeCase>(`api/v1/article/${articleId}`, {
-      method: 'GET'
-    });
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticleThumbnailRawData>>(
+      `api/v1/article/${articleId}`,
+      { method: 'GET' }
+    );
 
-    if (!response.is_editable) {
+    if (!response.isEditable) {
       notFound();
     }
 
-    return formatArticleInitialDataToCamelCase(response);
+    return formatArticleDataForUse(response);
   },
-  putArticle: async (articleId: string, data: ArticleInitialCamelCase) => {
-    const formatData: ArticleInitialSnakeCase = formatArticleInitialDataToSnakeCase(data);
-    const response = await fetchExtendedWithAuthToken<ArticleInitialSnakeCase>(`/api/v1/article/${articleId}`, {
-      method: 'PUT',
-      body: formatData
-    });
 
-    return formatArticleInitialDataToCamelCase(response);
+  putArticle: async (articleId: string, data: ArticleInitial) => {
+    const formatData = formatArticleDataForRequest(data);
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticleInitialRawData>>(
+      `/api/v1/article/${articleId}`,
+      {
+        method: 'PUT',
+        body: formatData
+      }
+    );
+
+    return response;
   },
 
   getSchedules: async (articleId: number) => {
