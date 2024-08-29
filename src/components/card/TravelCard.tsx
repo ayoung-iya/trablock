@@ -33,7 +33,7 @@ export interface TravelCardProps {
   travelStyle?: string[];
   name: string;
   profileImageUrl?: string;
-  thumbnailImageUrl?: string;
+  thumbnailImageUrl?: string | null;
   bookmarkCount: number;
   isBookmarked: boolean;
   isEditable?: boolean;
@@ -41,7 +41,7 @@ export interface TravelCardProps {
   isSearchPage?: boolean;
 }
 
-const isValidUrl = (url?: string): url is string => {
+const isValidUrl = (url?: string | null): url is string => {
   if (!url) {
     return false;
   }
