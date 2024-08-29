@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import type { CustomError } from '@/apis/interceptors/customError.type';
 import { fetchExtended } from '@/apis/interceptors/fetchExtended';
 import ReviewCard from '@/components/card/ReviewCard';
 
@@ -17,20 +16,13 @@ interface Review {
 }
 
 interface ReviewsResponse {
-  data: {
-    reviews: Review[];
-  };
-  error?: CustomError;
+  reviews: Review[];
 }
 
 export default async function BannerReviewList() {
   const fetchBannerReviews = async () => {
     try {
-      const {
-        body: {
-          data: { reviews }
-        }
-      } = await fetchExtended<ReviewsResponse>('api/v1/banner/reviews');
+      const { reviews } = await fetchExtended<ReviewsResponse>('api/v1/banner/reviews');
 
       return reviews;
     } catch (e) {
