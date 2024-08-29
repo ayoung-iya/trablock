@@ -10,13 +10,14 @@ export const formatArticleDataForRequest = ({
   travelCompanion,
   travelStyles
 }: ArticleInitial) => {
-  const formatData: ArticleInitialRawData = {
-    title,
-    locations,
-    startAt: dateRequestFormat(date.from),
-    endAt: dateRequestFormat(date.to),
-    travelCompanion
-  };
+  const formatData: Omit<ArticleInitialRawData, 'travelStyles'> & Partial<Pick<ArticleInitialRawData, 'travelStyles'>> =
+    {
+      title,
+      locations,
+      startAt: dateRequestFormat(date.from),
+      endAt: dateRequestFormat(date.to),
+      travelCompanion
+    };
 
   if (expense) {
     formatData.expense = String(expense);
