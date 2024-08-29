@@ -1,6 +1,5 @@
 import Link from 'next/link';
 
-import type { CustomError } from '@/apis/interceptors/customError.type';
 import { fetchExtended } from '@/apis/interceptors/fetchExtended';
 import TravelCard from '@/components/card/TravelCard';
 import Button from '@/components/common/button/Button';
@@ -28,17 +27,14 @@ interface Article {
 
 interface ArticlesResponse {
   data: Article[];
-  error?: CustomError;
 }
 
 export default async function BannerList() {
   const fetchBannerArticles = async () => {
     try {
-      const {
-        body: { data: articles }
-      } = await fetchExtended<ArticlesResponse>('api/v1/banner/articles');
+      const { data } = await fetchExtended<ArticlesResponse>('api/v1/banner/articles');
 
-      return articles;
+      return data;
     } catch (e) {
       console.error(e);
       return [];
