@@ -116,7 +116,8 @@ export default function SignupForm() {
     username: register('username', { ...validate.username, onBlur: validateUsername }),
     password: register('password', validate.password),
     password_confirm: register('password_confirm', { validate: validatePasswordConfirm }),
-    pw_answer: register('pw_answer', validate.pw_answer)
+    pw_answer: register('pw_answer', validate.pw_answer),
+    isAgreement: register('is_agreement', validate.isAgreement)
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (e) => {
@@ -210,12 +211,12 @@ export default function SignupForm() {
 
         <section className="mb-4">
           <div className="flex gap-4">
-            <input type="checkbox" id="is_agreement" {...register('is_agreement')} />
+            <input type="checkbox" id="is_agreement" {...registerList.isAgreement} />
             <label htmlFor="is_agreement">(필수)개인정보 수집 및 이용 동의</label>
           </div>
         </section>
 
-        <Button disabled={!isAgreement || !isValid} onClick={onSubmit} type="submit" className={buttonStyle}>
+        <Button disabled={!(isAgreement && isValid)} onClick={onSubmit} type="submit" className={buttonStyle}>
           회원가입
         </Button>
       </form>
