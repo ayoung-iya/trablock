@@ -1,102 +1,50 @@
-import { redirect } from 'next/navigation';
-import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
+import { notFound } from 'next/navigation';
 
-import type { ArticleFormData, ArticleRequestFormData, GetArticleFormData } from '@/apis/useArticle/article.type';
-import getAuthToken from '@/apis/utils/getAuthToken';
-
-import API_URL from '../constants/url';
-import interceptor from '../interceptors/interceptor';
+import { fetchExtendedWithAuthToken } from '@/apis/interceptors/fetchExtended';
+import type {
+  articleID,
+  ArticleInitialCamelCase,
+  ArticleInitialSnakeCase,
+  ArticleThumbnailSnakeCase
+} from '@/apis/useArticle/article.type';
 import {
-  formatArticleInitialDataForRequest,
-  formatArticleInitialDataFromResponse
-} from '../utils/formatArticleInitialData';
-
-const options: ReturnFetchDefaultOptions = {
-  baseUrl: API_URL.API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  interceptors: {
-    response: async (response) => {
-      const result = await response.json();
-      if (!response.ok) {
-        console.log('▷▶▷▶ response error', result);
-        redirect('/');
-      }
-      return response;
-    }
-  }
-};
-
-const fetchService = returnFetch({ fetch: interceptor.logging(options) });
+  formatArticleInitialDataToCamelCase,
+  formatArticleInitialDataToSnakeCase
+} from '@/apis/utils/formatArticleInitialData';
 
 const ArticleService = {
-  postRegisterArticle: async (data: ArticleFormData) => {
-    const authToken = getAuthToken();
+  postArticle: async (data: ArticleInitialCamelCase) => {
+    const formatData: ArticleInitialSnakeCase = formatArticleInitialDataToSnakeCase(data);
+    const { article_id: articleId } = await fetchExtendedWithAuthToken<articleID>('api/v1/article', {
+      method: 'POST',
+      body: formatData
+    });
 
-    try {
-      const formatData: ArticleRequestFormData = formatArticleInitialDataForRequest(data);
-      const response = await fetchService('api/v1/article', {
-        method: 'POST',
-        body: JSON.stringify(formatData),
-        headers: {
-          'authorization-token': authToken
-        }
-      });
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        throw new Error(responseData.error?.local_message);
-      }
-
-      return { articleId: responseData.data.article_id };
-    } catch (err) {
-      throw (err as Error).message;
-    }
+    return { articleId };
   },
   getArticle: async (articleId?: string) => {
-    const authToken = getAuthToken();
     if (!articleId) {
       throw new Error('no article id');
     }
 
-    const response = await fetchService(`api/v1/article/${articleId}`, {
-      method: 'GET',
-      headers: {
-        'authorization-token': authToken
-      }
+    const response = await fetchExtendedWithAuthToken<ArticleThumbnailSnakeCase>(`api/v1/article/${articleId}`, {
+      method: 'GET'
     });
-    const { data, error } = await response.json();
 
-    if (!response.ok) {
-      throw new Error(error.local_message);
+    if (!response.is_editable) {
+      notFound();
     }
 
-    const formattedData: GetArticleFormData = formatArticleInitialDataFromResponse(data);
-
-    return formattedData;
+    return formatArticleInitialDataToCamelCase(response);
   },
-  putArticle: async (articleId: string, data: ArticleFormData) => {
-    const authToken = getAuthToken();
-    try {
-      const formatData: ArticleRequestFormData = formatArticleInitialDataForRequest(data);
-      const response = await fetchService(`/api/v1/article/${articleId}`, {
-        method: 'PUT',
-        body: JSON.stringify(formatData),
-        headers: {
-          'authorization-token': authToken
-        }
-      });
-      const responseData = await response.json();
+  putArticle: async (articleId: string, data: ArticleInitialCamelCase) => {
+    const formatData: ArticleInitialSnakeCase = formatArticleInitialDataToSnakeCase(data);
+    const response = await fetchExtendedWithAuthToken<ArticleInitialSnakeCase>(`/api/v1/article/${articleId}`, {
+      method: 'PUT',
+      body: formatData
+    });
 
-      if (!response.ok) {
-        throw new Error(responseData.local_message);
-      }
-
-      return responseData.data;
-    } catch (err) {
-      throw (err as Error).message;
-    }
+    return formatArticleInitialDataToCamelCase(response);
   }
 };
 
