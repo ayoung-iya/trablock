@@ -25,7 +25,7 @@ export interface ArticleInitial {
   date: { from: Date; to: Date };
   expense?: number;
   travelCompanion: string;
-  travelStyles?: string[];
+  travelStyles: string[];
 }
 
 export interface ArticleInfo extends ArticleInitial {

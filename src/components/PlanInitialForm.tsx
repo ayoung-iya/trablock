@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { DateRange } from 'react-day-picker';
 import { Controller, useForm } from 'react-hook-form';
 
-import type { ArticleInitialCamelCase, CityInfoCamelCase } from '@/apis/useArticle/article.type';
+import type { ArticleInitial, CityInfo } from '@/apis/useArticle/article.type';
 import ArticleService from '@/apis/useArticle/fetch';
 import BadgeWithDelete from '@/components/badge/badgeWithDelete';
 import CitySearchList from '@/components/CitySearchList';
@@ -30,7 +30,7 @@ export default function PlanInitialForm({
   articleData
 }: {
   articlePageId?: string;
-  articleData?: ArticleInitialCamelCase;
+  articleData?: ArticleInitial;
 }) {
   const router = useRouter();
 
@@ -40,7 +40,7 @@ export default function PlanInitialForm({
     getValues,
     handleSubmit,
     formState: { isValid }
-  } = useForm<ArticleInitialCamelCase>({
+  } = useForm<ArticleInitial>({
     defaultValues: {
       title: articleData?.title || '',
       locations: articleData?.locations || [],
@@ -115,7 +115,7 @@ export default function PlanInitialForm({
     handleCalendarOpen();
   };
 
-  const onSubmit = async (formData: ArticleInitialCamelCase) => {
+  const onSubmit = async (formData: ArticleInitial) => {
     if (isEditPage) {
       try {
         await ArticleService.putArticle(articlePageId, formData);
@@ -190,7 +190,7 @@ export default function PlanInitialForm({
                   <CitySearchList
                     searchString={debounceSearchString}
                     selectedCityList={value}
-                    onClickCity={(city: CityInfoCamelCase[]) => {
+                    onClickCity={(city: CityInfo[]) => {
                       onChange(city);
                       handleCitySearchListClose();
                     }}
