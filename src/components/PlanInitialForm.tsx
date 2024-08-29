@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { DateRange } from 'react-day-picker';
 import { Controller, useForm } from 'react-hook-form';
 
-import type { ArticleFormData, CityInfo } from '@/apis/useArticle/article.type';
+import type { ArticleInitialCamelCase, CityInfoCamelCase } from '@/apis/useArticle/article.type';
 import ArticleService from '@/apis/useArticle/fetch';
 import BadgeWithDelete from '@/components/badge/badgeWithDelete';
 import CitySearchList from '@/components/CitySearchList';
@@ -30,7 +30,7 @@ export default function PlanInitialForm({
   articleData
 }: {
   articlePageId?: string;
-  articleData?: ArticleFormData;
+  articleData?: ArticleInitialCamelCase;
 }) {
   const router = useRouter();
 
@@ -40,13 +40,14 @@ export default function PlanInitialForm({
     getValues,
     handleSubmit,
     formState: { isValid }
-  } = useForm<ArticleFormData>({
+  } = useForm<ArticleInitialCamelCase>({
     defaultValues: {
       title: articleData?.title || '',
       locations: articleData?.locations || [],
       date: articleData?.date || {},
+      expense: articleData?.expense,
       travelCompanion: articleData?.travelCompanion || '혼자서',
-      travelStyle: articleData?.travelStyle || []
+      travelStyles: articleData?.travelStyles || []
     }
   });
 
@@ -114,7 +115,7 @@ export default function PlanInitialForm({
     handleCalendarOpen();
   };
 
-  const onSubmit = async (formData: ArticleFormData) => {
+  const onSubmit = async (formData: ArticleInitialCamelCase) => {
     if (isEditPage) {
       try {
         await ArticleService.putArticle(articlePageId, formData);
@@ -129,7 +130,7 @@ export default function PlanInitialForm({
     }
 
     try {
-      const { articleId } = await ArticleService.postRegisterArticle(formData);
+      const { articleId } = await ArticleService.postArticle(formData);
 
       // TODO: 여행 상세 페이지로 이동
       router.push(`/plan/detail/${articleId}`);
@@ -189,7 +190,7 @@ export default function PlanInitialForm({
                   <CitySearchList
                     searchString={debounceSearchString}
                     selectedCityList={value}
-                    onClickCity={(city: CityInfo[]) => {
+                    onClickCity={(city: CityInfoCamelCase[]) => {
                       onChange(city);
                       handleCitySearchListClose();
                     }}
@@ -292,7 +293,7 @@ export default function PlanInitialForm({
           <InputWithTitle title="여행 스타일" size="sm">
             <Controller
               control={control}
-              name="travelStyle"
+              name="travelStyles"
               render={({ field: { value, onChange } }) => {
                 const handleCheckboxChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
                   const newValue = value.includes(e.target.value)

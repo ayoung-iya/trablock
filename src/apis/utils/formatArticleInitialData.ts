@@ -1,22 +1,20 @@
 /* eslint-disable camelcase */
+import type {
+  ArticleInitialCamelCase,
+  ArticleInitialSnakeCase,
+  ArticleThumbnailSnakeCase
+} from '@/apis/useArticle/article.type';
 import { dateRequestFormat } from '@/libs/utils/dateFormatter';
 
-import {
-  ArticleFormData,
-  ArticleRequestFormData,
-  GetArticleFormData,
-  GetArticleRequestFormData
-} from '../useArticle/article.type';
-
-export const formatArticleInitialDataForRequest = ({
+export const formatArticleInitialDataToSnakeCase = ({
   title,
   locations,
   date,
   expense,
   travelCompanion,
-  travelStyle
-}: ArticleFormData) => {
-  const formatData: ArticleRequestFormData = {
+  travelStyles
+}: ArticleInitialCamelCase) => {
+  const formatData: ArticleInitialSnakeCase = {
     title,
     locations: locations.map(({ placeId, address, city }) => ({ place_id: placeId, address, city })),
     start_at: dateRequestFormat(date.from),
@@ -28,33 +26,31 @@ export const formatArticleInitialDataForRequest = ({
     formatData.expense = String(expense);
   }
 
-  if (travelStyle.length) {
-    formatData.travel_styles = travelStyle;
+  if (travelStyles.length) {
+    formatData.travel_styles = travelStyles;
   }
 
   return formatData;
 };
 
-export const formatArticleInitialDataFromResponse = ({
+export const formatArticleInitialDataToCamelCase = ({
   title,
   locations,
   start_at,
   end_at,
   travel_companion,
   travel_styles,
-  expense,
-  is_editable
-}: GetArticleRequestFormData) => {
-  const formatData: GetArticleFormData = {
+  expense
+}: ArticleThumbnailSnakeCase | ArticleInitialSnakeCase) => {
+  const formatData: ArticleInitialCamelCase = {
     title,
-    locations: locations?.map(({ place_id, address, city }) => ({ placeId: place_id, address, city })),
+    locations: locations.map(({ place_id, address, city }) => ({ placeId: place_id, address, city })),
     date: {
       from: new Date(start_at),
       to: new Date(end_at)
     },
     travelCompanion: travel_companion,
-    travelStyle: travel_styles || [],
-    isEditable: is_editable
+    travelStyles: travel_styles || []
   };
 
   if (expense) {
