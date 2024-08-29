@@ -5,6 +5,7 @@ import localFont from 'next/font/local';
 
 import ReactQueryProvider from '@/apis/components/ReactQueryProvider';
 import AsyncBoundary from '@/components/common/AsyncBoundary';
+import { PAGE_DESCRIPTIONS, PAGE_TITLES } from '@/libs/constants/title';
 import { DropdownProvider } from '@/libs/contexts/DropdownContext';
 import { LoginContextProvider } from '@/libs/contexts/LoginContext';
 import ModalProvider from '@/libs/contexts/ModalProvider';
@@ -24,8 +25,8 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
-  title: '트래블록',
-  description: '소중한 여행 계획, 트래블록으로 완성하세요'
+  title: PAGE_TITLES.default,
+  description: PAGE_DESCRIPTIONS.default
 };
 
 export default function RootLayout({

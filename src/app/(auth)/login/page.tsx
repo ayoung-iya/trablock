@@ -1,39 +1,38 @@
-import Head from 'next/head';
+import { Metadata } from 'next';
 import Link from 'next/link';
 
 import KakaoLogin from '@/components/KakaoLogin';
 import SigninForm from '@/components/SigninForm';
 import Logo from '@/icons/logo.svg';
+import { PAGE_TITLES } from '@/libs/constants/title';
+
+export const metadata: Metadata = {
+  title: PAGE_TITLES.login
+};
 
 export default function login() {
   return (
-    <>
-      <Head>
-        <title>로그인 - 트래블록</title>
-      </Head>
-
-      <div className="flex-col-center pb-32 pt-32">
-        <Link href="/">
-          <Logo width={123} height={32} />
-        </Link>
-        <div className="mt-14">
-          <SigninForm />
-        </div>
-
-        <p className="font-btn-text mt-5 text-black-03">
-          <span>
-            <Link href="/signup">회원가입 </Link>
-          </span>
-          |
-          <span>
-            <Link href="/find-password-email"> 비밀번호 찾기</Link>
-          </span>
-        </p>
-        <p className="font-caption-1 mt-10 text-gray-01">SNS 계정으로 로그인/회원가입</p>
-        <div className="mt-4">
-          <KakaoLogin />
-        </div>
+    <div className="flex-col-center pb-32 pt-32">
+      <Link href="/">
+        <Logo width={123} height={32} />
+      </Link>
+      <div className="mt-14">
+        <SigninForm />
       </div>
-    </>
+
+      <p className="font-btn-text mt-5 text-black-03">
+        <span>
+          <Link href="/signup">회원가입 </Link>
+        </span>
+        |
+        <span>
+          <Link href="/find-password-email"> 비밀번호 찾기</Link>
+        </span>
+      </p>
+      <p className="font-caption-1 mt-10 text-gray-01">SNS 계정으로 로그인/회원가입</p>
+      <div className="mt-4">
+        <KakaoLogin />
+      </div>
+    </div>
   );
 }
