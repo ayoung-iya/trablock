@@ -44,7 +44,7 @@ export default async function BannerList() {
                 startAt={article.startAt}
                 endAt={article.endAt}
                 travelCompanion={article.travelCompanion}
-                travelStyle={article.travelStyles}
+                travelStyle={article.travelStyles || []}
                 name={article.name}
                 profileImageUrl={article.profileImgUrl}
                 thumbnailImageUrl={article.coverImgUrl}
