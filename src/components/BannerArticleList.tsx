@@ -1,38 +1,15 @@
 import Link from 'next/link';
 
 import { fetchExtended } from '@/apis/interceptors/fetchExtended';
+import { ArticleThumbnailRawData } from '@/apis/useArticle/article.type';
 import TravelCard from '@/components/card/TravelCard';
 import Button from '@/components/common/button/Button';
-
-interface Article {
-  article_id: number;
-  title: string;
-  locations: {
-    place_id: string;
-    address: string;
-    city: string;
-  }[];
-  start_at: string;
-  end_at: string;
-  expense: string;
-  profile_img_url: string;
-  cover_img_url: string;
-  travel_companion: string;
-  travel_styles: string[];
-  name: string;
-  bookmark_count: number;
-  is_bookmarked: boolean;
-  is_editable: boolean;
-}
-
-interface ArticlesResponse {
-  data: Article[];
-}
+import { SnakeCase } from '@/libs/utils/snakeToCamel';
 
 export default async function BannerList() {
   const fetchBannerArticles = async () => {
     try {
-      const { data } = await fetchExtended<ArticlesResponse>('api/v1/banner/articles');
+      const { data } = await fetchExtended<SnakeCase<{ data: ArticleThumbnailRawData[] }>>('api/v1/banner/articles');
 
       return data;
     } catch (e) {
@@ -60,20 +37,20 @@ export default async function BannerList() {
           <div className="grid gap-4 sm:gap-5 xl:grid-cols-2 xl:gap-5 xl:gap-y-5">
             {articles?.map((article) => (
               <TravelCard
-                key={article.article_id}
-                id={article.article_id.toString()}
+                key={article.articleId}
+                id={article.articleId.toString()}
                 title={article.title}
                 city={article.locations.map((loc) => loc.city)}
-                startAt={article.start_at}
-                endAt={article.end_at}
-                travelCompanion={article.travel_companion}
-                travelStyle={article.travel_styles}
+                startAt={article.startAt}
+                endAt={article.endAt}
+                travelCompanion={article.travelCompanion}
+                travelStyle={article.travelStyles || []}
                 name={article.name}
-                profileImageUrl={article.profile_img_url}
-                thumbnailImageUrl={article.cover_img_url}
-                bookmarkCount={article.bookmark_count}
-                isBookmarked={article.is_bookmarked}
-                isEditable={article.is_editable}
+                profileImageUrl={article.profileImgUrl}
+                thumbnailImageUrl={article.coverImgUrl}
+                bookmarkCount={article.bookmarkCount}
+                isBookmarked={article.isBookmarked}
+                isEditable={article.isEditable}
                 isPlanTab={false}
               />
             ))}

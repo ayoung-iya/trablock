@@ -1,103 +1,113 @@
-import { redirect } from 'next/navigation';
-import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
+/* eslint-disable no-shadow */
+import { notFound } from 'next/navigation';
 
-import type { ArticleFormData, ArticleRequestFormData, GetArticleFormData } from '@/apis/useArticle/article.type';
-import getAuthToken from '@/apis/utils/getAuthToken';
+import { PaginationParams, Pagination } from '@/apis/constants/pagination.type';
+import { fetchExtendedWithAuthToken } from '@/apis/interceptors/fetchExtended';
+import type {
+  articleId,
+  ArticleInitial,
+  ArticleInitialRawData,
+  ArticleRawData,
+  ArticleInfoRawData
+} from '@/apis/useArticle/article.type';
+import { formatArticleDataForRequest, formatArticleDataForUse } from '@/apis/utils/formatArticleInitialData';
+import { Schedule, ScheduleList } from '@/libs/types/dragAndDropType';
+import { SnakeCase } from '@/libs/utils/snakeToCamel';
 
-import API_URL from '../constants/url';
-import interceptor from '../interceptors/interceptor';
-import {
-  formatArticleInitialDataForRequest,
-  formatArticleInitialDataFromResponse
-} from '../utils/formatArticleInitialData';
+interface ArticlesResponse extends Pagination {
+  content: ArticleRawData[];
+}
 
-const options: ReturnFetchDefaultOptions = {
-  baseUrl: API_URL.API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json'
+const ARTICLE_SERVICE = {
+  getArticles: async ({ page = 0, size = 10, sort = 'createdAt,DESC' }: PaginationParams) => {
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticlesResponse>>(
+      `api/v1/articles?page=${page}&size=${size}&sort=${sort}`,
+      { method: 'GET' }
+    );
+
+    return response;
   },
-  interceptors: {
-    response: async (response) => {
-      const result = await response.json();
-      if (!response.ok) {
-        console.log('▷▶▷▶ response error', result);
-        redirect('/');
-      }
-      return response;
-    }
-  }
-};
 
-const fetchService = returnFetch({ fetch: interceptor.logging(options) });
+  postArticle: async (data: ArticleInitial) => {
+    const formatData = formatArticleDataForRequest(data);
+    const response = await fetchExtendedWithAuthToken<SnakeCase<articleId>>('api/v1/article', {
+      method: 'POST',
+      body: formatData
+    });
 
-const ArticleService = {
-  postRegisterArticle: async (data: ArticleFormData) => {
-    const authToken = getAuthToken();
-
-    try {
-      const formatData: ArticleRequestFormData = formatArticleInitialDataForRequest(data);
-      const response = await fetchService('api/v1/article', {
-        method: 'POST',
-        body: JSON.stringify(formatData),
-        headers: {
-          'authorization-token': authToken
-        }
-      });
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        throw new Error(responseData.error?.local_message);
-      }
-
-      return { articleId: responseData.data.article_id };
-    } catch (err) {
-      throw (err as Error).message;
-    }
+    return response;
   },
+
   getArticle: async (articleId?: string) => {
-    const authToken = getAuthToken();
     if (!articleId) {
       throw new Error('no article id');
     }
 
-    const response = await fetchService(`api/v1/article/${articleId}`, {
-      method: 'GET',
-      headers: {
-        'authorization-token': authToken
-      }
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticleInfoRawData>>(`api/v1/article/${articleId}`, {
+      method: 'GET'
     });
-    const { data, error } = await response.json();
 
-    if (!response.ok) {
-      throw new Error(error.local_message);
+    if (!response.isEditable) {
+      notFound();
     }
 
-    const formattedData: GetArticleFormData = formatArticleInitialDataFromResponse(data);
-
-    return formattedData;
+    return formatArticleDataForUse(response);
   },
-  putArticle: async (articleId: string, data: ArticleFormData) => {
-    const authToken = getAuthToken();
-    try {
-      const formatData: ArticleRequestFormData = formatArticleInitialDataForRequest(data);
-      const response = await fetchService(`/api/v1/article/${articleId}`, {
+
+  putArticle: async (articleId: string, data: ArticleInitial) => {
+    const formatData = formatArticleDataForRequest(data);
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticleInitialRawData>>(
+      `/api/v1/article/${articleId}`,
+      {
         method: 'PUT',
-        body: JSON.stringify(formatData),
-        headers: {
-          'authorization-token': authToken
-        }
-      });
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        throw new Error(responseData.local_message);
+        body: formatData
       }
+    );
 
-      return responseData.data;
-    } catch (err) {
-      throw (err as Error).message;
+    return response;
+  },
+
+  getSchedules: async (articleId: number) => {
+    const response = await fetchExtendedWithAuthToken<ScheduleList>(`api/v1/articles/${articleId}/schedules`, {
+      method: 'GET'
+    });
+
+    return response;
+  },
+
+  putSchedules: async (articleId: number, payload: { schedules: Schedule[] }) => {
+    const response = await fetchExtendedWithAuthToken<Schedule[]>(`api/v1/articles/${articleId}/schedules`, {
+      method: 'PUT',
+      body: payload
+    });
+
+    return response;
+  },
+
+  putCoverImage: async (articleId: number, payload: { coverImage: File | null }) => {
+    const formData = new FormData();
+    if (payload.coverImage) {
+      formData.append('cover_img', payload.coverImage);
     }
+
+    const response = await fetchExtendedWithAuthToken<{ cover_img_url: string }>(
+      `api/v1/article/${articleId}/coverImg`,
+      {
+        method: 'PUT',
+        body: formData
+      }
+    );
+
+    return response;
+  },
+
+  deleteArticle: async (articleId: number) => {
+    const response = await fetchExtendedWithAuthToken<{ is_delete: boolean }>(`api/v1/articles/${articleId}/status`, {
+      method: 'PATCH'
+    });
+
+    return response;
   }
 };
 
-export default ArticleService;
+export default ARTICLE_SERVICE;

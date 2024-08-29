@@ -44,13 +44,13 @@ export default async function BannerReviewList() {
       <div className="scrollbar-custom grid w-full grid-cols-1 gap-[18px] max-md:flex-col max-md:px-5 md:grid-cols-2 md:px-7 xl:flex xl:overflow-x-auto xl:px-0">
         {reviews?.map((review) => (
           <ReviewCard
-            key={review.review_id}
-            reviewId={review.review_id}
+            key={review.reviewId}
+            reviewId={review.reviewId}
             title={review.title}
             city={review.locations.map((location) => location.city)}
-            imageUrl={review.representative_img_url}
+            imageUrl={review.representativeImgUrl}
             name={review.nickname}
-            profileImageUrl={review.profile_img_url}
+            profileImageUrl={review.profileImgUrl}
             type="main"
           />
         ))}

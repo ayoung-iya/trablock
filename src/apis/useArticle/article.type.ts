@@ -1,33 +1,46 @@
+interface RawDataDateAndExpense {
+  startAt: string;
+  endAt: string;
+  expense?: string;
+}
+
+interface ImageURL {
+  profileImgUrl?: string;
+  coverImgUrl?: string;
+}
+
+export interface articleId {
+  articleId: number;
+}
+
 export interface CityInfo {
   placeId: string;
   address: string;
   city: string;
 }
 
-export interface ArticleFormData {
+export interface ArticleInitial {
   title: string;
   locations: CityInfo[];
   date: { from: Date; to: Date };
   expense?: number;
   travelCompanion: string;
-  travelStyle: string[];
+  travelStyles: string[];
 }
 
-export interface GetArticleFormData extends ArticleFormData {
+export interface ArticleInfo extends ArticleInitial {
+  name: string;
+  bookmarkCount: number;
+  isBookmarked: boolean;
   isEditable: boolean;
 }
 
-export interface ArticleRequestFormData {
-  title: string;
-  locations: { place_id: string; address: string; city: string }[];
-  start_at: string;
-  end_at: string;
-  expense?: string;
-  travel_companion: string;
-  style?: string[];
-  travel_styles?: string[];
-}
-
-export interface GetArticleRequestFormData extends ArticleRequestFormData {
-  is_editable: boolean;
-}
+export interface ArticleInitialRawData extends Omit<ArticleInitial, 'date' | 'expense'>, RawDataDateAndExpense {}
+export interface ArticleInfoRawData extends Omit<ArticleInfo, 'date' | 'expense'>, RawDataDateAndExpense {}
+export interface ArticleThumbnailRawData
+  extends Omit<ArticleInfo, 'date' | 'expense'>,
+    articleId,
+    ImageURL,
+    RawDataDateAndExpense {}
+export interface Article extends articleId, ArticleInfo {}
+export interface ArticleRawData extends articleId, ArticleThumbnailRawData {}

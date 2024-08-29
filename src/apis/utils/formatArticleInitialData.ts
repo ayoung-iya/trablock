@@ -1,60 +1,53 @@
-/* eslint-disable camelcase */
+import type { ArticleInitial, ArticleInitialRawData } from '@/apis/useArticle/article.type';
 import { dateRequestFormat } from '@/libs/utils/dateFormatter';
+import { changeKeysToSnakeCase } from '@/libs/utils/snakeToCamel';
 
-import {
-  ArticleFormData,
-  ArticleRequestFormData,
-  GetArticleFormData,
-  GetArticleRequestFormData
-} from '../useArticle/article.type';
-
-export const formatArticleInitialDataForRequest = ({
+export const formatArticleDataForRequest = ({
   title,
   locations,
   date,
   expense,
   travelCompanion,
-  travelStyle
-}: ArticleFormData) => {
-  const formatData: ArticleRequestFormData = {
-    title,
-    locations: locations.map(({ placeId, address, city }) => ({ place_id: placeId, address, city })),
-    start_at: dateRequestFormat(date.from),
-    end_at: dateRequestFormat(date.to),
-    travel_companion: travelCompanion
-  };
+  travelStyles
+}: ArticleInitial) => {
+  const formatData: Omit<ArticleInitialRawData, 'travelStyles'> & Partial<Pick<ArticleInitialRawData, 'travelStyles'>> =
+    {
+      title,
+      locations,
+      startAt: dateRequestFormat(date.from),
+      endAt: dateRequestFormat(date.to),
+      travelCompanion
+    };
 
   if (expense) {
     formatData.expense = String(expense);
   }
 
-  if (travelStyle.length) {
-    formatData.travel_styles = travelStyle;
+  if (travelStyles?.length) {
+    formatData.travelStyles = travelStyles;
   }
 
-  return formatData;
+  return changeKeysToSnakeCase(formatData);
 };
 
-export const formatArticleInitialDataFromResponse = ({
+export const formatArticleDataForUse = ({
   title,
   locations,
-  start_at,
-  end_at,
-  travel_companion,
-  travel_styles,
-  expense,
-  is_editable
-}: GetArticleRequestFormData) => {
-  const formatData: GetArticleFormData = {
+  startAt,
+  endAt,
+  travelCompanion,
+  travelStyles,
+  expense
+}: ArticleInitialRawData) => {
+  const formatData: ArticleInitial = {
     title,
-    locations: locations?.map(({ place_id, address, city }) => ({ placeId: place_id, address, city })),
+    locations,
+    travelCompanion,
     date: {
-      from: new Date(start_at),
-      to: new Date(end_at)
+      from: new Date(startAt),
+      to: new Date(endAt)
     },
-    travelCompanion: travel_companion,
-    travelStyle: travel_styles || [],
-    isEditable: is_editable
+    travelStyles: travelStyles || []
   };
 
   if (expense) {
