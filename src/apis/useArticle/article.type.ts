@@ -4,6 +4,11 @@ interface RawDataDateAndExpense {
   expense?: string;
 }
 
+interface ImageURL {
+  profileImgUrl?: string;
+  coverImgUrl?: string;
+}
+
 export interface articleId {
   articleId: number;
 }
@@ -23,7 +28,7 @@ export interface ArticleInitial {
   travelStyles?: string[];
 }
 
-export interface ArticleThumbnail extends ArticleInitial {
+export interface ArticleInfo extends ArticleInitial {
   name: string;
   bookmarkCount: number;
   isBookmarked: boolean;
@@ -31,6 +36,11 @@ export interface ArticleThumbnail extends ArticleInitial {
 }
 
 export interface ArticleInitialRawData extends Omit<ArticleInitial, 'date' | 'expense'>, RawDataDateAndExpense {}
-export interface ArticleThumbnailRawData extends Omit<ArticleThumbnail, 'date' | 'expense'>, RawDataDateAndExpense {}
-export interface Article extends articleId, ArticleThumbnail {}
+export interface ArticleInfoRawData extends Omit<ArticleInfo, 'date' | 'expense'>, RawDataDateAndExpense {}
+export interface ArticleThumbnailRawData
+  extends Omit<ArticleInfo, 'date' | 'expense'>,
+    articleId,
+    ImageURL,
+    RawDataDateAndExpense {}
+export interface Article extends articleId, ArticleInfo {}
 export interface ArticleRawData extends articleId, ArticleThumbnailRawData {}
