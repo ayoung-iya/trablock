@@ -1,5 +1,11 @@
+import { CamelCase } from '@/libs/utils/snakeToCamel';
+
 export interface articleID {
   article_id: number;
+}
+
+export interface articleIdCamelCase {
+  articleId: number;
 }
 
 export interface CityInfoSnakeCase {
@@ -46,3 +52,6 @@ export interface ArticleThumbnailCamelCase extends ArticleInitialCamelCase {
   isBookmarked: boolean;
   isEditable: boolean;
 }
+
+export interface ArticleSnakeCase extends articleID, ArticleThumbnailSnakeCase {}
+export type ArticleCamelCase = CamelCase<ArticleSnakeCase>;
