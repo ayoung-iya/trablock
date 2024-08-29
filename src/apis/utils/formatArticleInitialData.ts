@@ -1,56 +1,52 @@
-/* eslint-disable camelcase */
-import type {
-  ArticleInitialCamelCase,
-  ArticleInitialSnakeCase,
-  ArticleThumbnailSnakeCase
-} from '@/apis/useArticle/article.type';
+import type { ArticleInitial, ArticleInitialRawData } from '@/apis/useArticle/article.type';
 import { dateRequestFormat } from '@/libs/utils/dateFormatter';
+import { changeKeysToSnakeCase } from '@/libs/utils/snakeToCamel';
 
-export const formatArticleInitialDataToSnakeCase = ({
+export const formatArticleDataForRequest = ({
   title,
   locations,
   date,
   expense,
   travelCompanion,
   travelStyles
-}: ArticleInitialCamelCase) => {
-  const formatData: ArticleInitialSnakeCase = {
+}: ArticleInitial) => {
+  const formatData: ArticleInitialRawData = {
     title,
-    locations: locations.map(({ placeId, address, city }) => ({ place_id: placeId, address, city })),
-    start_at: dateRequestFormat(date.from),
-    end_at: dateRequestFormat(date.to),
-    travel_companion: travelCompanion
+    locations,
+    startAt: dateRequestFormat(date.from),
+    endAt: dateRequestFormat(date.to),
+    travelCompanion
   };
 
   if (expense) {
     formatData.expense = String(expense);
   }
 
-  if (travelStyles.length) {
-    formatData.travel_styles = travelStyles;
+  if (travelStyles?.length) {
+    formatData.travelStyles = travelStyles;
   }
 
-  return formatData;
+  return changeKeysToSnakeCase(formatData);
 };
 
-export const formatArticleInitialDataToCamelCase = ({
+export const formatArticleDataForUse = ({
   title,
   locations,
-  start_at,
-  end_at,
-  travel_companion,
-  travel_styles,
+  startAt,
+  endAt,
+  travelCompanion,
+  travelStyles,
   expense
-}: ArticleThumbnailSnakeCase | ArticleInitialSnakeCase) => {
-  const formatData: ArticleInitialCamelCase = {
+}: ArticleInitialRawData) => {
+  const formatData: ArticleInitial = {
     title,
-    locations: locations.map(({ place_id, address, city }) => ({ placeId: place_id, address, city })),
+    locations,
+    travelCompanion,
     date: {
-      from: new Date(start_at),
-      to: new Date(end_at)
+      from: new Date(startAt),
+      to: new Date(endAt)
     },
-    travelCompanion: travel_companion,
-    travelStyles: travel_styles || []
+    travelStyles: travelStyles || []
   };
 
   if (expense) {
