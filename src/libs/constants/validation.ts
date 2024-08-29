@@ -23,6 +23,9 @@ export const validate = {
   },
   pw_answer: {
     required: '답변을 입력해 주세요'
+  },
+  isAgreement: {
+    validate: (v: boolean) => v
   }
 };
 
