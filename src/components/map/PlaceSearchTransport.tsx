@@ -1,11 +1,4 @@
-/* eslint-disable max-len */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-return-assign */
 /* eslint-disable no-undef */
-/* eslint-disable no-shadow */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-new */
 
 'use client';
 
@@ -19,19 +12,20 @@ import PlaceSearchResult from '@/components/map/PlaceSearchResult';
 import { TRANSPORT_LIST } from '@/libs/constants/googleMaps';
 import useGoogleMapsPlaceSearch from '@/libs/hooks/useGoogleMapsPlaceSearch';
 import { Transport } from '@/libs/types/commonPlanType.js';
+import { CamelCase } from '@/libs/utils/snakeToCamel';
 
 interface PlaceSearchTransportProps {
   className?: string;
   onTransportSelect: (
     transport: Transport,
-    place: google.maps.places.PlaceResult,
-    secondPlace: google.maps.places.PlaceResult
+    place: CamelCase<google.maps.places.PlaceResult>,
+    secondPlace: CamelCase<google.maps.places.PlaceResult>
   ) => void;
 }
 
 export default function PlaceSearchTransport({ className, onTransportSelect }: PlaceSearchTransportProps) {
   const { query, setQuery, places, error, loading } = useGoogleMapsPlaceSearch();
-  const [selectedPlace, setSelectedPlace] = useState<google.maps.places.PlaceResult | null>(null);
+  const [selectedPlace, setSelectedPlace] = useState<CamelCase<google.maps.places.PlaceResult> | null>(null);
   const [selectedTransport, setSelectedTransport] = useState<Transport>(TRANSPORT_LIST[0]);
 
   const handleDropdownSelect = (e?: any) => {
@@ -43,12 +37,12 @@ export default function PlaceSearchTransport({ className, onTransportSelect }: P
     setQuery('');
   };
 
-  const handleFirstPlaceSelect = (place: google.maps.places.PlaceResult) => {
+  const handleFirstPlaceSelect = (place: CamelCase<google.maps.places.PlaceResult>) => {
     if (place) setSelectedPlace(place);
     setQuery('');
   };
 
-  const handleSecondPlaceSelect = (place: google.maps.places.PlaceResult) => {
+  const handleSecondPlaceSelect = (place: CamelCase<google.maps.places.PlaceResult>) => {
     if (selectedPlace && place) onTransportSelect(selectedTransport, selectedPlace, place);
   };
 
@@ -91,7 +85,7 @@ export default function PlaceSearchTransport({ className, onTransportSelect }: P
               />
               <div className="ml-3">
                 <p className="font-subtitle-2 mb-1 line-clamp-1">{selectedPlace.name}</p>
-                <p className="font-caption-2 line-clamp-1 text-gray-01">{selectedPlace.formatted_address}</p>
+                <p className="font-caption-2 line-clamp-1 text-gray-01">{selectedPlace.formattedAddress}</p>
               </div>
             </div>
             <p className="font-subtitle-3 mb-2 text-gray-01">도착지</p>
