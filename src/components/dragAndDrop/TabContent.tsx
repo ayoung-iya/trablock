@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 
+import { TabContentProps } from '@/apis/useArticle/article.type';
 import BudgetBlock from '@/components/travelBlock/BudgetBlock';
 import TravelBlock from '@/components/travelBlock/TravelBlock';
 import useGoogleMapsPlaceDetails from '@/libs/hooks/useGoogleMapsPlaceDetails';
-import { TabContentProps } from '@/libs/types/dragAndDropType';
 
 // 일정 탭 블록
 export function TravelTabContent({ schedule, ...props }: TabContentProps) {
   const [photo, setPhoto] = useState('');
 
   const placeId = {
-    GENERAL: schedule.schedule_general?.google_map_place_id,
-    TRANSPORT: schedule.schedule_transport?.google_map_start_place_address,
+    GENERAL: schedule.scheduleGeneral?.googleMapPlaceId,
+    TRANSPORT: schedule.scheduleTransport?.googleMapStartPlaceAddress,
     ETC: null
   };
   const { place } = useGoogleMapsPlaceDetails(placeId[schedule.dtype] || '');
@@ -24,12 +24,12 @@ export function TravelTabContent({ schedule, ...props }: TabContentProps) {
   if (schedule.dtype === 'GENERAL') {
     return (
       <TravelBlock
-        index={schedule.sort_order}
-        name={schedule.schedule_general?.place_name || '빈 이름'}
+        index={schedule.sortOrder}
+        name={schedule.scheduleGeneral?.placeName || '빈 이름'}
         category={schedule.category}
         memo={schedule.memo}
-        startAt={schedule.visited_time}
-        duration={schedule.duration_time}
+        startAt={schedule.visitedTime}
+        duration={schedule.durationTime}
         imageUrl={photo}
         {...props}
       />
@@ -39,13 +39,13 @@ export function TravelTabContent({ schedule, ...props }: TabContentProps) {
   if (schedule.dtype === 'TRANSPORT') {
     return (
       <TravelBlock
-        index={schedule.sort_order}
-        name={schedule.schedule_transport?.start_place_name || '빈 이름'}
+        index={schedule.sortOrder}
+        name={schedule.scheduleTransport?.startPlaceName || '빈 이름'}
         category={schedule.category}
         memo={schedule.memo}
-        startAt={schedule.visited_time}
-        duration={schedule.duration_time}
-        transport={schedule.schedule_transport?.transportation}
+        startAt={schedule.visitedTime}
+        duration={schedule.durationTime}
+        transport={schedule.scheduleTransport?.transportation}
         {...props}
       />
     );
@@ -54,12 +54,12 @@ export function TravelTabContent({ schedule, ...props }: TabContentProps) {
   if (schedule.dtype === 'ETC') {
     return (
       <TravelBlock
-        index={schedule.sort_order}
-        name={schedule.schedule_etc?.place_name || '빈 이름'}
+        index={schedule.sortOrder}
+        name={schedule.scheduleEtc?.placeName || '빈 이름'}
         category={schedule.category}
         memo={schedule.memo}
-        startAt={schedule.visited_time}
-        duration={schedule.duration_time}
+        startAt={schedule.visitedTime}
+        duration={schedule.durationTime}
         {...props}
       />
     );
@@ -73,7 +73,7 @@ export function BudgetTabContent({ schedule, ...props }: TabContentProps) {
   if (schedule.dtype === 'GENERAL') {
     return (
       <BudgetBlock
-        name={schedule.schedule_general?.place_name || ''}
+        name={schedule.scheduleGeneral?.placeName || ''}
         category={schedule.category}
         symbol={symbol}
         money={money}
@@ -85,7 +85,7 @@ export function BudgetTabContent({ schedule, ...props }: TabContentProps) {
   if (schedule.dtype === 'TRANSPORT') {
     return (
       <BudgetBlock
-        name={schedule.schedule_transport?.start_place_name || ''}
+        name={schedule.scheduleTransport?.startPlaceName || ''}
         category={schedule.category}
         symbol={symbol}
         money={money}
@@ -97,7 +97,7 @@ export function BudgetTabContent({ schedule, ...props }: TabContentProps) {
   if (schedule.dtype === 'ETC') {
     return (
       <BudgetBlock
-        name={schedule.schedule_etc?.place_name || ''}
+        name={schedule.scheduleEtc?.placeName || ''}
         category={schedule.category}
         symbol={symbol}
         money={money}

@@ -5,8 +5,8 @@ import { useState, useEffect } from 'react';
  * @param query string; ex) 'min-width: 768px'
  * @returns boolean; query를 만족하는지 여부
  */
-export default function useMediaQuery(query: string) {
-  const [isMatch, setIsMatch] = useState(false);
+export default function useMediaQuery(query: string, init = false) {
+  const [isMatch, setIsMatch] = useState(init);
 
   useEffect(() => {
     const mediaQueryList = window.matchMedia(query);

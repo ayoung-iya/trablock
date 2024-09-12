@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { DateRange } from 'react-day-picker';
 import { Controller, useForm } from 'react-hook-form';
 
-import type { ArticleInitial, CityInfo } from '@/apis/useArticle/article.type';
+import type { InitialArticle, CityInfo } from '@/apis/useArticle/article.type';
 import ArticleService from '@/apis/useArticle/fetch';
 import BadgeWithDelete from '@/components/badge/badgeWithDelete';
 import CitySearchList from '@/components/CitySearchList';
@@ -30,7 +30,7 @@ export default function PlanInitialForm({
   articleData
 }: {
   articlePageId?: string;
-  articleData?: ArticleInitial;
+  articleData?: InitialArticle;
 }) {
   const router = useRouter();
 
@@ -40,7 +40,7 @@ export default function PlanInitialForm({
     getValues,
     handleSubmit,
     formState: { isValid }
-  } = useForm<ArticleInitial>({
+  } = useForm<InitialArticle>({
     defaultValues: {
       title: articleData?.title || '',
       locations: articleData?.locations || [],
@@ -115,7 +115,7 @@ export default function PlanInitialForm({
     handleCalendarOpen();
   };
 
-  const onSubmit = async (formData: ArticleInitial) => {
+  const onSubmit = async (formData: InitialArticle) => {
     if (isEditPage) {
       try {
         await ArticleService.putArticle(articlePageId, formData);
@@ -132,7 +132,6 @@ export default function PlanInitialForm({
     try {
       const { articleId } = await ArticleService.postArticle(formData);
 
-      // TODO: 여행 상세 페이지로 이동
       router.push(`/plan/detail/${articleId}`);
     } catch (err) {
       // TODO: 에러처리
