@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 
-import serviceSchedule from '@/apis/useScheduleService/fetch';
+import ARTICLE_SERVICE from '@/apis/useArticle/fetch';
 import PlanDetailContent from '@/app/(plan)/plan/detail/[id]/PlanDetailContent';
 import { PAGE_DESCRIPTIONS, PAGE_TITLES } from '@/libs/constants/title';
 import { getDayNum } from '@/libs/utils/dateChanger';
@@ -11,9 +12,8 @@ type PageProps = {
   };
 };
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { id } = params;
-  const { title, end_at: endAt, start_at: startAt, locations } = await serviceSchedule.getSchedulesPlanDetail(+id);
+export async function generateMetadata({ params: { id } }: PageProps): Promise<Metadata> {
+  const { title, endAt, startAt, locations } = await ARTICLE_SERVICE.getArticle(id);
   const tripPeriod = getDayNum(endAt, startAt, endAt);
   const locationsToString = locations.map(({ city }: { city: string }) => city).join(', ');
 
@@ -23,11 +23,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function PlanDetailIdPage({ params }: PageProps) {
+export default async function PlanDetailIdPage({ params: { id } }: PageProps) {
+  const userAgent = headers().get('user-agent') || '';
+  const isMobile = /mobile/i.test(userAgent);
   // fetch data
-  const articleId = Number(params.id);
-  const initPlanDetail = await serviceSchedule.getSchedulesPlanDetail(articleId);
-  const initScheduleList = await serviceSchedule.getSchedules(articleId);
+  const initPlanDetail = await ARTICLE_SERVICE.getArticle(id);
+  const initScheduleList = await ARTICLE_SERVICE.getSchedules(id);
 
-  return <PlanDetailContent planDetail={initPlanDetail} initList={initScheduleList} />;
+  return (
+    <PlanDetailContent
+      articleId={id}
+      initialPlanDetail={initPlanDetail}
+      initialScheduleList={initScheduleList}
+      isDesktopInitSize={!isMobile}
+    />
+  );
 }
