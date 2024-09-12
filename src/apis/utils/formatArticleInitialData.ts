@@ -1,4 +1,4 @@
-import type { ArticleInitial, ArticleInitialRawData } from '@/apis/useArticle/article.type';
+import type { Article, InitialArticle, InitialArticleRawData } from '@/apis/useArticle/article.type';
 import { dateRequestFormat } from '@/libs/utils/dateFormatter';
 import { changeKeysToSnakeCase } from '@/libs/utils/snakeToCamel';
 
@@ -9,21 +9,20 @@ export const formatArticleDataForRequest = ({
   expense,
   travelCompanion,
   travelStyles
-}: ArticleInitial) => {
-  const formatData: Omit<ArticleInitialRawData, 'travelStyles'> & Partial<Pick<ArticleInitialRawData, 'travelStyles'>> =
-    {
-      title,
-      locations,
-      startAt: dateRequestFormat(date.from),
-      endAt: dateRequestFormat(date.to),
-      travelCompanion
-    };
+}: InitialArticle) => {
+  const formatData: InitialArticleRawData = {
+    title,
+    locations,
+    startAt: dateRequestFormat(date.from),
+    endAt: dateRequestFormat(date.to),
+    travelCompanion
+  };
 
   if (expense) {
     formatData.expense = String(expense);
   }
 
-  if (travelStyles?.length) {
+  if (travelStyles.length) {
     formatData.travelStyles = travelStyles;
   }
 
@@ -36,10 +35,10 @@ export const formatArticleDataForUse = ({
   startAt,
   endAt,
   travelCompanion,
-  travelStyles,
+  travelStyles = [],
   expense
-}: ArticleInitialRawData) => {
-  const formatData: ArticleInitial = {
+}: Omit<Article, 'articleId' | 'profileImgUrl'>) => {
+  const formatData: InitialArticle = {
     title,
     locations,
     travelCompanion,
@@ -47,7 +46,7 @@ export const formatArticleDataForUse = ({
       from: new Date(startAt),
       to: new Date(endAt)
     },
-    travelStyles: travelStyles || []
+    travelStyles
   };
 
   if (expense) {
