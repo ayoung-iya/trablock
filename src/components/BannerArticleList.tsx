@@ -1,24 +1,24 @@
 import Link from 'next/link';
 
-import { fetchExtended } from '@/apis/interceptors/fetchExtended';
-import { ArticleThumbnailRawData } from '@/apis/useArticle/article.type';
-import TravelCard from '@/components/card/TravelCard';
+// import { fetchExtended } from '@/apis/interceptors/fetchExtended';
+// import { ArticleThumbnailRawData } from '@/apis/useArticle/article.type';
+// import TravelCard from '@/components/card/TravelCard';
 import Button from '@/components/common/button/Button';
-import { SnakeCase } from '@/libs/utils/snakeToCamel';
+// import { SnakeCase } from '@/libs/utils/snakeToCamel';
 
 export default async function BannerList() {
-  const fetchBannerArticles = async () => {
-    try {
-      const { data } = await fetchExtended<SnakeCase<{ data: ArticleThumbnailRawData[] }>>('api/v1/banner/articles');
+  // const fetchBannerArticles = async () => {
+  //   try {
+  //     const { data } = await fetchExtended<SnakeCase<{ data: ArticleThumbnailRawData[] }>>('api/v1/banner/articles');
 
-      return data;
-    } catch (e) {
-      console.error(e);
-      return [];
-    }
-  };
+  //     return data;
+  //   } catch (e) {
+  //     console.error(e);
+  //     return [];
+  //   }
+  // };
 
-  const articles = await fetchBannerArticles();
+  // const articles = await fetchBannerArticles();
 
   return (
     <div className="mx-auto w-full">
@@ -35,7 +35,7 @@ export default async function BannerList() {
         </div>
         <div className="justify-center">
           <div className="grid gap-4 sm:gap-5 xl:grid-cols-2 xl:gap-5 xl:gap-y-5">
-            {articles?.map((article) => (
+            {/* {articles?.map((article) => (
               <TravelCard
                 key={article.articleId}
                 id={article.articleId.toString()}
@@ -53,7 +53,7 @@ export default async function BannerList() {
                 isEditable={article.isEditable}
                 isPlanTab={false}
               />
-            ))}
+            ))} */}
           </div>
         </div>
         <div className="mt-8 xl:hidden">
