@@ -9,13 +9,18 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      backgroundSize: {
+        '80%': '80%'
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'second-logo': "url('/icons/second-logo.svg')"
       },
       boxShadow: {
         modal: '0 0 0.625rem 0 rgba(0, 0, 0, 0.10)',
-        button: '0 0 0.5rem 0 rgba(0, 0, 0, 0.08)'
+        button: '0 0 0.5rem 0 rgba(0, 0, 0, 0.08)',
+        card: '0 0 0.625rem rgba(0, 0, 0, 0.08)'
       },
       colors: {
         black: {
