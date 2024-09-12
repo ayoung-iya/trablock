@@ -18,7 +18,7 @@ interface ArticlesResponse extends Pagination {
 interface ArticleId extends Pick<Article, 'articleId'> {}
 interface CoverImgUrl extends Required<Pick<Article, 'coverImgUrl'>> {}
 
-const ARTICLE_SERVICE = {
+const ARTICLE_SERVICE = Object.freeze({
   getArticles: async ({ page = 0, size = 10, sort = 'createdAt,DESC' }: PaginationParams) => {
     const response = await fetchExtendedWithAuthToken<SnakeCase<ArticlesResponse>>(
       `api/v1/articles?page=${page}&size=${size}&sort=${sort}`,
@@ -110,6 +110,6 @@ const ARTICLE_SERVICE = {
 
     return response;
   }
-};
+});
 
 export default ARTICLE_SERVICE;
