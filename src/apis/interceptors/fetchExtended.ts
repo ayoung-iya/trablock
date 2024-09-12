@@ -86,9 +86,10 @@ const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
   const fetch = returnFetch(args);
 
   return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<CamelCase<T>> => {
+    const formatBody = init?.body && (init.body instanceof FormData ? init.body : JSON.stringify(init.body));
     const response = await fetch(url, {
       ...init,
-      body: init?.body && JSON.stringify(init.body)
+      body: formatBody
     });
 
     const { data: rawData, error } = parseJsonSafely(await response.text()) as ApiResponse<T>;
