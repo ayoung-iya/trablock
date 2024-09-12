@@ -2,12 +2,13 @@
 /* eslint-disable no-undef */
 import EmptyResultMessage from '@/components/map/EmptyResultMessage';
 import PlaceSearchItem from '@/components/map/PlaceSearchItem';
+import { CamelCase } from '@/libs/utils/snakeToCamel';
 
 interface PlaceSearchResultProps {
   className?: string;
   query: string;
-  places: google.maps.places.PlaceResult[];
-  onPlaceSelect: (place: google.maps.places.PlaceResult) => void;
+  places: CamelCase<google.maps.places.PlaceResult[]>;
+  onPlaceSelect: (place: CamelCase<google.maps.places.PlaceResult>) => void;
   loading: boolean;
 }
 
@@ -42,7 +43,7 @@ export default function PlaceSearchResult({
   return (
     <div className={containerStyle}>
       {places.map((place) => (
-        <PlaceSearchItem key={place.place_id} place={place} onPlaceSelect={onPlaceSelect} />
+        <PlaceSearchItem key={place.placeId} place={place} onPlaceSelect={onPlaceSelect} />
       ))}
     </div>
   );

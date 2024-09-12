@@ -6,18 +6,19 @@ import Badge from '@/components/common/Badge';
 import Button from '@/components/common/button/Button';
 import ImageBox from '@/components/common/ImageBox';
 import ChevronSvg from '@/icons/chevron-custom.svg';
+import { CamelCase } from '@/libs/utils/snakeToCamel';
 import translatePlaceType from '@/libs/utils/translatePlaceType';
 
 interface PlaceSearchItemProps {
-  place: google.maps.places.PlaceResult;
-  onPlaceSelect?: (place: google.maps.places.PlaceResult) => void;
+  place: CamelCase<google.maps.places.PlaceResult>;
+  onPlaceSelect?: (place: CamelCase<google.maps.places.PlaceResult>) => void;
 }
 
 export default function PlaceSearchItem({ place, onPlaceSelect = () => {} }: PlaceSearchItemProps) {
   if (!place) return null;
   return (
     <Button
-      key={place.place_id}
+      key={place.placeId}
       className="flex-row-center w-full justify-between py-2 hover:bg-primary-02"
       onClick={() => onPlaceSelect(place)}
     >
@@ -38,7 +39,7 @@ export default function PlaceSearchItem({ place, onPlaceSelect = () => {} }: Pla
             {translatePlaceType(place.types?.[0])}
           </Badge>
           <p className="font-subtitle-2 mb-1 line-clamp-1">{place.name}</p>
-          <p className="font-caption-2 line-clamp-1 text-gray-01">{place.formatted_address}</p>
+          <p className="font-caption-2 line-clamp-1 text-gray-01">{place.formattedAddress}</p>
         </div>
       </div>
       {/* 장소 선택 텍스트 */}

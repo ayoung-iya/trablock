@@ -4,9 +4,11 @@
 
 import { useEffect, useState } from 'react';
 
+import { CamelCase, changeKeysToCamelCase } from '@/libs/utils/snakeToCamel';
+
 export default function useGoogleMapsPlaceSearch() {
   const [query, setQuery] = useState('');
-  const [places, setPlaces] = useState<google.maps.places.PlaceResult[]>([]);
+  const [places, setPlaces] = useState<CamelCase<google.maps.places.PlaceResult[]>>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -31,7 +33,9 @@ export default function useGoogleMapsPlaceSearch() {
           setLoading(false); // 로딩 상태 종료
 
           if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-            setPlaces(results);
+            const newResult = changeKeysToCamelCase(results);
+
+            setPlaces(newResult);
             setError(null);
           } else {
             setPlaces([]);

@@ -1,18 +1,14 @@
 /* eslint-disable max-len */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-return-assign */
-/* eslint-disable no-undef */
 /* eslint-disable no-shadow */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-new */
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
+import { DraggableProvided, DroppableProvided, DropResult } from '@hello-pangea/dnd';
 import dynamic from 'next/dynamic';
 
+import { Schedule, ScheduleWithKey } from '@/apis/useArticle/article.type';
 import AddPlanButton from '@/components/common/button/AddPlan';
 import Button from '@/components/common/button/Button';
 import INIT_SCHEDULE_DATA from '@/components/dragAndDrop/constant';
@@ -21,7 +17,6 @@ import ScheduleBlock from '@/components/dragAndDrop/ScheduleBlock';
 import modalList from '@/components/modal/modalList/modalList';
 import TrashSvg from '@/icons/trash.svg';
 import useModal from '@/libs/hooks/useModal';
-import { Schedule, ScheduleWithKey } from '@/libs/types/dragAndDropType';
 import {
   EtcBlockDetailData,
   OnBlockDetailEdit,
@@ -38,6 +33,24 @@ import { getDateFromDayNum, getDayNum } from '@/libs/utils/dateChanger';
 const Droppable = dynamic(() => import('@hello-pangea/dnd').then((mod) => mod.Droppable), { ssr: false });
 const Draggable = dynamic(() => import('@hello-pangea/dnd').then((mod) => mod.Draggable), { ssr: false });
 const DragDropContext = dynamic(() => import('@hello-pangea/dnd').then((mod) => mod.DragDropContext), { ssr: false });
+
+const createInitialScheduleListWithKey = (initList: Schedule[], startAt: string, endAt: string) => {
+  const columnCount = getDayNum(endAt, startAt, endAt);
+  const initListWithKey: ScheduleWithKey[] = initList.map((item) => ({
+    ...item,
+    key: crypto.randomUUID()
+  }));
+
+  const newScheduleListWithKey: ScheduleWithKey[][] = Array.from({ length: columnCount }, () => []);
+
+  initListWithKey.forEach((item) => {
+    const newIdx = getDayNum(item.visitedDate, startAt, endAt) - 1;
+    const colIdx = newIdx >= 0 ? newIdx : columnCount - 1;
+    newScheduleListWithKey[colIdx][item.sortOrder - 1] = item;
+  });
+
+  return newScheduleListWithKey;
+};
 
 interface DragAndDropProps {
   initList: Schedule[];
@@ -63,77 +76,53 @@ export default function DragAndDrop({
   onClickAdd = () => {},
   onClickDelete = () => {}
 }: DragAndDropProps) {
-  const [scheduleListWithKey, setScheduleListWithKey] = useState<ScheduleWithKey[][]>([]);
-  const [columnKeyList, setColumnKeyList] = useState<string[]>([]);
-  const { openModal, closeModal } = useModal(); // 모달
+  const [scheduleListWithKey, setScheduleListWithKey] = useState<ScheduleWithKey[][]>(() =>
+    createInitialScheduleListWithKey(initList, startAt, endAt)
+  );
+  const { openModal, closeModal } = useModal();
+  const dateList = Array.from({ length: getDayNum(endAt, startAt, endAt) }, (_, index) =>
+    getDateFromDayNum(index + 1, startAt, endAt)
+  );
 
-  const columnCount = getDayNum(endAt, startAt, endAt);
+  const updateScheduleList = (scheduleListWithKey: ScheduleWithKey[][]) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const newScheduleList = scheduleListWithKey.flat().map(({ key, ...item }) => item);
 
-  // 아이템 재정렬
-  const reorder = (list: ScheduleWithKey[], startIdx: number, endIdx: number): ScheduleWithKey[] => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIdx, 1);
-    result.splice(endIdx, 0, removed);
-
-    return result.map((item, index) => ({
-      ...item,
-      sort_order: index + 1
-    }));
-  };
-
-  // 아이템 이동
-  const move = (
-    source: ScheduleWithKey[],
-    destination: ScheduleWithKey[],
-    droppableSource: any,
-    droppableDestination: any
-  ) => {
-    const srcClone = Array.from(source);
-    const destClone = Array.from(destination);
-    const [removed] = srcClone.splice(droppableSource.index, 1);
-    destClone.splice(droppableDestination.index, 0, removed);
-
-    const updatedSource: ScheduleWithKey[] = srcClone.map((item, index) => ({
-      ...item,
-      sort_order: index + 1
-    }));
-
-    const newVisitedDate = getDateFromDayNum(+droppableDestination.droppableId + 1, startAt, endAt) || endAt;
-
-    const updatedDestination: ScheduleWithKey[] = destClone.map((item, index) => ({
-      ...item,
-      sort_order: index + 1,
-      visited_date: newVisitedDate
-    }));
-
-    const result: { [key: string]: ScheduleWithKey[] } = {};
-    result[droppableSource.droppableId] = updatedSource;
-    result[droppableDestination.droppableId] = updatedDestination;
-
-    return result;
+    updateList(newScheduleList);
   };
 
   // 드래그 종료
-  const handleDragEnd = (result: any) => {
-    const { source, destination } = result;
+  const handleDragEnd = (result: DropResult) => {
+    const { draggableId, source, destination } = result;
 
     if (!destination) return;
 
-    const srcIdx = +source.droppableId;
-    const destIdx = +destination.droppableId;
+    const draggableBlock = scheduleListWithKey.flat().find((block) => block.key === draggableId);
 
-    if (srcIdx === destIdx) {
-      const reorderedList = reorder(scheduleListWithKey[srcIdx], source.index, destination.index);
-      const newScheduleList = [...scheduleListWithKey];
-      newScheduleList[srcIdx] = reorderedList;
-      setScheduleListWithKey(newScheduleList);
-    } else {
-      const movedList = move(scheduleListWithKey[srcIdx], scheduleListWithKey[destIdx], source, destination);
-      const newScheduleList = [...scheduleListWithKey];
-      newScheduleList[srcIdx] = movedList[srcIdx];
-      newScheduleList[destIdx] = movedList[destIdx];
-      setScheduleListWithKey(newScheduleList);
-    }
+    if (!draggableBlock) return;
+
+    const newVisitedDate = getDateFromDayNum(+destination.droppableId + 1, startAt, endAt) || endAt;
+    const newBlock = { ...draggableBlock, visitedDate: newVisitedDate };
+
+    const newScheduleList = scheduleListWithKey
+      .map((schedule, index) => {
+        const newSchedule =
+          index === +source.droppableId ? schedule.filter((block) => block.key !== draggableId) : schedule;
+
+        if (index !== +destination.droppableId) {
+          return newSchedule;
+        }
+
+        return [...newSchedule.slice(0, destination.index), newBlock, ...newSchedule.slice(destination.index)];
+      })
+      .map((schedule, index) =>
+        index === +source.droppableId || index === +destination.droppableId
+          ? schedule.map((block, index) => ({ ...block, sortOrder: index + 1 }))
+          : schedule
+      );
+
+    setScheduleListWithKey(newScheduleList);
+    updateScheduleList(newScheduleList);
   };
 
   // 아이템 삭제
@@ -143,12 +132,14 @@ export default function DragAndDrop({
 
     const updatedColumn: ScheduleWithKey[] = newScheduleList[columnIdx].map((item, index) => ({
       ...item,
-      sort_order: index + 1
+      sortOrder: index + 1
     }));
 
     newScheduleList[columnIdx] = updatedColumn;
 
     setScheduleListWithKey(newScheduleList);
+    updateScheduleList(newScheduleList);
+
     onClickDelete();
 
     return deletedSchedule;
@@ -159,24 +150,27 @@ export default function DragAndDrop({
     const newVisitedDate = getDateFromDayNum(columnIdx + 1, startAt, endAt) || endAt;
     const newScheduleWithKey: ScheduleWithKey = {
       ...INIT_SCHEDULE_DATA,
-      key: `item-${new Date().getTime()}`,
-      visited_date: newVisitedDate,
-      sort_order: scheduleListWithKey[columnIdx].length + 1,
+      key: crypto.randomUUID(),
+      visitedDate: newVisitedDate,
+      sortOrder: scheduleListWithKey[columnIdx].length + 1,
       category,
       dtype: 'GENERAL',
-      schedule_general: {
-        place_name: place.name || '빈 이름',
-        google_map_place_id: place.place_id || '',
-        google_map_latitude: place.geometry?.location?.lat() || 0,
-        google_map_longitude: place.geometry?.location?.lng() || 0,
-        google_map_address: place.formatted_address || '',
-        google_map_phone_number: place.formatted_phone_number || '',
-        google_map_home_page_url: place.website || ''
+      scheduleGeneral: {
+        placeName: place.name || '빈 이름',
+        googleMapPlaceId: place.placeId || '',
+        googleMapLatitude: place.geometry?.location?.lat() || 0,
+        googleMapLongitude: place.geometry?.location?.lng() || 0,
+        googleMapAddress: place.formattedAddress || '',
+        googleMapPhoneNumber: place.formattedPhoneNumber || '',
+        googleMapHomePageUrl: place.website || ''
       }
     };
     const newScheduleList = [...scheduleListWithKey];
     newScheduleList[columnIdx] = [...newScheduleList[columnIdx], newScheduleWithKey];
+
     setScheduleListWithKey(newScheduleList);
+    updateScheduleList(newScheduleList);
+
     closeModal();
     onClickAdd();
   };
@@ -192,26 +186,28 @@ export default function DragAndDrop({
     const newVisitedDate = getDateFromDayNum(columnIdx + 1, startAt, endAt) || endAt;
     const newScheduleWithKey: ScheduleWithKey = {
       ...INIT_SCHEDULE_DATA,
-      key: `item-${new Date().getTime()}`,
-      visited_date: newVisitedDate,
-      sort_order: scheduleListWithKey[columnIdx].length + 1,
+      key: crypto.randomUUID(),
+      visitedDate: newVisitedDate,
+      sortOrder: scheduleListWithKey[columnIdx].length + 1,
       category,
       dtype: 'TRANSPORT',
-      schedule_transport: {
+      scheduleTransport: {
         transportation: transport,
-        start_place_name: place.name || '빈 이름',
-        google_map_start_place_address: place.formatted_address || '',
-        google_map_start_latitude: place.geometry?.location?.lat() || 0,
-        google_map_start_longitude: place.geometry?.location?.lng() || 0,
-        end_place_name: secondPlace.name || '빈 이름',
-        google_map_end_place_address: secondPlace.formatted_address || '',
-        google_map_end_latitude: secondPlace.geometry?.location?.lat() || 0,
-        google_map_end_longitude: secondPlace.geometry?.location?.lng() || 0
+        startPlaceName: place.name || '빈 이름',
+        googleMapStartPlaceAddress: place.formattedAddress || '',
+        googleMapStartLatitude: place.geometry?.location?.lat() || 0,
+        googleMapStartLongitude: place.geometry?.location?.lng() || 0,
+        endPlaceName: secondPlace.name || '빈 이름',
+        googleMapEndPlaceAddress: secondPlace.formattedAddress || '',
+        googleMapEndLatitude: secondPlace.geometry?.location?.lat() || 0,
+        googleMapEndLongitude: secondPlace.geometry?.location?.lng() || 0
       }
     };
     const newScheduleList = [...scheduleListWithKey];
     newScheduleList[columnIdx] = [...newScheduleList[columnIdx], newScheduleWithKey];
+
     setScheduleListWithKey(newScheduleList);
+    updateScheduleList(newScheduleList);
     closeModal();
     onClickAdd();
   };
@@ -221,18 +217,20 @@ export default function DragAndDrop({
     const newVisitedDate = getDateFromDayNum(columnIdx + 1, startAt, endAt) || endAt;
     const newScheduleWithKey: ScheduleWithKey = {
       ...INIT_SCHEDULE_DATA,
-      key: `item-${new Date().getTime()}`,
-      visited_date: newVisitedDate,
-      sort_order: scheduleListWithKey[columnIdx].length + 1,
+      key: crypto.randomUUID(),
+      visitedDate: newVisitedDate,
+      sortOrder: scheduleListWithKey[columnIdx].length + 1,
       category,
       dtype: 'ETC',
-      schedule_etc: {
-        place_name: name
+      scheduleEtc: {
+        placeName: name
       }
     };
     const newScheduleList = [...scheduleListWithKey];
     newScheduleList[columnIdx] = [...newScheduleList[columnIdx], newScheduleWithKey];
+
     setScheduleListWithKey(newScheduleList);
+    updateScheduleList(newScheduleList);
     closeModal();
     onClickAdd();
   };
@@ -264,12 +262,14 @@ export default function DragAndDrop({
     const newScheduleList = [...scheduleListWithKey];
     newScheduleList[columnIdx][itemIdx] = {
       ...newScheduleList[columnIdx][itemIdx],
-      visited_time: startAt,
-      duration_time: duration,
+      visitedTime: startAt,
+      durationTime: duration,
       expense: budget,
-      memo
+      memo: memo || ''
     };
+
     setScheduleListWithKey(newScheduleList);
+    updateScheduleList(newScheduleList);
     closeModal();
   };
 
@@ -288,52 +288,54 @@ export default function DragAndDrop({
       ...newScheduleList[columnIdx][itemIdx],
       expense: budget
     };
+
     setScheduleListWithKey(newScheduleList);
+    updateScheduleList(newScheduleList);
     closeModal();
   };
 
   // 일정 상세 블록 데이터 매핑
   const createBlockData = (schedule: ScheduleWithKey, baseData: any) => {
     if (schedule.dtype === 'GENERAL') {
-      const { schedule_general: scheduleGeneral } = schedule;
+      const { scheduleGeneral } = schedule;
       if (!scheduleGeneral) return null;
       const blockData: PlaceBlockDetailData = {
         ...baseData,
-        name: scheduleGeneral.place_name,
-        placeId: scheduleGeneral.google_map_place_id,
-        lat: scheduleGeneral.google_map_latitude,
-        lng: scheduleGeneral.google_map_longitude,
-        address: scheduleGeneral.google_map_address,
-        phone: scheduleGeneral.google_map_phone_number,
-        homepage: scheduleGeneral.google_map_home_page_url
+        name: scheduleGeneral.placeName,
+        placeId: scheduleGeneral.googleMapPlaceId,
+        lat: scheduleGeneral.googleMapLatitude,
+        lng: scheduleGeneral.googleMapLongitude,
+        address: scheduleGeneral.googleMapAddress,
+        phone: scheduleGeneral.googleMapPhoneNumber,
+        homepage: scheduleGeneral.googleMapHomePageUrl
       };
       return blockData;
     }
 
     if (schedule.dtype === 'TRANSPORT') {
-      const { schedule_transport: scheduleTransport } = schedule;
+      const { scheduleTransport } = schedule;
       if (!scheduleTransport) return null;
       const blockData: PlaceBlockDetailData = {
         ...baseData,
-        name: scheduleTransport.start_place_name,
+        name: scheduleTransport.startPlaceName,
         transport: scheduleTransport.transportation,
-        address: scheduleTransport.google_map_start_place_address,
-        lat: scheduleTransport.google_map_start_latitude,
-        lng: scheduleTransport.google_map_start_longitude,
-        secondPlaceName: scheduleTransport.end_place_name,
-        secondPlaceAddress: scheduleTransport.google_map_end_place_address,
-        secondPlaceLat: scheduleTransport.google_map_end_latitude,
-        secondPlaceLng: scheduleTransport.google_map_end_longitude
+        address: scheduleTransport.googleMapStartPlaceAddress,
+        lat: scheduleTransport.googleMapStartLatitude,
+        lng: scheduleTransport.googleMapStartLongitude,
+        secondPlaceName: scheduleTransport.endPlaceName,
+        secondPlaceAddress: scheduleTransport.googleMapEndPlaceAddress,
+        secondPlaceLat: scheduleTransport.googleMapEndLatitude,
+        secondPlaceLng: scheduleTransport.googleMapEndLongitude
       };
       return blockData;
     }
 
     if (schedule.dtype === 'ETC') {
-      const { schedule_etc: scheduleEtc } = schedule;
+      const { scheduleEtc } = schedule;
       if (!scheduleEtc) return null;
       const blockData: PlaceBlockDetailData = {
         ...baseData,
-        name: scheduleEtc.place_name
+        name: scheduleEtc.placeName
       };
       return blockData;
     }
@@ -346,12 +348,12 @@ export default function DragAndDrop({
     const schedule = scheduleListWithKey[columnIdx][itemIdx];
     const { category } = scheduleListWithKey[columnIdx][itemIdx];
 
-    if (!schedule.schedule_general && !schedule.schedule_transport && !schedule.schedule_etc) return;
+    if (!schedule.scheduleGeneral && !schedule.scheduleTransport && !schedule.scheduleEtc) return;
 
     const baseData = {
       category,
-      startAt: schedule.visited_time,
-      duration: schedule.duration_time,
+      startAt: schedule.visitedTime,
+      duration: schedule.durationTime,
       budget: schedule.expense,
       memo: schedule.memo
     };
@@ -389,43 +391,6 @@ export default function DragAndDrop({
     }
   };
 
-  // initList에 mapping용 key가 추가된 ScheduleList 생성
-  useEffect(() => {
-    const initListWithKey: ScheduleWithKey[] = initList.map((item) => ({
-      ...item,
-      key: `${item.visited_date}${item.sort_order}${new Date().getTime()}` // 고유한 mapping용 key 추가
-    }));
-
-    const newScheduleListWithKey: ScheduleWithKey[][] = Array.from({ length: columnCount }, () => []);
-
-    initListWithKey.forEach((item) => {
-      const newIdx = getDayNum(item.visited_date, startAt, endAt) - 1;
-      const colIdx = newIdx >= 0 ? newIdx : columnCount - 1;
-      newScheduleListWithKey[colIdx][item.sort_order - 1] = item;
-    });
-
-    setScheduleListWithKey(newScheduleListWithKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // 각 column에 사용할 key 리스트
-  useEffect(() => {
-    for (let idx = 0; idx < columnCount; idx += 1) {
-      columnKeyList[idx] = `columnKey-${idx}`;
-    }
-    setColumnKeyList(columnKeyList);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // updateList 호출
-  useEffect(() => {
-    const updatedScheduleListWithKey = scheduleListWithKey.flat();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const updatedScheduleList: Schedule[] = updatedScheduleListWithKey.map(({ key, ...item }) => item);
-    updateList(updatedScheduleList);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scheduleListWithKey]);
-
   // 렌더링
   return (
     <div className="scrollbar-custom flex max-md:flex-col md:overflow-x-auto">
@@ -433,15 +398,14 @@ export default function DragAndDrop({
         {scheduleListWithKey.map((list, columnIdx) => (
           <div
             className="flex-col-center w-full px-5 md:w-72 md:min-w-80 md:px-[0.625rem] md:first:ml-7 md:last:mr-7 xl:first:ml-10 xl:last:mr-10"
-            key={columnKeyList[columnIdx]}
+            key={dateList[columnIdx]}
           >
             <DayHeader columnIdx={columnIdx} startAt={startAt} endAt={endAt} />
             <Droppable droppableId={`${columnIdx}`} isDropDisabled={!isEdit}>
-              {(listProvided: any, listSnapshot: any) => (
+              {(listProvided: DroppableProvided) => (
                 <div
                   className="flex-col-center w-full gap-3 pb-16 md:gap-4"
                   ref={listProvided.innerRef}
-                  style={{ ...listSnapshot.isDraggingOver }}
                   {...listProvided.droppableProps}
                 >
                   {list.map((schedule, itemIdx) => (
@@ -452,13 +416,13 @@ export default function DragAndDrop({
                       disableInteractiveElementBlocking
                       isDragDisabled={!isEdit}
                     >
-                      {(itemProvided: any, itemSnapshot: any) => (
+                      {(itemProvided: DraggableProvided) => (
                         <div
                           className="relative w-full bg-white-01"
                           ref={itemProvided.innerRef}
                           {...itemProvided.draggableProps}
                           {...itemProvided.dragHandleProps}
-                          style={{ ...itemSnapshot.isDragging, ...itemProvided.draggableProps.style }}
+                          style={{ ...itemProvided.draggableProps.style }}
                         >
                           <ScheduleBlock
                             schedule={scheduleListWithKey[columnIdx][itemIdx]}

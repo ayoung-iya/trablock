@@ -1,5 +1,5 @@
+import { TabContentProps } from '@/apis/useArticle/article.type';
 import { BudgetTabContent, TravelTabContent } from '@/components/dragAndDrop/TabContent';
-import { TabContentProps } from '@/libs/types/dragAndDropType';
 import { TAB } from '@/libs/types/planDetailType.js';
 
 // 탭 블록 콘텐츠 객체

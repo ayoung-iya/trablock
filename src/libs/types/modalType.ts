@@ -1,19 +1,20 @@
 /* eslint-disable no-undef */
 
 import { Category, Transport } from '@/libs/types/commonPlanType.js';
+import { CamelCase } from '@/libs/utils/snakeToCamel';
 
 // 장소 선택 함수 타입
 export type OnPlaceSelectProps = {
   category: Category;
-  place: google.maps.places.PlaceResult;
+  place: CamelCase<google.maps.places.PlaceResult>;
 };
 export type OnPlaceSelect<T = any> = ({ category, place }: OnPlaceSelectProps & T) => void;
 
 export type OnTransportSelectProps = {
   category: Category;
   transport: Transport;
-  place: google.maps.places.PlaceResult;
-  secondPlace: google.maps.places.PlaceResult;
+  place: CamelCase<google.maps.places.PlaceResult>;
+  secondPlace: CamelCase<google.maps.places.PlaceResult>;
 };
 export type OnTransportSelect<T = any> = ({
   category,
