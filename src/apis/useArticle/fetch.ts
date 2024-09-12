@@ -1,36 +1,38 @@
 /* eslint-disable no-shadow */
-import { notFound } from 'next/navigation';
-
 import { PaginationParams, Pagination } from '@/apis/constants/pagination.type';
-import { fetchExtendedWithAuthToken } from '@/apis/interceptors/fetchExtended';
+import { fetchExtendedWithAuthToken, fetchExtendedWithoutContentType } from '@/apis/interceptors/fetchExtended';
 import type {
-  articleId,
-  ArticleInitial,
-  ArticleInitialRawData,
-  ArticleRawData,
-  ArticleInfoRawData
+  Article,
+  InitialArticle,
+  InitialArticleRawData,
+  Schedule,
+  ScheduleDetail
 } from '@/apis/useArticle/article.type';
-import { formatArticleDataForRequest, formatArticleDataForUse } from '@/apis/utils/formatArticleInitialData';
-import { Schedule, ScheduleList } from '@/libs/types/dragAndDropType';
-import { SnakeCase } from '@/libs/utils/snakeToCamel';
+import { formatArticleDataForRequest } from '@/apis/utils/formatArticleInitialData';
+import { changeKeysToSnakeCase, SnakeCase } from '@/libs/utils/snakeToCamel';
 
 interface ArticlesResponse extends Pagination {
-  content: ArticleRawData[];
+  content: Article[];
 }
 
-const ARTICLE_SERVICE = {
+interface ArticleId extends Pick<Article, 'articleId'> {}
+interface CoverImgUrl extends Required<Pick<Article, 'coverImgUrl'>> {}
+
+const ARTICLE_SERVICE = Object.freeze({
   getArticles: async ({ page = 0, size = 10, sort = 'createdAt,DESC' }: PaginationParams) => {
     const response = await fetchExtendedWithAuthToken<SnakeCase<ArticlesResponse>>(
       `api/v1/articles?page=${page}&size=${size}&sort=${sort}`,
-      { method: 'GET' }
+      {
+        method: 'GET'
+      }
     );
 
     return response;
   },
 
-  postArticle: async (data: ArticleInitial) => {
+  postArticle: async (data: InitialArticle) => {
     const formatData = formatArticleDataForRequest(data);
-    const response = await fetchExtendedWithAuthToken<SnakeCase<articleId>>('api/v1/article', {
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticleId>>('api/v1/article', {
       method: 'POST',
       body: formatData
     });
@@ -43,20 +45,19 @@ const ARTICLE_SERVICE = {
       throw new Error('no article id');
     }
 
-    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticleInfoRawData>>(`api/v1/article/${articleId}`, {
-      method: 'GET'
-    });
+    const response = await fetchExtendedWithAuthToken<SnakeCase<Omit<Article, 'articleId' | 'profileImgUrl'>>>(
+      `api/v1/article/${articleId}`,
+      {
+        method: 'GET'
+      }
+    );
 
-    if (!response.isEditable) {
-      notFound();
-    }
-
-    return formatArticleDataForUse(response);
+    return response;
   },
 
-  putArticle: async (articleId: string, data: ArticleInitial) => {
+  putArticle: async (articleId: string, data: InitialArticle) => {
     const formatData = formatArticleDataForRequest(data);
-    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticleInitialRawData>>(
+    const response = await fetchExtendedWithAuthToken<SnakeCase<InitialArticleRawData>>(
       `/api/v1/article/${articleId}`,
       {
         method: 'PUT',
@@ -67,30 +68,31 @@ const ARTICLE_SERVICE = {
     return response;
   },
 
-  getSchedules: async (articleId: number) => {
-    const response = await fetchExtendedWithAuthToken<ScheduleList>(`api/v1/articles/${articleId}/schedules`, {
-      method: 'GET'
-    });
+  getSchedules: async (articleId: string) => {
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ScheduleDetail>>(
+      `api/v1/articles/${articleId}/schedules`,
+      {
+        method: 'GET'
+      }
+    );
 
     return response;
   },
 
-  putSchedules: async (articleId: number, payload: { schedules: Schedule[] }) => {
-    const response = await fetchExtendedWithAuthToken<Schedule[]>(`api/v1/articles/${articleId}/schedules`, {
+  putSchedules: async (articleId: string, payload: { schedules: Schedule[] }) => {
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticleId>>(`api/v1/articles/${articleId}/schedules`, {
       method: 'PUT',
-      body: payload
+      body: changeKeysToSnakeCase(payload)
     });
 
     return response;
   },
 
-  putCoverImage: async (articleId: number, payload: { coverImage: File | null }) => {
+  putCoverImage: async (articleId: string, payload: { coverImage: File }) => {
     const formData = new FormData();
-    if (payload.coverImage) {
-      formData.append('cover_img', payload.coverImage);
-    }
+    formData.append('file', payload.coverImage);
 
-    const response = await fetchExtendedWithAuthToken<{ cover_img_url: string }>(
+    const response = await fetchExtendedWithoutContentType<SnakeCase<CoverImgUrl>>(
       `api/v1/article/${articleId}/coverImg`,
       {
         method: 'PUT',
@@ -101,13 +103,13 @@ const ARTICLE_SERVICE = {
     return response;
   },
 
-  deleteArticle: async (articleId: number) => {
+  deleteArticle: async (articleId: string) => {
     const response = await fetchExtendedWithAuthToken<{ is_delete: boolean }>(`api/v1/articles/${articleId}/status`, {
       method: 'PATCH'
     });
 
     return response;
   }
-};
+});
 
 export default ARTICLE_SERVICE;

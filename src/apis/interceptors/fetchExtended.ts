@@ -12,12 +12,7 @@ interface ApiResponse<T> {
   error?: CustomError;
 }
 
-const defaultApiOptions = {
-  baseUrl: API_URL.API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-};
+const JSON_HEADERS = Object.freeze({ 'Content-Type': 'application/json' });
 
 const returnFetchThrowingErrorByStatusCode: ReturnFetch = (args) =>
   returnFetch({
@@ -65,6 +60,7 @@ const returnFetchAddAuthTokenInHeader: ReturnFetch = (args) =>
           ...options,
           headers: {
             ...options?.headers,
+            ...args?.headers,
             'authorization-token': token
           }
         };
@@ -90,9 +86,10 @@ const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
   const fetch = returnFetch(args);
 
   return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<CamelCase<T>> => {
+    const formatBody = init?.body && (init.body instanceof FormData ? init.body : JSON.stringify(init.body));
     const response = await fetch(url, {
       ...init,
-      body: init?.body && JSON.stringify(init.body)
+      body: formatBody
     });
 
     const { data: rawData, error } = parseJsonSafely(await response.text()) as ApiResponse<T>;
@@ -112,14 +109,30 @@ const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
 
 export const fetchExtended = returnFetchJson({
   fetch: returnFetchThrowingErrorByStatusCode({
-    fetch: returnFetchHandleNotFound(defaultApiOptions)
+    fetch: returnFetchHandleNotFound({
+      baseUrl: API_URL.API_BASE_URL,
+      headers: JSON_HEADERS
+    })
   })
 });
 
 export const fetchExtendedWithAuthToken = returnFetchJson({
   fetch: returnFetchThrowingErrorByStatusCode({
-    fetch: returnFetchAddAuthTokenInHeader({
-      fetch: returnFetchHandleNotFound(defaultApiOptions)
+    fetch: returnFetchHandleNotFound({
+      fetch: returnFetchAddAuthTokenInHeader({
+        baseUrl: API_URL.API_BASE_URL,
+        headers: JSON_HEADERS
+      })
+    })
+  })
+});
+
+export const fetchExtendedWithoutContentType = returnFetchJson({
+  fetch: returnFetchThrowingErrorByStatusCode({
+    fetch: returnFetchHandleNotFound({
+      fetch: returnFetchAddAuthTokenInHeader({
+        baseUrl: API_URL.API_BASE_URL
+      })
     })
   })
 });
