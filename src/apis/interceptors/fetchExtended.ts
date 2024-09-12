@@ -126,3 +126,13 @@ export const fetchExtendedWithAuthToken = returnFetchJson({
     })
   })
 });
+
+export const fetchExtendedWithoutContentType = returnFetchJson({
+  fetch: returnFetchThrowingErrorByStatusCode({
+    fetch: returnFetchHandleNotFound({
+      fetch: returnFetchAddAuthTokenInHeader({
+        baseUrl: API_URL.API_BASE_URL
+      })
+    })
+  })
+});
