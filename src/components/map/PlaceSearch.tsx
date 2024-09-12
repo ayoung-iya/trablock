@@ -15,10 +15,11 @@ import SearchInput from '@/components/common/input/SearchInput';
 import EmptyResultMessage from '@/components/map/EmptyResultMessage';
 import PlaceSearchResult from '@/components/map/PlaceSearchResult';
 import useGoogleMapsPlaceSearch from '@/libs/hooks/useGoogleMapsPlaceSearch';
+import { CamelCase } from '@/libs/utils/snakeToCamel';
 
 interface PlaceSearchProps {
   className?: string;
-  onPlaceSelect: (place: google.maps.places.PlaceResult) => void;
+  onPlaceSelect: (place: CamelCase<google.maps.places.PlaceResult>) => void;
 }
 
 export default function PlaceSearch({ className, onPlaceSelect }: PlaceSearchProps) {
