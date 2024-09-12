@@ -1,103 +1,115 @@
-import { redirect } from 'next/navigation';
-import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
+/* eslint-disable no-shadow */
+import { PaginationParams, Pagination } from '@/apis/constants/pagination.type';
+import { fetchExtendedWithAuthToken, fetchExtendedWithoutContentType } from '@/apis/interceptors/fetchExtended';
+import type {
+  Article,
+  InitialArticle,
+  InitialArticleRawData,
+  Schedule,
+  ScheduleDetail
+} from '@/apis/useArticle/article.type';
+import { formatArticleDataForRequest } from '@/apis/utils/formatArticleInitialData';
+import { changeKeysToSnakeCase, SnakeCase } from '@/libs/utils/snakeToCamel';
 
-import type { ArticleFormData, ArticleRequestFormData, GetArticleFormData } from '@/apis/useArticle/article.type';
-import getAuthToken from '@/apis/utils/getAuthToken';
+interface ArticlesResponse extends Pagination {
+  content: Article[];
+}
 
-import API_URL from '../constants/url';
-import interceptor from '../interceptors/interceptor';
-import {
-  formatArticleInitialDataForRequest,
-  formatArticleInitialDataFromResponse
-} from '../utils/formatArticleInitialData';
+interface ArticleId extends Pick<Article, 'articleId'> {}
+interface CoverImgUrl extends Required<Pick<Article, 'coverImgUrl'>> {}
 
-const options: ReturnFetchDefaultOptions = {
-  baseUrl: API_URL.API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  interceptors: {
-    response: async (response) => {
-      const result = await response.json();
-      if (!response.ok) {
-        console.log('▷▶▷▶ response error', result);
-        redirect('/');
+const ARTICLE_SERVICE = Object.freeze({
+  getArticles: async ({ page = 0, size = 10, sort = 'createdAt,DESC' }: PaginationParams) => {
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticlesResponse>>(
+      `api/v1/articles?page=${page}&size=${size}&sort=${sort}`,
+      {
+        method: 'GET'
       }
-      return response;
-    }
-  }
-};
+    );
 
-const fetchService = returnFetch({ fetch: interceptor.logging(options) });
-
-const ArticleService = {
-  postRegisterArticle: async (data: ArticleFormData) => {
-    const authToken = getAuthToken();
-
-    try {
-      const formatData: ArticleRequestFormData = formatArticleInitialDataForRequest(data);
-      const response = await fetchService('api/v1/article', {
-        method: 'POST',
-        body: JSON.stringify(formatData),
-        headers: {
-          'authorization-token': authToken
-        }
-      });
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        throw new Error(responseData.error?.local_message);
-      }
-
-      return { articleId: responseData.data.article_id };
-    } catch (err) {
-      throw (err as Error).message;
-    }
+    return response;
   },
+
+  postArticle: async (data: InitialArticle) => {
+    const formatData = formatArticleDataForRequest(data);
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticleId>>('api/v1/article', {
+      method: 'POST',
+      body: formatData
+    });
+
+    return response;
+  },
+
   getArticle: async (articleId?: string) => {
-    const authToken = getAuthToken();
     if (!articleId) {
       throw new Error('no article id');
     }
 
-    const response = await fetchService(`api/v1/article/${articleId}`, {
-      method: 'GET',
-      headers: {
-        'authorization-token': authToken
+    const response = await fetchExtendedWithAuthToken<SnakeCase<Omit<Article, 'articleId' | 'profileImgUrl'>>>(
+      `api/v1/article/${articleId}`,
+      {
+        method: 'GET'
       }
-    });
-    const { data, error } = await response.json();
+    );
 
-    if (!response.ok) {
-      throw new Error(error.local_message);
-    }
-
-    const formattedData: GetArticleFormData = formatArticleInitialDataFromResponse(data);
-
-    return formattedData;
+    return response;
   },
-  putArticle: async (articleId: string, data: ArticleFormData) => {
-    const authToken = getAuthToken();
-    try {
-      const formatData: ArticleRequestFormData = formatArticleInitialDataForRequest(data);
-      const response = await fetchService(`/api/v1/article/${articleId}`, {
+
+  putArticle: async (articleId: string, data: InitialArticle) => {
+    const formatData = formatArticleDataForRequest(data);
+    const response = await fetchExtendedWithAuthToken<SnakeCase<InitialArticleRawData>>(
+      `/api/v1/article/${articleId}`,
+      {
         method: 'PUT',
-        body: JSON.stringify(formatData),
-        headers: {
-          'authorization-token': authToken
-        }
-      });
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        throw new Error(responseData.local_message);
+        body: formatData
       }
+    );
 
-      return responseData.data;
-    } catch (err) {
-      throw (err as Error).message;
-    }
+    return response;
+  },
+
+  getSchedules: async (articleId: string) => {
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ScheduleDetail>>(
+      `api/v1/articles/${articleId}/schedules`,
+      {
+        method: 'GET'
+      }
+    );
+
+    return response;
+  },
+
+  putSchedules: async (articleId: string, payload: { schedules: Schedule[] }) => {
+    const response = await fetchExtendedWithAuthToken<SnakeCase<ArticleId>>(`api/v1/articles/${articleId}/schedules`, {
+      method: 'PUT',
+      body: changeKeysToSnakeCase(payload)
+    });
+
+    return response;
+  },
+
+  putCoverImage: async (articleId: string, payload: { coverImage: File }) => {
+    const formData = new FormData();
+    formData.append('file', payload.coverImage);
+
+    const response = await fetchExtendedWithoutContentType<SnakeCase<CoverImgUrl>>(
+      `api/v1/article/${articleId}/coverImg`,
+      {
+        method: 'PUT',
+        body: formData
+      }
+    );
+
+    return response;
+  },
+
+  deleteArticle: async (articleId: string) => {
+    const response = await fetchExtendedWithAuthToken<{ is_delete: boolean }>(`api/v1/articles/${articleId}/status`, {
+      method: 'PATCH'
+    });
+
+    return response;
   }
-};
+});
 
-export default ArticleService;
+export default ARTICLE_SERVICE;

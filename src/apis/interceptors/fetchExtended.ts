@@ -1,13 +1,18 @@
+import { notFound } from 'next/navigation';
 import returnFetch, { FetchArgs, ReturnFetch, ReturnFetchDefaultOptions } from 'return-fetch';
 
 import API_URL from '@/apis/constants/url';
+import type { CustomError } from '@/apis/interceptors/customError.type';
+import getAuthToken from '@/apis/utils/getAuthToken';
+import { CamelCase, changeKeysToCamelCase } from '@/libs/utils/snakeToCamel';
 
 type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, 'body'> & { body?: object };
-// eslint-disable-next-line no-undef
-type ResponseGenericBody<T> = Omit<Awaited<ReturnType<typeof fetch>>, keyof Body | 'clone'> & { body: T };
-type JsonResponse<T> = T extends object ? ResponseGenericBody<T> : ResponseGenericBody<unknown>;
+interface ApiResponse<T> {
+  data: T;
+  error?: CustomError;
+}
 
-const baseURL = { baseUrl: API_URL.API_BASE_URL };
+const JSON_HEADERS = Object.freeze({ 'Content-Type': 'application/json' });
 
 const returnFetchThrowingErrorByStatusCode: ReturnFetch = (args) =>
   returnFetch({
@@ -15,11 +20,52 @@ const returnFetchThrowingErrorByStatusCode: ReturnFetch = (args) =>
     interceptors: {
       response: async (response) => {
         if (response.status >= 400) {
-          const { error } = await response.json();
-          throw new Error(error);
+          const { error } = (await response.json()) as { error: CustomError };
+
+          throw error;
         }
 
         return response;
+      }
+    }
+  });
+
+const returnFetchHandleNotFound: ReturnFetch = (args) =>
+  returnFetch({
+    ...args,
+    interceptors: {
+      response: async (response) => {
+        if (response.status === 404) {
+          notFound();
+        }
+
+        return response;
+      }
+    }
+  });
+
+const returnFetchAddAuthTokenInHeader: ReturnFetch = (args) =>
+  returnFetch({
+    ...args,
+    interceptors: {
+      request: async (request) => {
+        const [url, options] = request;
+        const token = getAuthToken();
+
+        if (!token) {
+          return request;
+        }
+
+        const updatedOptions = {
+          ...options,
+          headers: {
+            ...options?.headers,
+            ...args?.headers,
+            'authorization-token': token
+          }
+        };
+
+        return [url, updatedOptions];
       }
     }
   });
@@ -39,28 +85,54 @@ const parseJsonSafely = (text: string): object | string => {
 const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
   const fetch = returnFetch(args);
 
-  return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<JsonResponse<T>> => {
+  return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<CamelCase<T>> => {
+    const formatBody = init?.body && (init.body instanceof FormData ? init.body : JSON.stringify(init.body));
     const response = await fetch(url, {
       ...init,
-      body: init?.body && JSON.stringify(init.body)
+      body: formatBody
     });
 
-    const body = parseJsonSafely(await response.text()) as T;
+    const { data: rawData, error } = parseJsonSafely(await response.text()) as ApiResponse<T>;
+    const data = changeKeysToCamelCase(rawData);
 
-    return {
-      headers: response.headers,
-      ok: response.ok,
-      redirected: response.redirected,
-      status: response.status,
-      statusText: response.statusText,
-      type: response.type,
-      url: response.url,
-      body
-    } as JsonResponse<T>;
+    if (error) {
+      throw error;
+    }
+
+    if (Array.isArray(data)) {
+      return { data } as CamelCase<T>;
+    }
+
+    return data;
   };
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const fetchExtended = returnFetchJson({
-  fetch: returnFetchThrowingErrorByStatusCode(baseURL)
+  fetch: returnFetchThrowingErrorByStatusCode({
+    fetch: returnFetchHandleNotFound({
+      baseUrl: API_URL.API_BASE_URL,
+      headers: JSON_HEADERS
+    })
+  })
+});
+
+export const fetchExtendedWithAuthToken = returnFetchJson({
+  fetch: returnFetchThrowingErrorByStatusCode({
+    fetch: returnFetchHandleNotFound({
+      fetch: returnFetchAddAuthTokenInHeader({
+        baseUrl: API_URL.API_BASE_URL,
+        headers: JSON_HEADERS
+      })
+    })
+  })
+});
+
+export const fetchExtendedWithoutContentType = returnFetchJson({
+  fetch: returnFetchThrowingErrorByStatusCode({
+    fetch: returnFetchHandleNotFound({
+      fetch: returnFetchAddAuthTokenInHeader({
+        baseUrl: API_URL.API_BASE_URL
+      })
+    })
+  })
 });
