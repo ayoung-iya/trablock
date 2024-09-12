@@ -1,4 +1,6 @@
 /* eslint-disable no-param-reassign */
+type FunctionType = (...args: any) => any;
+
 type CamelCaseString<S extends string> = S extends `${infer T}_${infer U}`
   ? `${T}${Capitalize<CamelCaseString<U>>}`
   : S;
@@ -9,8 +11,9 @@ type SnakeCaseString<S extends string> = S extends `${infer T}${infer U}`
     : `${T}_${Uncapitalize<SnakeCaseString<U>>}`
   : S;
 
-export type CamelCase<T> =
-  T extends Array<infer U>
+export type CamelCase<T> = T extends FunctionType
+  ? T
+  : T extends Array<infer U>
     ? Array<CamelCase<U>>
     : T extends Record<string, any>
       ? { [K in keyof T as CamelCaseString<Extract<K, string>>]: CamelCase<T[K]> }
