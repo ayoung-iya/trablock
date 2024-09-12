@@ -1,46 +1,33 @@
-interface RawDataDateAndExpense {
-  startAt: string;
-  endAt: string;
-  expense?: string;
-}
-
-interface ImageURL {
-  profileImgUrl?: string;
-  coverImgUrl?: string;
-}
-
-export interface articleId {
-  articleId: number;
-}
-
 export interface CityInfo {
   placeId: string;
   address: string;
   city: string;
 }
 
-export interface ArticleInitial {
+export interface Article {
+  articleId: number;
   title: string;
   locations: CityInfo[];
-  date: { from: Date; to: Date };
-  expense?: number;
+  startAt: string;
+  endAt: string;
+  expense?: string;
   travelCompanion: string;
-  travelStyles: string[];
-}
-
-export interface ArticleInfo extends ArticleInitial {
+  travelStyles?: string[];
+  profileImgUrl?: string;
+  coverImgUrl?: string;
   name: string;
   bookmarkCount: number;
   isBookmarked: boolean;
   isEditable: boolean;
 }
 
-export interface ArticleInitialRawData extends Omit<ArticleInitial, 'date' | 'expense'>, RawDataDateAndExpense {}
-export interface ArticleInfoRawData extends Omit<ArticleInfo, 'date' | 'expense'>, RawDataDateAndExpense {}
-export interface ArticleThumbnailRawData
-  extends Omit<ArticleInfo, 'date' | 'expense'>,
-    articleId,
-    ImageURL,
-    RawDataDateAndExpense {}
-export interface Article extends articleId, ArticleInfo {}
-export interface ArticleRawData extends articleId, ArticleThumbnailRawData {}
+export interface InitialArticle extends Pick<Article, 'title' | 'locations' | 'travelCompanion'> {
+  date: { from: Date; to: Date };
+  expense?: number;
+  travelStyles: string[];
+}
+
+export interface InitialArticleRawData
+  extends Pick<Article, 'title' | 'locations' | 'startAt' | 'endAt' | 'expense' | 'travelCompanion' | 'travelStyles'> {
+  expense?: string;
+}
