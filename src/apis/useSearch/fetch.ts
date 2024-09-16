@@ -1,39 +1,26 @@
-import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
+// import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
-import getAuthToken from '@/apis/utils/getAuthToken';
-
-import API_URL from '../constants/url';
-import { formatSearchDataFromResponse } from '../utils/formatSearchResultData';
+import { Pagination } from '@/apis/constants/pagination.type';
+import { fetchExtendedWithAuthToken } from '@/apis/interceptors/fetchExtended';
+import { Article } from '@/apis/useArticle/article.type';
+import { SnakeCase } from '@/libs/utils/snakeToCamel';
 
 const PAGE_SIZE = 10;
-
-const options: ReturnFetchDefaultOptions = {
-  baseUrl: API_URL.API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-};
-
-const fetchService = returnFetch(options);
+interface SearchResults extends Pagination {
+  content: Article[];
+}
 
 const searchService = {
   getSearchResults: async (keyword: string, order: string, page: number) => {
-    const authToken = getAuthToken();
     const orderString = order === 'popularity' ? 'popularity' : '';
-    const response = await fetchService(
+    const response = await fetchExtendedWithAuthToken<SnakeCase<SearchResults>>(
       `api/v1/search/article?keyword=${keyword}&page=${page}&size=${PAGE_SIZE}&sort=${orderString}`,
       {
-        method: 'GET',
-        headers: {
-          'authorization-token': authToken
-        }
+        method: 'GET'
       }
     );
 
-    const rawData = await response.json();
-    const formattedData = formatSearchDataFromResponse(rawData);
-
-    return formattedData;
+    return response;
   }
 };
 
