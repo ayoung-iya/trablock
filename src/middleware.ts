@@ -14,6 +14,20 @@ export function middleware(request: NextRequest) {
   }
 
   if (
+    accessToken &&
+    (url === '/signup' ||
+      url === '/login' ||
+      url === '/kakaoLogin' ||
+      url === '/find-password-email' ||
+      url === '/find-password-question' ||
+      url === '/find-password-newpassword')
+  ) {
+    return NextResponse.redirect(
+      new URL(request.nextUrl.searchParams.get(SEARCH_PARAMS.returnUrl) || '/', request.url)
+    );
+  }
+
+  if (
     !accessToken &&
     url !== '/signup' &&
     url !== '/login' &&
@@ -35,5 +49,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|login|signup).*)']
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|icons/favicon.ico|icon).*)']
 };
