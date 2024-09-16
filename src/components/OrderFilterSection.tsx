@@ -77,7 +77,7 @@ export default function OrderFilterSection() {
           {ORDER_STRING[order || 'createAt']}
         </OrderFilterButton>
         {isOrderListOpened && (
-          <ul ref={orderListRef} className="shadow-box absolute top-9 z-10 w-full overflow-hidden">
+          <ul ref={orderListRef} className="shadow-box absolute top-9 z-20 w-full overflow-hidden">
             <li data-order="createAt" className="w-full cursor-pointer px-3 py-2 text-center hover:bg-gray-03">
               최신순
             </li>

@@ -32,7 +32,7 @@ export default function ArticlesList() {
         </span>
         <OrderFilterSection />
       </div>
-      <ul className="flex flex-wrap gap-[18px] md:gap-5">
+      <ul className="mt-5 flex flex-wrap gap-[18px] md:gap-5">
         {data?.pages
           .flat()
           .map(({ articleId, ...rest }) => <TravelCard key={articleId} articleId={articleId} {...rest} />)}

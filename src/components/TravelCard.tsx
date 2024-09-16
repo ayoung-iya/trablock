@@ -115,7 +115,7 @@ export default function TravelCard({
             <button
               type="button"
               onClick={handleBookmarkClick}
-              className="flex-row-center absolute m-3 size-9 justify-center rounded-[5px] bg-white-01 md:m-4"
+              className="flex-row-center absolute z-10 m-3 size-9 justify-center rounded-[5px] bg-white-01 md:m-4"
             >
               <Bookmark className={`size-[18px] stroke-gray-01 ${bookmarked ? 'fill-gray-01' : ''}`} />
             </button>
