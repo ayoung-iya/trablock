@@ -3,13 +3,12 @@
 import { useEffect } from 'react';
 
 import useGetSearch from '@/apis/useSearch/useGetSearch';
-import TravelCard from '@/components/card/TravelCard';
 import OrderFilterSection from '@/components/OrderFilterSection';
+import TravelCard from '@/components/TravelCard';
 import useIntersectingState from '@/libs/hooks/useIntersectingState';
 
 export default function SearchList({ keyword, order }: { keyword: string; order: string }) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useGetSearch(keyword, order);
-  console.log(data);
   const [isIntersecting, ref] = useIntersectingState<HTMLLIElement>();
 
   useEffect(() => {
@@ -30,10 +29,10 @@ export default function SearchList({ keyword, order }: { keyword: string; order:
         </span>
         <OrderFilterSection />
       </div>
-      <ul className="mt-5 grid grid-cols-1 gap-[18px] md:gap-5 lg:grid-cols-2">
+      <ul className="mt-5 flex flex-wrap gap-[18px] md:gap-5">
         {data?.pages
           .flat()
-          .map(({ articleId, ...rest }) => <TravelCard key={articleId} id={articleId} {...rest} isSearchPage />)}
+          .map(({ articleId, ...rest }) => <TravelCard key={articleId} articleId={articleId} {...rest} />)}
         {hasNextPage && !isFetchingNextPage && <li className="h-20 w-full" ref={ref} />}
       </ul>
       {isLoading && <p className="mt-[180px] text-center">로딩 중</p>}
