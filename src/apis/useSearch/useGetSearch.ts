@@ -4,11 +4,16 @@ import searchService from './fetch';
 
 const useGetSearch = (keyword: string, order: string) => {
   return useInfiniteQuery({
-    queryKey: ['trablock', 'search', 'useGetSearch', keyword, order],
+    queryKey: ['trablock', 'search', keyword, order],
     queryFn: ({ pageParam }) => searchService.getSearchResults(keyword, order, pageParam),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-      const { currentPage, isLastPage, totalPages } = lastPage;
+      const {
+        pageable: { pageNumber: currentPage },
+        last: isLastPage,
+        totalPages
+      } = lastPage;
+
       if (isLastPage || currentPage + 1 >= totalPages) {
         return null;
       }
