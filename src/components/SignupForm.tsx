@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, SubmitHandler, FieldValues, Controller } from 'react-hook-form';
 
 import usePostNicknameCheck from '@/apis/useSignup/usePostNicknameCheck';
@@ -13,6 +13,7 @@ import Dropdown from '@/components/common/Dropdown';
 import SignInput from '@/components/common/input/SignInput';
 import PlanInputTitle from '@/components/PlanInputTitle';
 import passwordList from '@/libs/constants/passwordQuestion';
+import SEARCH_PARAMS from '@/libs/constants/searchParams';
 import { validate } from '@/libs/constants/validation';
 import useDropdown from '@/libs/hooks/useDropdown';
 
@@ -37,6 +38,7 @@ export default function SignupForm() {
       is_agreement: false
     }
   });
+  const returnURL = useSearchParams().get(SEARCH_PARAMS.returnUrl);
 
   const selectedQuestionId = getValues('pw_question_id');
   const isAgreement = getValues('is_agreement');
@@ -131,7 +133,7 @@ export default function SignupForm() {
           throw new Error(error.local_message);
         }
 
-        router.push('/login');
+        router.push(`/login${returnURL ? `?returnURL=${returnURL}` : ''}`);
       },
       onError: (error) => {
         // TODO: 에러 처리

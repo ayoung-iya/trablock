@@ -7,7 +7,6 @@ import ReactQueryProvider from '@/apis/components/ReactQueryProvider';
 import AsyncBoundary from '@/components/common/AsyncBoundary';
 import { PAGE_DESCRIPTIONS, PAGE_TITLES } from '@/libs/constants/title';
 import { DropdownProvider } from '@/libs/contexts/DropdownContext';
-import { LoginContextProvider } from '@/libs/contexts/LoginContext';
 import ModalProvider from '@/libs/contexts/ModalProvider';
 import { PasswordFindProvider } from '@/libs/contexts/passwordFindContext';
 import '@/styles/globals.css';
@@ -42,14 +41,12 @@ export default function RootLayout({
       <body className={pretendard.className}>
         <PasswordFindProvider>
           <AsyncBoundary>
-            <LoginContextProvider>
-              <DropdownProvider>
-                <ReactQueryProvider>
-                  <ModalProvider>{children}</ModalProvider>
-                  <div id="modal-root" />
-                </ReactQueryProvider>
-              </DropdownProvider>
-            </LoginContextProvider>
+            <DropdownProvider>
+              <ReactQueryProvider>
+                <ModalProvider>{children}</ModalProvider>
+                <div id="modal-root" />
+              </ReactQueryProvider>
+            </DropdownProvider>
           </AsyncBoundary>
         </PasswordFindProvider>
         {/* <KakaoScript /> */}

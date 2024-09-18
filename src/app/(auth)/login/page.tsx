@@ -6,11 +6,17 @@ import SigninForm from '@/components/SigninForm';
 import Logo from '@/icons/logo.svg';
 import { PAGE_TITLES } from '@/libs/constants/title';
 
+interface LoginParams {
+  searchParams: {
+    returnURL?: string;
+  };
+}
+
 export const metadata: Metadata = {
   title: PAGE_TITLES.login
 };
 
-export default function login() {
+export default function login({ searchParams: { returnURL } }: LoginParams) {
   return (
     <div className="flex-col-center pb-32 pt-32">
       <Link href="/">
@@ -22,11 +28,11 @@ export default function login() {
 
       <p className="font-btn-text mt-5 text-black-03">
         <span>
-          <Link href="/signup">회원가입 </Link>
+          <Link href={{ pathname: '/signup', query: { returnURL } }}>회원가입 </Link>
         </span>
         |
         <span>
-          <Link href="/find-password-email"> 비밀번호 찾기</Link>
+          <Link href={{ pathname: '/find-password-email', query: { returnURL } }}> 비밀번호 찾기</Link>
         </span>
       </p>
       <p className="font-caption-1 mt-10 text-gray-01">SNS 계정으로 로그인/회원가입</p>

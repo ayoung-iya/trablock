@@ -2,7 +2,7 @@
 
 import { useContext } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 
 import useFindPasswordEmail from '@/apis/useFindPassword/usePostPasswordFindEmail';
@@ -18,6 +18,7 @@ export default function FindPasswordEmail() {
     watch,
     formState: { errors, isValid }
   } = useForm({ mode: 'onBlur', defaultValues: { username: '' } });
+  const returnURL = useSearchParams().get('returnURL');
 
   const registerList = {
     username: register('username', validate.username)
@@ -34,7 +35,7 @@ export default function FindPasswordEmail() {
         const { pw_question_id: pwQuestionID } = response;
         setQuestionId(Number(pwQuestionID));
         setUsername(payload);
-        router.push('/find-password-question');
+        router.push(`/find-password-question${returnURL ? `?returnURL=${returnURL}` : ''}`);
       },
       onError: () => {
         alert('존재하지 않는 이메일입니다.');

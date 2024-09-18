@@ -2,7 +2,7 @@
 
 import { useContext } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 
 import useFindPasswordVerification from '@/apis/useFindPassword/usePostPasswordFindVerification';
@@ -19,6 +19,7 @@ export default function FindPasswordQuestion() {
     watch,
     formState: { errors, isValid }
   } = useForm({ mode: 'onBlur', defaultValues: { pw_answer: '' } });
+  const returnURL = useSearchParams().get('returnURL');
 
   const registerList = {
     pw_answer: register('pw_answer', validate.pw_answer)
@@ -40,7 +41,7 @@ export default function FindPasswordQuestion() {
       onSuccess: (response) => {
         const { answer } = response;
         setAnswer(answer);
-        router.push('/find-password-newpassword');
+        router.push(`/find-password-newpassword${returnURL ? `?returnURL=${returnURL}` : ''}`);
       },
       onError: () => {
         alert('올바르지 않은 답변입니다.');

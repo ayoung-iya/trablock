@@ -2,7 +2,7 @@
 
 import { useContext } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 
 // import passWordList from '@/libs/constants/passWordQuestion';
@@ -24,6 +24,7 @@ export default function FindPasswordNewpassword() {
     mode: 'onChange',
     defaultValues: { password: '', password_confirm: '', pw_quesiton_id: 1, pw_answer: '' }
   });
+  const returnURL = useSearchParams().get('returnURL');
 
   const { username, questionId, answer } = useContext(PasswordFindContext);
 
@@ -57,7 +58,7 @@ export default function FindPasswordNewpassword() {
       onSuccess: () => {
         // 처리가 안되냐
         alert('비밀번호가 갱신되었습니다. 다시 로그인 해 주세요.');
-        router.push('/login');
+        router.push(`/login${returnURL ? `?returnURL=${returnURL}` : ''}`);
       },
       onError: () => {
         alert('비밀번호 갱신에 실패했습니다');
