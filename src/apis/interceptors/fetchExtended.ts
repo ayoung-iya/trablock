@@ -4,12 +4,12 @@ import returnFetch, { FetchArgs, ReturnFetch, ReturnFetchDefaultOptions } from '
 import API_URL from '@/apis/constants/url';
 import type { CustomError } from '@/apis/interceptors/customError.type';
 import getAuthToken from '@/apis/utils/getAuthToken';
-import { CamelCase, changeKeysToCamelCase } from '@/libs/utils/snakeToCamel';
+import { changeKeysToCamelCase, SnakeCase } from '@/libs/utils/snakeToCamel';
 
 type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, 'body'> & { body?: object };
 interface ApiResponse<T> {
-  data: T;
-  error?: CustomError;
+  data: SnakeCase<T>;
+  error?: SnakeCase<CustomError>;
 }
 
 const JSON_HEADERS = Object.freeze({ 'Content-Type': 'application/json' });
@@ -20,9 +20,9 @@ const returnFetchThrowingErrorByStatusCode: ReturnFetch = (args) =>
     interceptors: {
       response: async (response) => {
         if (response.status >= 400) {
-          const { error } = (await response.json()) as { error: CustomError };
+          const { error } = (await response.json()) as { error: SnakeCase<CustomError> };
 
-          throw error;
+          throw changeKeysToCamelCase(error);
         }
 
         return response;
@@ -85,7 +85,7 @@ const parseJsonSafely = (text: string): object | string => {
 const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
   const fetch = returnFetch(args);
 
-  return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<CamelCase<T>> => {
+  return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<T> => {
     const formatBody = init?.body && (init.body instanceof FormData ? init.body : JSON.stringify(init.body));
     const response = await fetch(url, {
       ...init,
@@ -96,14 +96,14 @@ const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
     const data = changeKeysToCamelCase(rawData);
 
     if (error) {
-      throw error;
+      throw changeKeysToCamelCase(error);
     }
 
     if (Array.isArray(data)) {
-      return { data } as CamelCase<T>;
+      return { data } as T;
     }
 
-    return data;
+    return data as T;
   };
 };
 
