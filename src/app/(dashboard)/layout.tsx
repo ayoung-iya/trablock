@@ -6,7 +6,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="mx-auto">
       <GNB />
-      <main>{children}</main>
+      <main className="overflow-hidden">{children}</main>
     </div>
   );
 }
