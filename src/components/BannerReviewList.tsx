@@ -3,16 +3,16 @@ import { fetchExtended } from '@/apis/interceptors/fetchExtended';
 import ReviewCard from '@/components/card/ReviewCard';
 
 interface Review {
-  review_id: number;
+  reviewId: number;
   title: string;
-  representative_img_url: string;
+  representativeImgUrl: string;
   locations: {
-    place_id: string;
+    placeId: string;
     address: string;
     city: string;
   }[];
   nickname: string;
-  profile_img_url: string;
+  profileImgUrl: string;
 }
 
 interface ReviewsResponse {
