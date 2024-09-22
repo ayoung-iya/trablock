@@ -3,8 +3,9 @@
 import { useEffect } from 'react';
 
 import useGetArticles from '@/apis/useArticle/useGetArticles';
+import { formatArticleData } from '@/apis/utils/formatArticleData';
+import TravelDetailCard from '@/components/card/TravelDetailCard';
 import OrderFilterSection from '@/components/OrderFilterSection';
-import TravelCard from '@/components/TravelCard';
 import useIntersectingState from '@/libs/hooks/useIntersectingState';
 
 export default function ArticlesList() {
@@ -13,6 +14,7 @@ export default function ArticlesList() {
     sort: 'createdAt,DESC'
   });
   const [isIntersecting, ref] = useIntersectingState<HTMLLIElement>();
+  const articles = formatArticleData(data?.pages.flat() || []);
 
   useEffect(() => {
     if (!isIntersecting || isFetchingNextPage) {
@@ -33,9 +35,9 @@ export default function ArticlesList() {
         <OrderFilterSection />
       </div>
       <ul className="mt-5 flex flex-wrap gap-[18px] md:gap-5">
-        {data?.pages
-          .flat()
-          .map(({ articleId, ...rest }) => <TravelCard key={articleId} articleId={articleId} {...rest} />)}
+        {articles.map(({ articleId, ...rest }) => (
+          <TravelDetailCard key={articleId} articleId={articleId} {...rest} />
+        ))}
         {hasNextPage && !isFetchingNextPage && <li className="h-20 w-full" ref={ref} />}
       </ul>
       {isLoading && <p className="mt-[180px] text-center">로딩 중</p>}
