@@ -99,10 +99,6 @@ const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
       throw changeKeysToCamelCase(error);
     }
 
-    if (Array.isArray(data)) {
-      return { data } as T;
-    }
-
     return data as T;
   };
 };
