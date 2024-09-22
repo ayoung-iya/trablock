@@ -1,8 +1,13 @@
 /* eslint-disable no-shadow */
 import { PaginationParams, Pagination } from '@/apis/constants/pagination.type';
-import { fetchExtendedWithAuthToken, fetchExtendedWithoutContentType } from '@/apis/interceptors/fetchExtended';
+import {
+  fetchExtended,
+  fetchExtendedWithAuthToken,
+  fetchExtendedWithoutContentType
+} from '@/apis/interceptors/fetchExtended';
 import type {
   Article,
+  BannerArticle,
   InitialArticle,
   InitialArticleRawData,
   Schedule,
@@ -14,7 +19,6 @@ import { changeKeysToSnakeCase, SnakeCase } from '@/libs/utils/snakeToCamel';
 interface ArticlesResponse extends Pagination {
   content: Article[];
 }
-
 interface ArticleId extends Pick<Article, 'articleId'> {}
 interface CoverImgUrl extends Required<Pick<Article, 'coverImgUrl'>> {}
 
@@ -97,6 +101,22 @@ const ARTICLE_SERVICE = Object.freeze({
   deleteArticle: async (articleId: string) => {
     const response = await fetchExtendedWithAuthToken<{ isDelete: boolean }>(`api/v1/articles/${articleId}/status`, {
       method: 'PATCH'
+    });
+
+    return response;
+  },
+
+  getLikeArticles: async () => {
+    const response = await fetchExtended<BannerArticle[]>('api/v1/banner/articles/likes', {
+      method: 'GET'
+    });
+
+    return response;
+  },
+
+  getHotArticles: async () => {
+    const response = await fetchExtended<BannerArticle[]>('api/v1/banner/articles/hot', {
+      method: 'GET'
     });
 
     return response;

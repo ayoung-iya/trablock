@@ -25,6 +25,10 @@ export interface Article {
   isEditable: boolean;
 }
 
+export interface BannerArticle extends Omit<Article, 'name' | 'bookmarkCount' | 'isBookmarked' | 'isEditable'> {
+  writer: string;
+}
+
 export interface InitialArticle extends Pick<Article, 'title' | 'locations' | 'travelCompanion'> {
   date: { from: Date; to: Date };
   expense?: number;
