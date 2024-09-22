@@ -1,4 +1,7 @@
 /* eslint-disable max-len */
+
+'use client';
+
 import React, { useState } from 'react';
 
 import Image from 'next/image';
@@ -16,11 +19,13 @@ import useDropdown from '@/libs/hooks/useDropdown';
 import useModal from '@/libs/hooks/useModal';
 import { hyphenToDotDate } from '@/libs/utils/dateFormatter';
 
-import Badge from './common/Badge';
-import modalList from './modal/modalList/modalList';
+import Badge from '../common/Badge';
+import modalList from '../modal/modalList/modalList';
 
-interface TravelCardParams extends Article {
-  oneColumn?: boolean;
+interface TravelCardParams
+  extends Omit<Article, 'bookmarkCount' | 'isBookmarked' | 'isEditable' | 'locations'>,
+    Partial<Pick<Article, 'bookmarkCount' | 'isBookmarked' | 'isEditable'>> {
+  cities: string[];
 }
 
 const defaultCoverImageCSS =
@@ -28,10 +33,10 @@ const defaultCoverImageCSS =
 
 // TODO: isValidUrl 함수 추가
 
-export default function TravelCard({
+export default function TravelDetailCard({
   articleId,
   title,
-  locations,
+  cities,
   startAt,
   endAt,
   travelCompanion,
@@ -41,8 +46,7 @@ export default function TravelCard({
   name,
   bookmarkCount,
   isBookmarked,
-  isEditable,
-  oneColumn
+  isEditable
 }: TravelCardParams) {
   const {
     ref: dropdownRef,
@@ -65,7 +69,6 @@ export default function TravelCard({
 
   const { openModal, closeModal } = useModal();
   const { mutate: toggleBookmark } = useToggleBookmark();
-  const citiesString = locations.map(({ city }) => city).join(', ');
 
   const handleBookmarkClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -106,9 +109,7 @@ export default function TravelCard({
   };
 
   return (
-    <li
-      className={`w-full min-w-[285px] overflow-hidden rounded-lg shadow-card md:max-w-none ${oneColumn ? '' : 'xl:w-[calc(100%/2-10px)]'}`}
-    >
+    <li className="w-[320px] min-w-[285px] flex-grow overflow-hidden rounded-lg shadow-card md:w-full lg:w-[590px]">
       <Link href={`plan/detail/${articleId}`} className="flex h-full w-full flex-col md:flex-row">
         <div className={`relative min-h-[180px] min-w-[285px] bg-gray-02 ${defaultCoverImageCSS}`}>
           {isBookmarked !== undefined && (
@@ -155,7 +156,7 @@ export default function TravelCard({
               <div className="flex-col-start gap-1">
                 <div className="flex-row-center gap-[6px]">
                   <MapPin className="size-4 text-gray-01" />
-                  <span className="font-subtitle-3 text-gray-01">{citiesString}</span>
+                  <span className="font-subtitle-3 text-gray-01">{cities.join(', ')}</span>
                 </div>
                 <div className="flex-row-center gap-[6px]">
                   <Calendar className="size-4 text-gray-01" />
@@ -189,10 +190,12 @@ export default function TravelCard({
               />
               <span className="font-caption-2">{name}</span>
             </div>
-            <div className="flex-row-center gap-1 text-gray-01">
-              <Bookmark className="size-[0.6875rem] fill-gray-01 stroke-gray-01" />
-              <span className="font-caption-3">{bookmarkCount}</span>
-            </div>
+            {bookmarkCount !== undefined && (
+              <div className="flex-row-center gap-1 text-gray-01">
+                <Bookmark className="size-[0.6875rem] fill-gray-01 stroke-gray-01" />
+                <span className="font-caption-3">{bookmarkCount}</span>
+              </div>
+            )}
           </div>
         </div>
       </Link>
