@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import ArticleService from '@/apis/useArticle/fetch';
-import { formatArticleDataForUse } from '@/apis/utils/formatArticleInitialData';
+import { formatArticleInitialForUse } from '@/apis/utils/formatArticleData';
 import PlanInitialForm from '@/components/PlanInitialForm';
 import { PAGE_TITLES } from '@/libs/constants/title';
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 async function Plan({ params }: { params: { id: string } }) {
   const articleData = await ArticleService.getArticle(params.id);
 
-  return <PlanInitialForm articlePageId={params.id} articleData={formatArticleDataForUse(articleData)} />;
+  return <PlanInitialForm articlePageId={params.id} articleData={formatArticleInitialForUse(articleData)} />;
 }
 
 export default Plan;

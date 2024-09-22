@@ -2,7 +2,7 @@ import type { Article, InitialArticle, InitialArticleRawData } from '@/apis/useA
 import { dateRequestFormat } from '@/libs/utils/dateFormatter';
 import { changeKeysToSnakeCase } from '@/libs/utils/snakeToCamel';
 
-export const formatArticleDataForRequest = ({
+export const formatArticleInitialForRequest = ({
   title,
   locations,
   date,
@@ -29,7 +29,7 @@ export const formatArticleDataForRequest = ({
   return changeKeysToSnakeCase(formatData);
 };
 
-export const formatArticleDataForUse = ({
+export const formatArticleInitialForUse = ({
   title,
   locations,
   startAt,

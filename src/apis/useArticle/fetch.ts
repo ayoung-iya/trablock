@@ -8,7 +8,7 @@ import type {
   Schedule,
   ScheduleDetail
 } from '@/apis/useArticle/article.type';
-import { formatArticleDataForRequest } from '@/apis/utils/formatArticleInitialData';
+import { formatArticleInitialForRequest } from '@/apis/utils/formatArticleData';
 import { changeKeysToSnakeCase, SnakeCase } from '@/libs/utils/snakeToCamel';
 
 interface ArticlesResponse extends Pagination {
@@ -31,7 +31,7 @@ const ARTICLE_SERVICE = Object.freeze({
   },
 
   postArticle: async (data: InitialArticle) => {
-    const formatData = formatArticleDataForRequest(data);
+    const formatData = formatArticleInitialForRequest(data);
     const response = await fetchExtendedWithAuthToken<ArticleId>('api/v1/article', {
       method: 'POST',
       body: formatData
@@ -56,7 +56,7 @@ const ARTICLE_SERVICE = Object.freeze({
   },
 
   putArticle: async (articleId: string, data: InitialArticle) => {
-    const formatData = formatArticleDataForRequest(data);
+    const formatData = formatArticleInitialForRequest(data);
     const response = await fetchExtendedWithAuthToken<InitialArticleRawData>(`/api/v1/article/${articleId}`, {
       method: 'PUT',
       body: formatData
