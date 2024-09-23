@@ -1,8 +1,8 @@
-import type { Article, InitialArticle, InitialArticleRawData } from '@/apis/useArticle/article.type';
+import type { Article, BannerArticle, InitialArticle, InitialArticleRawData } from '@/apis/useArticle/article.type';
 import { dateRequestFormat } from '@/libs/utils/dateFormatter';
 import { changeKeysToSnakeCase } from '@/libs/utils/snakeToCamel';
 
-export const formatArticleDataForRequest = ({
+export const formatArticleInitialForRequest = ({
   title,
   locations,
   date,
@@ -29,7 +29,7 @@ export const formatArticleDataForRequest = ({
   return changeKeysToSnakeCase(formatData);
 };
 
-export const formatArticleDataForUse = ({
+export const formatArticleInitialForUse = ({
   title,
   locations,
   startAt,
@@ -54,4 +54,16 @@ export const formatArticleDataForUse = ({
   }
 
   return formatData;
+};
+
+export const formatBannerArticle = (articles: BannerArticle[]) => {
+  return articles.map(({ writer, locations, ...rest }) => ({
+    ...rest,
+    name: writer,
+    cities: locations.map(({ city }) => city)
+  }));
+};
+
+export const formatArticleData = (articles: Article[]) => {
+  return articles.map(({ locations, ...rest }) => ({ ...rest, cities: locations.map(({ city }) => city) }));
 };

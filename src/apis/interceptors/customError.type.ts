@@ -1,7 +1,7 @@
 export interface CustomError {
-  local_message: string;
+  localMessage: string;
   code: 0;
-  field_errors: {
+  fieldErrors: {
     additionalProp1: string;
     additionalProp2: string;
     additionalProp3: string;

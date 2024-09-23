@@ -39,7 +39,7 @@ export default function Carousel() {
   const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 4000 })]);
 
   return (
-    <div className="embla xl:-mx-[calc((100vw-1024px)*0.5)]" ref={emblaRef}>
+    <div className="embla xl:-mx-[calc((100vw-1280px)*0.5)]" ref={emblaRef}>
       <div className="embla__container min-w-[360px]">
         {SLIDES.map((slide) => (
           <div className={`embla__slide flex items-center justify-center ${slide.background}`} key={slide.id}>
