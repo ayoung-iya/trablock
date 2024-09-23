@@ -25,7 +25,10 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   title: PAGE_TITLES.default,
-  description: PAGE_DESCRIPTIONS.default
+  description: PAGE_DESCRIPTIONS.default,
+  verification: {
+    google: 'RSdxPy8tK7VIz_FH1LqEj4L2ekr_7kWr3mVgrWr1XPA'
+  }
 };
 
 export default function RootLayout({
