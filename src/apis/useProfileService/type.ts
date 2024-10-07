@@ -1,9 +1,15 @@
 export interface ProfileUserData {
-  profile_img_url: string | null;
+  profileImgUrl?: string;
   name: string;
-  introduce: string | null;
-  is_editable: boolean;
+  introduce?: string;
+  isEditable: boolean;
 }
+
+export interface ProfileUser extends ProfileUserData {
+  id: string;
+}
+
+export interface ProfileUpdateData extends Partial<Pick<ProfileUserData, 'name' | 'introduce'>> {}
 
 export interface UpdateProfileResponse {
   nickname: string;
