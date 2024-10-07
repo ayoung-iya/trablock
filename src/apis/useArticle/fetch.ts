@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import { PaginationParams, Pagination } from '@/apis/constants/pagination.type';
+import type { PaginationParams, Pagination, UserContentPaginationParams } from '@/apis/constants/pagination.type';
 import {
   fetchExtended,
   fetchExtendedWithAuthToken,
@@ -14,6 +14,7 @@ import type {
   ScheduleDetail
 } from '@/apis/useArticle/article.type';
 import { formatArticleInitialForRequest } from '@/apis/utils/formatArticleData';
+import { formatPaginationForUse } from '@/apis/utils/formatPaginationData';
 import { changeKeysToSnakeCase, SnakeCase } from '@/libs/utils/snakeToCamel';
 
 interface ArticlesResponse extends Pagination {
@@ -120,6 +121,17 @@ const ARTICLE_SERVICE = Object.freeze({
     });
 
     return response;
+  },
+
+  getUserArticles: async ({ userId, page, size }: UserContentPaginationParams) => {
+    const { content, ...pagination } = await fetchExtendedWithAuthToken<ArticlesResponse>(
+      `api/v1/articles/${userId}?page=${page}&size=${size}`,
+      {
+        method: 'GET'
+      }
+    );
+
+    return { content, ...formatPaginationForUse(pagination) };
   }
 });
 

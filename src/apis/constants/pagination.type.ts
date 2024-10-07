@@ -26,8 +26,19 @@ export interface Pagination {
   empty: boolean;
 }
 
-export type PaginationParams = {
+export interface CompactPagination {
+  currentPage: number;
+  pageSize: number;
+  totalPages: number;
+  totalComments: number;
+}
+
+export interface PaginationParams {
   page: number;
   size: number;
   sort: 'createdAt,DESC' | 'popularity';
-};
+}
+
+export interface UserContentPaginationParams extends Pick<PaginationParams, 'page' | 'size'> {
+  userId: string;
+}
