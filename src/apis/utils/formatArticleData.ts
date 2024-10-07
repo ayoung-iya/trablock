@@ -1,4 +1,10 @@
-import type { Article, BannerArticle, InitialArticle, InitialArticleRawData } from '@/apis/useArticle/article.type';
+import type {
+  Article,
+  BannerArticle,
+  CityInfo,
+  InitialArticle,
+  InitialArticleRawData
+} from '@/apis/useArticle/article.type';
 import { dateRequestFormat } from '@/libs/utils/dateFormatter';
 import { changeKeysToSnakeCase } from '@/libs/utils/snakeToCamel';
 
@@ -66,4 +72,8 @@ export const formatBannerArticle = (articles: BannerArticle[]) => {
 
 export const formatArticleData = (articles: Article[]) => {
   return articles.map(({ locations, ...rest }) => ({ ...rest, cities: locations.map(({ city }) => city) }));
+};
+
+export const formatCityData = (locations: CityInfo[]) => {
+  return locations.map(({ city }) => city);
 };
