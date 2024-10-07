@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import useGetSearch from '@/apis/useSearch/useGetSearch';
 import { formatArticleData } from '@/apis/utils/formatArticleData';
 import TravelDetailCard from '@/components/card/TravelDetailCard';
@@ -10,18 +8,12 @@ import useIntersectingState from '@/libs/hooks/useIntersectingState';
 
 export default function SearchList({ keyword, order }: { keyword: string; order: string }) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useGetSearch(keyword, order);
-  const [isIntersecting, ref] = useIntersectingState<HTMLLIElement>();
-  const articles = formatArticleData(data?.pages.flat() || []);
-
-  useEffect(() => {
-    if (!isIntersecting || isFetchingNextPage) {
-      return;
-    }
-
-    if (hasNextPage) {
+  const ref = useIntersectingState<HTMLLIElement>(([entry]) => {
+    if (entry.isIntersecting && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [isIntersecting, hasNextPage, fetchNextPage, isFetchingNextPage]);
+  });
+  const articles = formatArticleData(data?.pages.flat() || []);
 
   return (
     <>
