@@ -44,7 +44,7 @@ function CardMain({ children }: React.PropsWithChildren) {
 
 function CardMainSquare({ children }: React.PropsWithChildren) {
   return (
-    <div className="relative aspect-square size-full overflow-hidden rounded-[10px] bg-gray-02">
+    <div className="relative aspect-square size-full overflow-hidden rounded-[10px] bg-gray-02 before:absolute before:inset-0 before:bg-second-logo before:bg-[length:160px] before:bg-center before:bg-no-repeat">
       <div className="absolute bottom-0 z-10 h-2/4 w-full bg-gradient-to-t from-black/60 to-transparent" />
       {children}
     </div>
