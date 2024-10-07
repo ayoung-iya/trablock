@@ -100,7 +100,7 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    setMyProfileImg(myProfileData?.profile_img_url || null);
+    setMyProfileImg(myProfileData?.profileImgUrl || null);
   }, [myProfileData]);
 
   const handleGetReviewData = async () => {
