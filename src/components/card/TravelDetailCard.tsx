@@ -109,7 +109,7 @@ export default function TravelDetailCard({
 
   return (
     <li className="w-[320px] min-w-[285px] flex-grow overflow-hidden rounded-lg shadow-card md:w-full lg:w-[590px]">
-      <Link href={`plan/detail/${articleId}`} className="flex h-full w-full flex-col md:flex-row">
+      <Link href={`/plan/detail/${articleId}`} className="flex h-full w-full flex-col md:flex-row">
         <div className={`relative min-h-[180px] min-w-[285px] bg-gray-02 ${defaultCoverImageCSS}`}>
           {isBookmarked !== undefined && (
             <button

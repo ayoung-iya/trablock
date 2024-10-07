@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import useGetUserReviews from '@/apis/review/useGetUserReviews';
 import TravelPreviewCard from '@/components/card/TravelPreviewCard';
@@ -26,20 +27,22 @@ export default function ReviewList({ userId }: { userId: string }) {
     <>
       {reviews.map(({ reviewId, title, cities, startAt, endAt, representativeImgUrl }) => (
         <li key={reviewId}>
-          <TravelPreviewCard.MainSquare>
-            {representativeImgUrl && (
-              <Image src={representativeImgUrl} alt="대표 이미지" fill style={{ objectFit: 'cover' }} />
-            )}
-            <div className="absolute bottom-4 left-4 z-10 flex flex-col gap-3">
-              <div className="flex flex-col gap-1">
-                <TravelPreviewCard.Title>{title}</TravelPreviewCard.Title>
-                <div className="hidden md:flex md:flex-col md:gap-[2px]">
-                  <TravelPreviewCard.Info>{cities.join(', ')}</TravelPreviewCard.Info>
-                  <TravelPreviewCard.Info>{`${startAt} ~ ${endAt}`}</TravelPreviewCard.Info>
+          <Link href={`/review/${reviewId}`}>
+            <TravelPreviewCard.MainSquare>
+              {representativeImgUrl && (
+                <Image src={representativeImgUrl} alt="대표 이미지" fill style={{ objectFit: 'cover' }} />
+              )}
+              <div className="absolute bottom-4 left-4 z-10 flex flex-col gap-3">
+                <div className="flex flex-col gap-1">
+                  <TravelPreviewCard.Title>{title}</TravelPreviewCard.Title>
+                  <div className="hidden md:flex md:flex-col md:gap-[2px]">
+                    <TravelPreviewCard.Info>{cities.join(', ')}</TravelPreviewCard.Info>
+                    <TravelPreviewCard.Info>{`${startAt} ~ ${endAt}`}</TravelPreviewCard.Info>
+                  </div>
                 </div>
               </div>
-            </div>
-          </TravelPreviewCard.MainSquare>
+            </TravelPreviewCard.MainSquare>
+          </Link>
         </li>
       ))}
       {hasNextPage && <li className="h-20 w-full" ref={ref} />}
