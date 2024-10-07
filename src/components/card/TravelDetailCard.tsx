@@ -10,6 +10,8 @@ import Link from 'next/link';
 import { Article } from '@/apis/useArticle/article.type';
 import ARTICLE_SERVICE from '@/apis/useArticle/fetch';
 import useToggleBookmark from '@/apis/useContentService/useToggleBookmark';
+import Badge from '@/components/common/Badge';
+import modalList from '@/components/modal/modalList/modalList';
 import Bookmark from '@/icons/bookmark-filled.svg';
 import Calendar from '@/icons/calendar.svg';
 import kebab from '@/icons/kebab.svg?url';
@@ -18,9 +20,6 @@ import profileDefault from '@/icons/profile-default.svg?url';
 import useDropdown from '@/libs/hooks/useDropdown';
 import useModal from '@/libs/hooks/useModal';
 import { hyphenToDotDate } from '@/libs/utils/dateFormatter';
-
-import Badge from '../common/Badge';
-import modalList from '../modal/modalList/modalList';
 
 interface TravelCardParams
   extends Omit<Article, 'bookmarkCount' | 'isBookmarked' | 'isEditable' | 'locations'>,
