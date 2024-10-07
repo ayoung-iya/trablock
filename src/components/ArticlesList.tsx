@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import useGetArticles from '@/apis/useArticle/useGetArticles';
 import { formatArticleData } from '@/apis/utils/formatArticleData';
 import TravelDetailCard from '@/components/card/TravelDetailCard';
@@ -13,18 +11,15 @@ export default function ArticlesList() {
     size: 10,
     sort: 'createdAt,DESC'
   });
-  const [isIntersecting, ref] = useIntersectingState<HTMLLIElement>();
+
+  const ref = useIntersectingState<HTMLLIElement>((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    });
+  });
   const articles = formatArticleData(data?.pages.flat() || []);
-
-  useEffect(() => {
-    if (!isIntersecting || isFetchingNextPage) {
-      return;
-    }
-
-    if (hasNextPage) {
-      fetchNextPage();
-    }
-  }, [isIntersecting, hasNextPage, fetchNextPage, isFetchingNextPage]);
 
   return (
     <>
