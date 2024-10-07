@@ -39,7 +39,7 @@ export default function Carousel() {
   const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 4000 })]);
 
   return (
-    <div className="embla xl:-mx-[calc((100vw-1280px)*0.5)]" ref={emblaRef}>
+    <div className="embla" ref={emblaRef}>
       <div className="embla__container min-w-[360px]">
         {SLIDES.map((slide) => (
           <div className={`embla__slide flex items-center justify-center ${slide.background}`} key={slide.id}>
@@ -53,7 +53,7 @@ export default function Carousel() {
                 <p className="text-sm text-black-03 md:text-base lg:text-xl">{slide.description}</p>
               </div>
               <div className="relative h-[100px] w-[112px] md:h-[256px] md:w-[220px] lg:w-[270px] xl:h-[330px]">
-                <Image src={slide.imageURL} alt={slide.imageAlt} fill priority />
+                <Image src={slide.imageURL} alt={slide.imageAlt} fill />
               </div>
             </div>
           </div>
