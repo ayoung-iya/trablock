@@ -7,7 +7,7 @@ import { ProfileUserData } from './type';
 // fetch
 export default function useGetProfile(id: string) {
   const query = useQuery<ProfileUserData, Error>({
-    queryKey: ['useGetProfile', id],
+    queryKey: ['trablock', 'profile', id],
     queryFn: () => profileService.getProfile(id),
     enabled: !!id
   });
