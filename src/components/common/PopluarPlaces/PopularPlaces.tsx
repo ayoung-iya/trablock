@@ -3,35 +3,35 @@
 import Link from 'next/link';
 
 import CircleImage from '@/components/common/PopluarPlaces/CircleImage';
-import image1 from '@/components/common/PopluarPlaces/images/1.png';
-import image2 from '@/components/common/PopluarPlaces/images/2.png';
-import image3 from '@/components/common/PopluarPlaces/images/3.png';
-import image4 from '@/components/common/PopluarPlaces/images/4.png';
-import image5 from '@/components/common/PopluarPlaces/images/5.png';
+import bangkokImageUrl from '@/images/popularPlace/bangkok.webp';
+import hawaiianImageUrl from '@/images/popularPlace/hawaiian.webp';
+import newYorkImageUrl from '@/images/popularPlace/newYork.webp';
+import osakaImageUrl from '@/images/popularPlace/osaka.webp';
+import tokyoImageUrl from '@/images/popularPlace/tokyo.webp';
 
 const places = [
   {
-    imageUrl: image1,
+    imageUrl: osakaImageUrl,
     text: '오사카',
     searchQuery: '오사카'
   },
   {
-    imageUrl: image2,
+    imageUrl: tokyoImageUrl,
     text: '도쿄',
     searchQuery: '도쿄'
   },
   {
-    imageUrl: image3,
+    imageUrl: newYorkImageUrl,
     text: '뉴욕',
     searchQuery: '뉴욕'
   },
   {
-    imageUrl: image4,
+    imageUrl: bangkokImageUrl,
     text: '방콕',
     searchQuery: '방콕'
   },
   {
-    imageUrl: image5,
+    imageUrl: hawaiianImageUrl,
     text: '하와이',
     searchQuery: '하와이'
   }
