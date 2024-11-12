@@ -51,7 +51,7 @@ export default function SigninForm() {
 
           router.refresh();
           setTimeout(() => {
-            router.push(returnURL);
+            router.replace(returnURL);
           }, 1000);
         },
         onError: (err) => alert(err) // 시간나면 에러메세지 가져오기
