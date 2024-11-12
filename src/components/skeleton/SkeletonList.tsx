@@ -9,9 +9,7 @@ export default function SkeletonList({ count = 1, SkeletonComponent }: SkeletonL
   return (
     <>
       {Array.from({ length: count }, (_, i) => (
-        <li key={`skeleton-${i}`}>
-          <SkeletonComponent />
-        </li>
+        <SkeletonComponent key={`skeleton-${i}`} />
       ))}
     </>
   );
