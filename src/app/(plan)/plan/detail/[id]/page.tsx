@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 
+import API_URL from '@/apis/constants/url';
 import ARTICLE_SERVICE from '@/apis/useArticle/fetch';
 import PlanDetailContent from '@/app/(plan)/plan/detail/[id]/PlanDetailContent';
 import { PAGE_DESCRIPTIONS, PAGE_TITLES } from '@/libs/constants/title';
@@ -29,6 +30,9 @@ export default async function PlanDetailIdPage({ params: { id } }: PageProps) {
   // fetch data
   const initPlanDetail = await ARTICLE_SERVICE.getArticle(id);
   const initScheduleList = await ARTICLE_SERVICE.getSchedules(id);
+  const firstPlaceGeocoding = await (
+    await fetch(`${API_URL.APP_BASE_URL}api/googleGeocoding/${initPlanDetail.locations[0].placeId}`)
+  ).json();
 
   return (
     <PlanDetailContent
@@ -36,6 +40,7 @@ export default async function PlanDetailIdPage({ params: { id } }: PageProps) {
       initialPlanDetail={initPlanDetail}
       initialScheduleList={initScheduleList}
       isDesktopInitSize={!isMobile}
+      firstPlaceGeocoding={firstPlaceGeocoding}
     />
   );
 }

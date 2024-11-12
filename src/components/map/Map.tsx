@@ -19,6 +19,7 @@ import { MARKER_COLOR } from '@/libs/constants/mapStyle';
 import { Category } from '@/libs/types/commonPlanType';
 
 interface MapProps extends GoogleMapProps {
+  defaultGeocoding?: { lat: number; lng: number };
   mapContainerStyle: React.CSSProperties;
   coordinateList?: (Coordinate | undefined)[];
   markerCategoryList?: (Category | undefined)[];
@@ -26,6 +27,7 @@ interface MapProps extends GoogleMapProps {
 }
 
 export default function Map({
+  defaultGeocoding = DEFAULT_COORDINATE_LIST[0],
   mapContainerStyle,
   coordinateList = [],
   markerCategoryList = [],
@@ -35,7 +37,7 @@ export default function Map({
   const [markers, setMarkers] = useState<google.maps.marker.AdvancedMarkerElement[]>([]);
   const [polyline, setPolyline] = useState<google.maps.Polyline | null>(null);
 
-  const center = coordinateList?.[0] || DEFAULT_COORDINATE_LIST[0];
+  const center = coordinateList?.[0] || defaultGeocoding;
 
   // 맵 load
   const handleOnLoad = useCallback(
@@ -130,6 +132,10 @@ export default function Map({
     });
     setPolyline(newPolyline);
 
+    if (finalMarkers.length === 0) {
+      bounds.extend(defaultGeocoding);
+    }
+
     // 마커 거리에 맞춰 줌 레벨 제어
     map.fitBounds(bounds);
   }, [map, coordinateList, markerCategoryList]);
@@ -147,7 +153,7 @@ export default function Map({
 
       if (!hasCoord) {
         map.setZoom(MAX_ZOOM);
-        map.setCenter(DEFAULT_COORDINATE_LIST[0]);
+        map.setCenter(defaultGeocoding);
       }
     });
 

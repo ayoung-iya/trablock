@@ -49,17 +49,21 @@ const SEE_MORE_LIST = Object.freeze({
   }
 });
 
-export default function PlanDetailContent({
-  articleId,
-  isDesktopInitSize,
-  initialPlanDetail: { title, startAt, endAt, coverImgUrl: initCoverImgUrl },
-  initialScheduleList
-}: {
+interface PlaceDetailContentProps {
   articleId: string;
   isDesktopInitSize: boolean;
   initialPlanDetail: Omit<Article, 'articleId' | 'profileImgUrl'>;
   initialScheduleList: ScheduleDetail;
-}) {
+  firstPlaceGeocoding: { lat: number; lng: number };
+}
+
+export default function PlanDetailContent({
+  articleId,
+  isDesktopInitSize,
+  initialPlanDetail: { title, startAt, endAt, coverImgUrl: initCoverImgUrl },
+  initialScheduleList,
+  firstPlaceGeocoding
+}: PlaceDetailContentProps) {
   const [isEditing, setIsEditing] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 1024px)', isDesktopInitSize);
   const [scheduleList, setScheduleList] = useState(initialScheduleList);
@@ -327,6 +331,7 @@ export default function PlanDetailContent({
       {isGoggleApiLoaded && (
         <div className="h-screen w-full lg:absolute lg:inset-0 lg:h-full">
           <Map
+            defaultGeocoding={firstPlaceGeocoding}
             mapContainerStyle={{ width: '100%', height: '100%' }}
             coordinateList={currentDayCoordinateList}
             markerCategoryList={currentDayMarkerCategoryList}
